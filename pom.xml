@@ -9,12 +9,14 @@
     <description>MallE-AggregationService</description>
     <packaging>pom</packaging>
     <modules>
+        <module>malle-common</module>
         <module>malle-coupon</module>
         <module>malle-member</module>
         <module>malle-order</module>
         <module>malle-product</module>
         <module>malle-ware</module>
         <module>renren-fast</module>
+        <module>renren-generator</module>
     </modules>
 
 </project>

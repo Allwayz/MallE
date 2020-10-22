@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: MallE-ProductService
+  datasource:
+    url: jdbc:mysql://192.168.0.21:3306/MallE-pms
+    username: root
+    password: 990312lycLYC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 10000
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto
