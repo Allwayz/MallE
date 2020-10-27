@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +18,6 @@ import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.R;
 
 
-
 /**
  * 优惠券信息
  *
@@ -24,11 +25,28 @@ import cn.allwayz.common.utils.R;
  * @email allwayz_org@icloud.com
  * @date 2020-10-22 21:14:46
  */
+@RefreshScope
 @RestController
 @RequestMapping("coupon/coupon")
 public class CouponController {
     @Autowired
     private CouponService couponService;
+
+    @Value("${coupon.user.name}")
+    private String name;
+    @Value("${coupon.user.age}")
+    private Integer age;
+
+
+    /**
+     * Test
+     * @return
+     */
+    @RequestMapping("/test")
+    public R testRequest(){
+
+        return R.ok().put("Name",name).put("Age",age);
+    }
 
     /**
      * List
@@ -84,6 +102,17 @@ public class CouponController {
 		couponService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
+    }
+
+    /**
+     * Select All the coupon by one member
+     * @return
+     */
+    @RequestMapping("member/coupon")
+    public R memberCoupon(){
+        CouponEntity couponEntity = new CouponEntity();
+        couponEntity.setCouponName("10% Discount");
+        return R.ok().put("Coupons",Arrays.asList(couponEntity));
     }
 
 }

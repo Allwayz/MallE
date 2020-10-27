@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.product.entity.CategoryEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,6 +16,18 @@ import java.util.Map;
  */
 public interface CategoryService extends IService<CategoryEntity> {
 
+    /**
+     * Paging query
+     * @param params
+     * @return
+     */
     PageUtils queryPage(Map<String, Object> params);
+
+    /**
+     * Select All item category and shown in a tree structure
+     * @return
+     */
+    List<CategoryEntity> listWithTree();
+
 }
 

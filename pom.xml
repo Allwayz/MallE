@@ -17,6 +17,7 @@
         <module>malle-ware</module>
         <module>renren-fast</module>
         <module>renren-generator</module>
+        <module>malle-gateway</module>
     </modules>
 
 </project>

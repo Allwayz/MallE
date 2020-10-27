@@ -3,6 +3,7 @@ package cn.allwayz.member.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import cn.allwayz.member.feign.CouopnFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,8 @@ import cn.allwayz.common.utils.R;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+    @Autowired
+    CouopnFeignService couopnFeignService;
 
     /**
      * List
@@ -84,6 +87,14 @@ public class MemberController {
 		memberService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
+    }
+
+    @RequestMapping("/coupons")
+    public R getCoupons(){
+        MemberEntity memberEntity = new MemberEntity();
+        memberEntity.setNickname("Joker");
+        R memberCoupons = couopnFeignService.memberCoupons();
+        return R.ok().put("Member",memberEntity).put("Coupons",memberCoupons.get("Coupons"));
     }
 
 }

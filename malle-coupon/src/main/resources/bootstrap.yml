@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: MallE-CouponService
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.0.21:8848
+        file-extension: yaml
+        namespace: 7693de7f-bb0c-4585-8ba3-037da9ff9a9d
+        extension-configs[0]:
+          data-id: datasource.yaml
+          group: dev
+          refresh: true
+        extension-configs[1]:
+          data-id: mybatis.yaml
+          group: dev
+          refresh: true
+        extension-configs[2]:
+          data-id: MallE-CouponService.yaml
+          group: dev
+          refresh: true
+        extension-configs[3]:
+          data-id: springConfig.yaml
+          group: dev
+          refresh: true

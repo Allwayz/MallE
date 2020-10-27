@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: MallE-MemberService
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.0.21:8848
+        file-extension: yaml
+        namespace: cb297ea3-9e24-43e0-b77e-2f3f42aafad6
+        extension-configs[0]:
+          data-id: datasource.yaml
+          group: dev
+          refresh: true
+        extension-configs[1]:
+          data-id: mybatis.yaml
+          group: dev
+          refresh: true
+        extension-configs[2]:
+          data-id: springConfig.yaml
+          group: dev
+          refresh: true

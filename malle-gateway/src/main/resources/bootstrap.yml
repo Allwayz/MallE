@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: MallE-GatewayService
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.0.21:8848
+        file-extension: yaml
+        namespace: 9bdea83e-9f12-4e13-b04e-682fc5188c88
+        group: dev

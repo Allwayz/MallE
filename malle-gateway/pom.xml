@@ -6,13 +6,13 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.3.4.RELEASE</version>
-		<relativePath/>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>cn.allwayz</groupId>
-	<artifactId>malle-member</artifactId>
+	<artifactId>malle-gateway</artifactId>
 	<version>0.0.1</version>
-	<name>malle-member</name>
-	<description>MallE-MemberService</description>
+	<name>malle-gateway</name>
+	<description>MallE-Gateway</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -21,14 +21,10 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>cn.allwayz</groupId>
-			<artifactId>malle-common</artifactId>
-			<version>0.0.1</version>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-gateway</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -41,12 +37,23 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-			<version>2.2.5.RELEASE</version>
+			<groupId>cn.allwayz</groupId>
+			<artifactId>malle-common</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
