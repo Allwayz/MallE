@@ -31,7 +31,7 @@ public class CommentReplayController {
     private CommentReplayService commentReplayService;
 
     /**
-     * 列表
+     * list
      */
     @RequestMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
@@ -42,7 +42,7 @@ public class CommentReplayController {
 
 
     /**
-     * 信息
+     * Info
      */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Long id){
@@ -52,7 +52,7 @@ public class CommentReplayController {
     }
 
     /**
-     * 保存
+     * Save
      */
     @RequestMapping("/save")
     public R save(@RequestBody CommentReplayEntity commentReplay){
@@ -62,7 +62,7 @@ public class CommentReplayController {
     }
 
     /**
-     * 修改
+     * Update
      */
     @RequestMapping("/update")
     public R update(@RequestBody CommentReplayEntity commentReplay){
@@ -72,7 +72,7 @@ public class CommentReplayController {
     }
 
     /**
-     * 删除
+     * Delete
      */
     @RequestMapping("/delete")
     public R delete(@RequestBody Long[] ids){

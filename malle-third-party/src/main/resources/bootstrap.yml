@@ -1,21 +1,17 @@
 spring:
   application:
-    name: MallE-ProductService
+    name: MallE-ThirdPartyService
   cloud:
     nacos:
       config:
         server-addr: 192.168.0.21:8848
         file-extension: yaml
-        namespace: fa23778a-3c80-4515-be05-9ed8c603ffe1
+        namespace: 526e8539-b5ca-4ab6-aae9-313cf5de9910
         extension-configs[0]:
-          data-id: datasource.yaml
+          data-id: aLiCloud_OSS.yaml
           group: dev
           refresh: true
         extension-configs[1]:
-          data-id: mybatis.yaml
-          group: dev
-          refresh: true
-        extension-configs[2]:
           data-id: springConfig.yaml
           group: dev
           refresh: true
