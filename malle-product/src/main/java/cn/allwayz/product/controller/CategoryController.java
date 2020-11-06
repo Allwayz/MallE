@@ -5,11 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import cn.allwayz.product.entity.CategoryEntity;
 import cn.allwayz.product.service.CategoryService;
@@ -34,7 +30,7 @@ public class  CategoryController {
     /**
      * 列表
      */
-    @RequestMapping("/list/tree")
+    @GetMapping("/list/tree")
     public R list(){
         List<CategoryEntity> entityList = categoryService.listWithTree();
 

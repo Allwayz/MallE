@@ -3,8 +3,12 @@ package cn.allwayz.product.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import cn.allwayz.common.valid.AddGroup;
+import cn.allwayz.common.valid.UpdateGroup;
+import cn.allwayz.common.valid.UpdateStatusGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +19,6 @@ import cn.allwayz.product.entity.BrandEntity;
 import cn.allwayz.product.service.BrandService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.R;
-
-import javax.validation.Valid;
 
 
 /**
@@ -56,7 +58,7 @@ public class BrandController {
      * 保存
      */
     @RequestMapping("/save")
-    public R save(@Valid @RequestBody BrandEntity brand, BindingResult result){
+    public R save(@Validated({AddGroup.class}) @RequestBody BrandEntity brand, BindingResult result){
             brandService.save(brand);
         return R.ok();
     }
@@ -65,8 +67,18 @@ public class BrandController {
      * 修改
      */
     @RequestMapping("/update")
-    public R update(@RequestBody BrandEntity brand){
+    public R update(@Validated({UpdateGroup.class}) @RequestBody BrandEntity brand){
 		brandService.updateById(brand);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改状态
+     */
+    @RequestMapping("/update/status")
+    public R updateStatus(@Validated(UpdateStatusGroup.class) @RequestBody BrandEntity brand){
+        brandService.updateById(brand);
 
         return R.ok();
     }

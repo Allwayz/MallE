@@ -1,11 +1,15 @@
 package cn.allwayz.product.entity;
 
+import cn.allwayz.common.valid.AddGroup;
+import cn.allwayz.common.valid.ListValue;
+import cn.allwayz.common.valid.UpdateGroup;
+import cn.allwayz.common.valid.UpdateStatusGroup;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
+import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.*;
 
@@ -22,35 +26,45 @@ import javax.validation.constraints.*;
 public class BrandEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 品牌id
-	 */
+//	/**
+//	 * Brand id
+//	 */
+//	@NotNull(message = "Update must within brandId",groups = {UpdateGroup.class})
+//	@Null(message = "insert can not use Id attribute",groups = {AddGroup.class})
 	@TableId
 	private Long brandId;
-	/**
-	 * 品牌名
-	 */
-	@NotBlank(message = "Brand Name Can Not Blank")
+//	/**
+//	 * Brand anme
+//	 */
+//	@NotBlank(message = "Brand Name Can Not Blank",groups = {UpdateGroup.class,AddGroup.class})
 	private String name;
-	/**
-	 * 品牌logo地址
-	 */
+//	/**
+//	 * Logo Url
+//	 */
+//	@NotBlank(groups = {AddGroup.class})
+//	@URL(message = "Unauthenticated Url address",groups = {UpdateGroup.class,AddGroup.class})
 	private String logo;
 	/**
-	 * 介绍
+	 * Introduction
 	 */
 	private String descript;
-	/**
-	 * 显示状态[0-不显示；1-显示]
-	 */
+//	/**
+//	 * showStatus
+//	 */
+//	@NotNull(groups = {AddGroup.class, UpdateStatusGroup.class})
+//	@ListValue(vals={0,1},groups = {AddGroup.class, UpdateStatusGroup.class})
 	private Integer showStatus;
-	/**
-	 * 检索首字母
-	 */
+//	/**
+//	 * firstLetter
+//	 */
+//	@NotBlank
+//	@Pattern(regexp="^[a-zA-Z]$",message = "Must be a Letter",groups={AddGroup.class,UpdateGroup.class})
 	private String firstLetter;
-	/**
-	 * 排序
-	 */
+//	/**
+//	 * sort
+//	 */
+//	@NotNull(groups={AddGroup.class})
+//	@Min(value = 0,message = "The sort must be greater than 0",groups={AddGroup.class,UpdateGroup.class})
 	private Integer sort;
 
 }

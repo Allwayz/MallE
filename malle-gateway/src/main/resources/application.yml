@@ -8,13 +8,27 @@ spring:
             - Path=/api/product/**
           filters:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
-        - id: thirdparty_route
+
+        - id: third_party_route
           uri: lb://MallE-ThirdPartyService
           predicates:
-            - Path=/api/thirdparty/oss/**
+            - Path=/api/thirdparty/**
           filters:
             - RewritePath=/api/thirdparty/(?<segment>.*),/$\{segment}
 
+        - id: member_route
+          uri: lb://MallE-MemberService
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: ware_route
+          uri: lb://MallE-WarehouseService
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
 
         - id: admin_route
           uri: lb://renrenFast
