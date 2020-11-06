@@ -1,9 +1,11 @@
 package cn.allwayz.product.service;
 
+import cn.allwayz.product.vo.AttrGroupRelationVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.product.entity.AttrAttrgroupRelationEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,5 +23,11 @@ public interface AttrAttrgroupRelationService extends IService<AttrAttrgroupRela
      * @return
      */
     PageUtils queryPage(Map<String, Object> params);
+
+    /**
+     * ???
+     * @param vos
+     */
+    void saveBatch(List<AttrGroupRelationVo> vos);
 }
 
