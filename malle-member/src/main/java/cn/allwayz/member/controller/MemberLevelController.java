@@ -34,7 +34,6 @@ public class MemberLevelController {
      * List
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("member:memberlevel:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = memberLevelService.queryPage(params);
 
@@ -46,7 +45,6 @@ public class MemberLevelController {
      * Info
      */
     @RequestMapping("/info/{id}")
-    //@RequiresPermissions("member:memberlevel:info")
     public R info(@PathVariable("id") Long id){
 		MemberLevelEntity memberLevel = memberLevelService.getById(id);
 
@@ -57,7 +55,6 @@ public class MemberLevelController {
      * Save
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("member:memberlevel:save")
     public R save(@RequestBody MemberLevelEntity memberLevel){
 		memberLevelService.save(memberLevel);
 
@@ -68,7 +65,6 @@ public class MemberLevelController {
      * Update
      */
     @RequestMapping("/update")
-    //@RequiresPermissions("member:memberlevel:update")
     public R update(@RequestBody MemberLevelEntity memberLevel){
 		memberLevelService.updateById(memberLevel);
 
@@ -79,7 +75,6 @@ public class MemberLevelController {
      * Delete
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("member:memberlevel:delete")
     public R delete(@RequestBody Long[] ids){
 		memberLevelService.removeByIds(Arrays.asList(ids));
 

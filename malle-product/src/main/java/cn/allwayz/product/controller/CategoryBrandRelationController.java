@@ -58,7 +58,6 @@ public class CategoryBrandRelationController {
             BrandVo brandVo = new BrandVo();
             brandVo.setBrandId(item.getBrandId());
             brandVo.setBrandName(item.getName());
-
             return brandVo;
         }).collect(Collectors.toList());
 
