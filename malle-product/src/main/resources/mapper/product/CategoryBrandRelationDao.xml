@@ -3,7 +3,6 @@
 
 <mapper namespace="cn.allwayz.product.dao.CategoryBrandRelationDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="cn.allwayz.product.entity.CategoryBrandRelationEntity" id="categoryBrandRelationMap">
         <result property="id" column="id"/>
         <result property="brandId" column="brand_id"/>

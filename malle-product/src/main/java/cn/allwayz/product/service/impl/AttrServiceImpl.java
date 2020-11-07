@@ -75,8 +75,6 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
             relationEntity.setAttrId(attrEntity.getAttrId());
             relationDao.insert(relationEntity);
         }
-
-
     }
 
     @Override
@@ -94,12 +92,10 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
                 wrapper.eq("attr_id",key).or().like("attr_name",key);
             });
         }
-
         IPage<AttrEntity> page = this.page(
                 new Query<AttrEntity>().getPage(params),
                 queryWrapper
         );
-
         PageUtils pageUtils = new PageUtils(page);
         List<AttrEntity> records = page.getRecords();
         List<AttrRespVo> respVos = records.stream().map((attrEntity) -> {
@@ -115,15 +111,12 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
                 }
 
             }
-
-
             CategoryEntity categoryEntity = categoryDao.selectById(attrEntity.getCatelogId());
             if (categoryEntity != null) {
                 attrRespVo.setCatelogName(categoryEntity.getName());
             }
             return attrRespVo;
         }).collect(Collectors.toList());
-
         pageUtils.setList(respVos);
         return pageUtils;
     }
@@ -133,9 +126,6 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         AttrRespVo respVo = new AttrRespVo();
         AttrEntity attrEntity = this.getById(attrId);
         BeanUtils.copyProperties(attrEntity,respVo);
-
-
-
         if(attrEntity.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()){
             //1、设置分组信息
             AttrAttrgroupRelationEntity attrgroupRelation = relationDao.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrId));
@@ -147,8 +137,6 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
                 }
             }
         }
-
-
         //2、设置分类信息
         Long catelogId = attrEntity.getCatelogId();
         Long[] catelogPath = categoryService.findCatelogPath(catelogId);
@@ -158,8 +146,6 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         if(categoryEntity!=null){
             respVo.setCatelogName(categoryEntity.getName());
         }
-
-
         return respVo;
     }
 
@@ -186,8 +172,6 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
                 relationDao.insert(relationEntity);
             }
         }
-
-
     }
 
     /**
