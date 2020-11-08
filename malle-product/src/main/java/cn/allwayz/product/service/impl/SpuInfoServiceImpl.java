@@ -87,12 +87,9 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         descEntity.setDecript(String.join(",",decript));
         spuInfoDescService.saveSpuInfoDesc(descEntity);
 
-
-
         //3、保存spu的图片集 pms_spu_images
         List<String> images = vo.getImages();
         imagesService.saveImages(infoEntity.getId(),images);
-
 
         //4、保存spu的规格参数;pms_product_attr_value
         List<BaseAttrs> baseAttrs = vo.getBaseAttrs();
@@ -109,7 +106,6 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         }).collect(Collectors.toList());
         attrValueService.saveProductAttr(collect);
 
-
         //5、保存spu的积分信息；gulimall_sms->sms_spu_bounds
         Bounds bounds = vo.getBounds();
         SpuBoundTo spuBoundTo = new SpuBoundTo();
@@ -120,9 +116,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             log.error("远程保存spu积分信息失败");
         }
 
-
         //5、保存当前spu对应的所有sku信息；
-
         List<Skus> skus = vo.getSkus();
         if(skus!=null && skus.size()>0){
             skus.forEach(item->{
@@ -132,10 +126,6 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                         defaultImg = image.getImgUrl();
                     }
                 }
-                //    private String skuName;
-                //    private BigDecimal price;
-                //    private String skuTitle;
-                //    private String skuSubtitle;
                 SkuInfoEntity skuInfoEntity = new SkuInfoEntity();
                 BeanUtils.copyProperties(item,skuInfoEntity);
                 skuInfoEntity.setBrandId(infoEntity.getBrandId());
@@ -180,20 +170,11 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                 if(skuReductionTo.getFullCount() >0 || skuReductionTo.getFullPrice().compareTo(new BigDecimal("0")) == 1){
                     R r1 = couponFeignService.saveSkuReduction(skuReductionTo);
                     if(r1.getCode() != 0){
-                        log.error("远程保存sku优惠信息失败");
+                        log.error("Failed to save SKU offers remotely");
                     }
                 }
-
-
-
             });
         }
-
-
-
-
-
-
     }
 
     @Override
@@ -212,7 +193,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                 w.eq("id",key).or().like("spu_name",key);
             });
         }
-        // status=1 and (id=1 or spu_name like xxx)
+
         String status = (String) params.get("status");
         if(!StringUtils.isEmpty(status)){
             wrapper.eq("publish_status",status);
@@ -227,13 +208,6 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         if(!StringUtils.isEmpty(catelogId)&&!"0".equalsIgnoreCase(catelogId)){
             wrapper.eq("catalog_id",catelogId);
         }
-
-        /**
-         * status: 2
-         * key:
-         * brandId: 9
-         * catelogId: 225
-         */
 
         IPage<SpuInfoEntity> page = this.page(
                 new Query<SpuInfoEntity>().getPage(params),

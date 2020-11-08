@@ -1,6 +1,7 @@
 package cn.allwayz.product.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,9 +16,10 @@ import cn.allwayz.product.dao.SkuInfoDao;
 import cn.allwayz.product.entity.SkuInfoEntity;
 import cn.allwayz.product.service.SkuInfoService;
 
-
+@Slf4j
 @Service("skuInfoService")
 public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> implements SkuInfoService {
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<SkuInfoEntity> page = this.page(
@@ -35,6 +37,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
 
     @Override
     public PageUtils queryPageByCondition(Map<String, Object> params) {
+        log.info(params.toString());
         QueryWrapper<SkuInfoEntity> queryWrapper = new QueryWrapper<>();
         /**
          * key:
@@ -52,7 +55,6 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
 
         String catelogId = (String) params.get("catelogId");
         if(!StringUtils.isEmpty(catelogId)&&!"0".equalsIgnoreCase(catelogId)){
-
             queryWrapper.eq("catalog_id",catelogId);
         }
 
@@ -80,7 +82,6 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
             }
 
         }
-
 
         IPage<SkuInfoEntity> page = this.page(
                 new Query<SkuInfoEntity>().getPage(params),

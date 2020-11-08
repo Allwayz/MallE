@@ -34,19 +34,16 @@ public class WareSkuController {
      * List
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("ware:waresku:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = wareSkuService.queryPage(params);
 
         return R.ok().put("page", page);
     }
 
-
     /**
      * Info
      */
     @RequestMapping("/info/{id}")
-    //@RequiresPermissions("ware:waresku:info")
     public R info(@PathVariable("id") Long id){
 		WareSkuEntity wareSku = wareSkuService.getById(id);
 
@@ -57,7 +54,6 @@ public class WareSkuController {
      * Save
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("ware:waresku:save")
     public R save(@RequestBody WareSkuEntity wareSku){
 		wareSkuService.save(wareSku);
 
@@ -68,7 +64,6 @@ public class WareSkuController {
      * Update
      */
     @RequestMapping("/update")
-    //@RequiresPermissions("ware:waresku:update")
     public R update(@RequestBody WareSkuEntity wareSku){
 		wareSkuService.updateById(wareSku);
 
@@ -79,7 +74,6 @@ public class WareSkuController {
      * Delete
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("ware:waresku:delete")
     public R delete(@RequestBody Long[] ids){
 		wareSkuService.removeByIds(Arrays.asList(ids));
 
