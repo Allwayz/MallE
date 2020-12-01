@@ -31,8 +31,8 @@ spring:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
 
         - id: admin_route
-          uri: lb://renrenFast
+          uri: lb://MallE-AdminService
           predicates:
             - Path=/api/**
           filters:
-            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+            - RewritePath=/api/(?<segment>.*),/malle-admin/$\{segment}

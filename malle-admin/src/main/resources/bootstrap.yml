@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: MallE-AdminService
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.0.21:8848
+        file-extension: yaml

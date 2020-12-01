@@ -82,9 +82,20 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     @Override
     public void removeMenuByIds(List<Long> asList) {
         //TODO: check the list if there have been reference by any other.
-
-        //Logic Delete
         baseMapper.deleteBatchIds(asList);
+    }
+
+    private Boolean checkIfBeenReferenced(List<Long> longList){
+        for(Long id:longList){
+            CategoryEntity categoryEntity = baseMapper.selectById(id);
+            if(categoryEntity.getCatLevel()<3){
+                List<CategoryEntity> categoryEntityList = baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid",categoryEntity.getParentCid()));
+                if (categoryEntityList.size() > 0){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
