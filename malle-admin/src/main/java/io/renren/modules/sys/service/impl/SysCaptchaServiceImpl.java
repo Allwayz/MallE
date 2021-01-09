@@ -37,7 +37,7 @@ public class SysCaptchaServiceImpl extends ServiceImpl<SysCaptchaDao, SysCaptcha
     @Override
     public BufferedImage getCaptcha(String uuid) {
         if(StringUtils.isBlank(uuid)){
-            throw new RRException("uuid不能为空");
+            throw new RRException("uuid cannot be empty!");
         }
         //生成文字验证码
         String code = producer.createText();

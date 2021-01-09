@@ -66,7 +66,7 @@ public class SysLoginController extends AbstractController {
 	public Map<String, Object> login(@RequestBody SysLoginForm form)throws IOException {
 		boolean captcha = sysCaptchaService.validate(form.getUuid(), form.getCaptcha());
 		if(!captcha){
-			return R.error("验证码不正确");
+			return R.error("The verification code is incorrect");
 		}
 
 		//用户信息
@@ -74,12 +74,12 @@ public class SysLoginController extends AbstractController {
 
 		//账号不存在、密码错误
 		if(user == null || !user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex())) {
-			return R.error("账号或密码不正确");
+			return R.error("The account or password is incorrect");
 		}
 
 		//账号锁定
 		if(user.getStatus() == 0){
-			return R.error("账号已被锁定,请联系管理员");
+			return R.error("The account has been locked, please contact the administrator");
 		}
 
 		//生成token，并保存到数据库
