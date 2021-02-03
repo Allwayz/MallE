@@ -18,6 +18,7 @@
         <module>malle-ware</module>
         <module>malle-gateway</module>
         <module>malle-third-party</module>
+        <module>malle-search</module>
     </modules>
 
 </project>

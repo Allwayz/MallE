@@ -21,28 +21,28 @@ public class AttrGroupEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 分组id
+	 * GroupId
 	 */
 	@TableId
 	private Long attrGroupId;
 	/**
-	 * 组名
+	 * GroupName
 	 */
 	private String attrGroupName;
 	/**
-	 * 排序
+	 * sort
 	 */
 	private Integer sort;
 	/**
-	 * 描述
+	 * descript
 	 */
 	private String descript;
 	/**
-	 * 组图标
+	 * icon
 	 */
 	private String icon;
 	/**
-	 * 所属分类id
+	 * catelogId
 	 */
 	private Long catelogId;
 

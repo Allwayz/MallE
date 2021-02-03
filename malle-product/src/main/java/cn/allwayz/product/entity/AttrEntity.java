@@ -20,45 +20,46 @@ public class AttrEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 属性id
+	 * attrId
 	 */
 	@TableId
 	private Long attrId;
 	/**
-	 * 属性名
+	 * attrName
 	 */
 	private String attrName;
 	/**
-	 * 是否需要检索[0-不需要，1-需要]
+	 * searchType[0-dontNees，1-Need]
 	 */
 	private Integer searchType;
 	/**
-	 * 属性图标
+	 * icon
 	 */
 	private String icon;
 	/**
-	 * 可选值列表[用逗号分隔]
+	 * valueSelect
 	 */
 	private String valueSelect;
 	/**
-	 * 属性类型[0-销售属性，1-基本属性，2-既是销售属性又是基本属性]
+	 * attrType[0-销售属性，1-基本属性，2-既是销售属性又是基本属性]
 	 */
 	private Integer attrType;
 	/**
-	 * 启用状态[0 - 禁用，1 - 启用]
+	 * enable[0 - 禁用，1 - 启用]
 	 */
 	private Long enable;
 	/**
-	 * 所属分类
+	 * catelogId
 	 */
 	private Long catelogId;
 	/**
-	 * 快速展示【是否展示在介绍上；0-否 1-是】，在sku中仍然可以调整
+	 * showDesc【是否展示在介绍上；0-否 1-是】，在sku中仍然可以调整
 	 */
 	private Integer showDesc;
 
 	/**
 	 * Multiple or single
-	 */private Integer valueType;
+	 */
+	private Integer valueType;
 
 }

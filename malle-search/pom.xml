@@ -9,16 +9,13 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>cn.allwayz</groupId>
-	<artifactId>malle-coupon</artifactId>
+	<artifactId>malle-search</artifactId>
 	<version>0.0.1</version>
-	<name>malle-coupon</name>
-	<description>MallE-CouponService</description>
-
+	<name>malle-search</name>
+	<description>ElasticSearch-SearchServer</description>
 	<properties>
 		<java.version>1.8</java.version>
-		<spring-cloud.version>Hoxton.SR8</spring-cloud.version>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>cn.allwayz</groupId>
@@ -34,17 +31,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency> 
+		</dependency>
+
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-			<version>2.2.5.RELEASE</version>
+			<groupId>org.elasticsearch.client</groupId>
+			<artifactId>elasticsearch-rest-high-level-client</artifactId>
+			<version>7.9.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>7.9.3</version>
 		</dependency>
 	</dependencies>
 
