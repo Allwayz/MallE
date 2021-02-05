@@ -1,8 +1,11 @@
 package cn.allwayz.product.dao;
 
 import cn.allwayz.product.entity.ProductAttrValueEntity;
+import cn.allwayz.product.vo.Attr;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * spu属性值
@@ -13,5 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ProductAttrValueDao extends BaseMapper<ProductAttrValueEntity> {
-	
+
 }

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: MallE-SearchServer
+    name: MallE-SearchService
   cloud:
     nacos:
       discovery:

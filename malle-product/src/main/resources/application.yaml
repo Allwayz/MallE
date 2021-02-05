@@ -12,6 +12,9 @@ spring:
         server-addr: 192.168.0.21:8848
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+  thymeleaf:
+    cache: false
+
 server:
   port: 10001
 logging:

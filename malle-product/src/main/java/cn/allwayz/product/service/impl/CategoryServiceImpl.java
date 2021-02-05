@@ -1,6 +1,7 @@
 package cn.allwayz.product.service.impl;
 
 import cn.allwayz.product.service.CategoryBrandRelationService;
+import cn.allwayz.product.vo.Catelog2VO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import cn.allwayz.product.dao.CategoryDao;
 import cn.allwayz.product.entity.CategoryEntity;
 import cn.allwayz.product.service.CategoryService;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 
@@ -37,7 +39,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                 new Query<CategoryEntity>().getPage(params),
                 new QueryWrapper<CategoryEntity>()
         );
-
         return new PageUtils(page);
     }
 
@@ -59,6 +60,66 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         return level1Menus;
     }
 
+    @Override
+    public void removeMenuByIds(List<Long> asList) {
+        //TODO: check the list if there have been reference by any other.
+        baseMapper.deleteBatchIds(asList);
+    }
+
+    @Override
+    public Long[] findCatelogPath(Long catelogId) {
+        List<Long> paths = new ArrayList<>();
+        List<Long> parentPath = findParentPath(catelogId, paths);
+
+        Collections.reverse(parentPath);
+
+        return parentPath.toArray(new Long[parentPath.size()]);
+    }
+
+    @Transactional
+    @Override
+    public void updateCascade(CategoryEntity category) {
+        this.updateById(category);
+        categoryBrandRelationService.updateCategory(category.getCatId(),category.getName());
+    }
+
+    @Override
+    public List<CategoryEntity> getLevel1Categories() {
+        return baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid", 0));
+    }
+
+    @Override
+    public Map<String, List<Catelog2VO>> getCatalogJson() {
+        List<CategoryEntity> selectList = baseMapper.selectList(null);
+        List<CategoryEntity> level1Categories = getParent_cid(selectList, 0L);
+
+        return level1Categories.stream().collect(Collectors.toMap(k -> k.getCatId().toString(), v -> {
+            List<CategoryEntity> categoryEntities = getParent_cid(selectList, v.getCatId());
+            List<Catelog2VO> catelog2VOS = null;
+            if (!CollectionUtils.isEmpty(categoryEntities)) {
+                catelog2VOS = categoryEntities.stream().map(l2 -> {
+                    Catelog2VO catelog2VO = new Catelog2VO(v.getCatId().toString(), null, l2.getCatId().toString(), l2.getName());
+                    List<CategoryEntity> level3Catalog = getParent_cid(selectList, l2.getCatId());
+                    if (!CollectionUtils.isEmpty(level3Catalog)) {
+                        List<Catelog2VO.Catelog3VO> collect = level3Catalog.stream().map(l3 -> {
+                            Catelog2VO.Catelog3VO catelog3VO = new Catelog2VO.Catelog3VO(l2.getCatId().toString(), l3.getCatId().toString(), l3.getName());
+                            return catelog3VO;
+                        }).collect(Collectors.toList());
+                        catelog2VO.setCatalog3List(collect);
+                    }
+                    return catelog2VO;
+                }).collect(Collectors.toList());
+            }
+            return catelog2VOS;
+        }));
+    }
+
+    /*
+    ==========================================================================================================================================================================
+    ==========================================================================================================================================================================
+    ==========================================================================================================================================================================
+     */
+
     /**
      * 递归查找所有菜单的子菜单
      * @param root
@@ -79,12 +140,38 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         return childrenList;
     }
 
-    @Override
-    public void removeMenuByIds(List<Long> asList) {
-        //TODO: check the list if there have been reference by any other.
-        baseMapper.deleteBatchIds(asList);
+    /**
+     *
+     *
+     * @param selectList
+     * @param parentCid
+     * @return
+     */
+    private List<CategoryEntity> getParent_cid(List<CategoryEntity> selectList, Long parentCid) {
+        return selectList.stream().filter(o -> o.getParentCid().equals(parentCid)).collect(Collectors.toList());
     }
 
+    /**
+     *
+     * @param catelogId
+     * @param paths
+     * @return
+     */
+    private List<Long> findParentPath(Long catelogId,List<Long> paths){
+        //1、收集当前节点id
+        paths.add(catelogId);
+        CategoryEntity byId = this.getById(catelogId);
+        if(byId.getParentCid()!=0){
+            findParentPath(byId.getParentCid(),paths);
+        }
+        return paths;
+    }
+
+    /**
+     *
+     * @param longList
+     * @return
+     */
     private Boolean checkIfBeenReferenced(List<Long> longList){
         for(Long id:longList){
             CategoryEntity categoryEntity = baseMapper.selectById(id);
@@ -98,31 +185,5 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         return true;
     }
 
-    @Override
-    public Long[] findCatelogPath(Long catelogId) {
-        List<Long> paths = new ArrayList<>();
-        List<Long> parentPath = findParentPath(catelogId, paths);
 
-        Collections.reverse(parentPath);
-
-
-        return parentPath.toArray(new Long[parentPath.size()]);
-    }
-
-    private List<Long> findParentPath(Long catelogId,List<Long> paths){
-        //1、收集当前节点id
-        paths.add(catelogId);
-        CategoryEntity byId = this.getById(catelogId);
-        if(byId.getParentCid()!=0){
-            findParentPath(byId.getParentCid(),paths);
-        }
-        return paths;
-    }
-
-    @Transactional
-    @Override
-    public void updateCascade(CategoryEntity category) {
-        this.updateById(category);
-        categoryBrandRelationService.updateCategory(category.getCatId(),category.getName());
-    }
 }

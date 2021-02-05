@@ -1,5 +1,6 @@
 package cn.allwayz.product.service;
 
+import cn.allwayz.product.vo.Catelog2VO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.product.entity.CategoryEntity;
@@ -35,6 +36,11 @@ public interface CategoryService extends IService<CategoryEntity> {
      */
     void removeMenuByIds(List<Long> asList);
 
+    /**
+     *
+     * @param catelogId
+     * @return
+     */
     Long[] findCatelogPath(Long catelogId);
 
     /**
@@ -42,5 +48,17 @@ public interface CategoryService extends IService<CategoryEntity> {
      * @param category
      */
     void updateCascade(CategoryEntity category);
+
+    /**
+     *
+     * @return
+     */
+    List<CategoryEntity> getLevel1Categories();
+
+    /**
+     *
+     * @return
+     */
+    Map<String,List<Catelog2VO>> getCatalogJson();
 }
 

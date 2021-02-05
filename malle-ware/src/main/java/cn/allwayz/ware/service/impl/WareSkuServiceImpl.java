@@ -1,5 +1,6 @@
 package cn.allwayz.ware.service.impl;
 
+import cn.allwayz.common.to.SkuHasStockVO;
 import cn.allwayz.common.utils.R;
 import cn.allwayz.ware.feign.ProductFeignService;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,10 +21,12 @@ import cn.allwayz.ware.dao.WareSkuDao;
 import cn.allwayz.ware.entity.WareSkuEntity;
 import cn.allwayz.ware.service.WareSkuService;
 
+import javax.annotation.Resource;
+
 @Service("wareSkuService")
 public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> implements WareSkuService {
 
-    @Autowired
+    @Resource
     WareSkuDao wareSkuDao;
 
     @Autowired
@@ -82,7 +87,19 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         }else{
             wareSkuDao.addStock(skuId,wareId,skuNum);
         }
+    }
 
+    @Override
+    public List<SkuHasStockVO> getSkuHasStock(List<Long> skuIds) {
+        List<SkuHasStockVO> collect = skuIds.stream().map(skuId -> {
+            SkuHasStockVO vo = new SkuHasStockVO();
+            // 查询当前 sku 的库存
+            Long count = baseMapper.getSkuStock(skuId);
+            vo.setSkuId(skuId);
+            vo.setHasStock(count != null && count > 0);
+            return vo;
+        }).collect(Collectors.toList());
+        return collect;
     }
 
 }
