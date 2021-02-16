@@ -36,3 +36,13 @@ spring:
             - Path=/api/**
           filters:
             - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+
+        - id: malle_host_route
+          uri: lb://MallE-ProductService
+          predicates:
+            - Host=malle.com
+
+        - id: malle_search_route
+          uri: lb://MallE-SearchService
+          predicates:
+            - Host=search.malle.com
