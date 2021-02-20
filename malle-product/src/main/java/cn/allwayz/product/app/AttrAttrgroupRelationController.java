@@ -1,20 +1,14 @@
 package cn.allwayz.product.app;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import cn.allwayz.product.entity.AttrAttrgroupRelationEntity;
-import cn.allwayz.product.service.AttrAttrgroupRelationService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.R;
+import cn.allwayz.product.entity.AttrAttrgroupRelationEntity;
+import cn.allwayz.product.service.AttrAttrgroupRelationService;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.Map;
 
 
 /**
@@ -27,7 +21,7 @@ import cn.allwayz.common.utils.R;
 @RestController
 @RequestMapping("product/attrattrgrouprelation")
 public class AttrAttrgroupRelationController {
-    @Autowired
+    @Resource
     private AttrAttrgroupRelationService attrAttrgroupRelationService;
 
     /**

@@ -1,24 +1,21 @@
 package cn.allwayz.product.app;
 
-import java.util.Arrays;
-import java.util.Map;
-
+import cn.allwayz.common.to.BrandTO;
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.R;
 import cn.allwayz.common.valid.AddGroup;
 import cn.allwayz.common.valid.UpdateGroup;
 import cn.allwayz.common.valid.UpdateStatusGroup;
+import cn.allwayz.product.entity.BrandEntity;
+import cn.allwayz.product.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import cn.allwayz.product.entity.BrandEntity;
-import cn.allwayz.product.service.BrandService;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.R;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -91,6 +88,15 @@ public class BrandController {
 		brandService.removeByIds(Arrays.asList(brandIds));
 
         return R.ok();
+    }
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/batch")
+    public R getBatch(@RequestBody List<Long> ids){
+        List<BrandTO> brands = brandService.getBatch(ids);
+        return R.ok().setData(brands);
     }
 
 }

@@ -31,16 +31,16 @@ spring:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
 
         - id: admin_route
-          uri: lb://renrenFast
+          uri: lb://MallE-AdminService
           predicates:
             - Path=/api/**
           filters:
-            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+            - RewritePath=/api/(?<segment>.*),//malle-admin/$\{segment}
 
         - id: malle_host_route
           uri: lb://MallE-ProductService
           predicates:
-            - Host=malle.com
+            - Host=malle.com, item.malle.com
 
         - id: malle_search_route
           uri: lb://MallE-SearchService

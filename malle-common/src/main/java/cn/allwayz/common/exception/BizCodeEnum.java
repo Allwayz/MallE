@@ -42,6 +42,10 @@ public enum BizCodeEnum {
 
     LOGIN_EXCEPTION(15003, "用户名或密码错误"),
 
+    PRODUCT_PARAM_INVAILD(10001,"参数格式校验失败"),
+    THREAD_POOL_TASK_FAILED(00003, "线程池执行任务失败"),
+    TOO_MANY_REQUEST(00002, "请求太频繁，请稍后重试"),
+
     NO_STOCK_EXCEPTION(22000, "商品库存不足");
 
     private int code;

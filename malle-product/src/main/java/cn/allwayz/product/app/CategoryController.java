@@ -1,14 +1,13 @@
 package cn.allwayz.product.app;
 
-import java.util.Arrays;
-import java.util.List;
-
+import cn.allwayz.common.utils.R;
+import cn.allwayz.product.entity.CategoryEntity;
+import cn.allwayz.product.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import cn.allwayz.product.entity.CategoryEntity;
-import cn.allwayz.product.service.CategoryService;
-import cn.allwayz.common.utils.R;
+import java.util.Arrays;
+import java.util.List;
 
 
 

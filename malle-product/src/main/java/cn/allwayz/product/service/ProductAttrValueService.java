@@ -1,5 +1,6 @@
 package cn.allwayz.product.service;
 
+import cn.allwayz.product.vo.ItemAttrGroupWithAttrVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.product.entity.ProductAttrValueEntity;
@@ -25,5 +26,7 @@ public interface ProductAttrValueService extends IService<ProductAttrValueEntity
 
 
     void updateSpuAttr(Long spuId, List<ProductAttrValueEntity> entities);
+
+    List<ItemAttrGroupWithAttrVO> getAttrsWithAttrGroupBySpuId(Long spuId);
 }
 

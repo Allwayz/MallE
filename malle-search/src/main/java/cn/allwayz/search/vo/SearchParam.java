@@ -1,7 +1,6 @@
 package cn.allwayz.search.vo;
 
 import lombok.Data;
-import lombok.ToString;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
 @Data
 public class SearchParam {
     /**
-     * &keyword=小米
+     * &keyword=
      * 关键字
      */
     private String keyword;

@@ -1,5 +1,6 @@
 package cn.allwayz.product.service;
 
+import cn.allwayz.product.vo.ItemDetailVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.product.entity.SkuInfoEntity;
@@ -22,5 +23,7 @@ public interface SkuInfoService extends IService<SkuInfoEntity> {
     PageUtils queryPageByCondition(Map<String, Object> params);
 
     List<SkuInfoEntity> getSkusBySpuId(Long spuId);
+
+    ItemDetailVO detail(Long skuId);
 }
 

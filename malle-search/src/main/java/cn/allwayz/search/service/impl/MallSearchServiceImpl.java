@@ -1,14 +1,13 @@
 package cn.allwayz.search.service.impl;
 
-import cn.allwayz.common.constant.ESConstant;
 import cn.allwayz.common.to.es.SkuEsModel;
-import cn.allwayz.common.utils.R;
-import cn.allwayz.search.config.ProductSearchConfig;
-import com.alibaba.fastjson.JSON;
 import cn.allwayz.search.config.MalleElasticSearchConfig;
+import cn.allwayz.search.config.ProductSearchConfig;
+import cn.allwayz.search.feign.ProductFeignService;
 import cn.allwayz.search.service.MallSearchService;
 import cn.allwayz.search.vo.SearchParam;
 import cn.allwayz.search.vo.SearchResult;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.search.SearchRequest;
@@ -18,30 +17,24 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
-import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
-import org.elasticsearch.search.aggregations.bucket.MultiBucketsAggregation;
 import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.nested.ParsedNested;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedLongTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -57,20 +50,19 @@ public class MallSearchServiceImpl implements MallSearchService {
 
     @Resource
     private RestHighLevelClient highLevelClient;
+    @Autowired
+    private ProductFeignService productFeignService;
 
     @Override
     public SearchResult search(SearchParam searchParam) {
         SearchResult result = null;
-
         SearchRequest request = buildSearchRequest(searchParam);
         try {
-
             SearchResponse response = highLevelClient.search(request, MalleElasticSearchConfig.COMMON_OPTIONS);
             result = buildSearchResult(response, searchParam);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return result;
     }
 
@@ -188,12 +180,104 @@ public class MallSearchServiceImpl implements MallSearchService {
      * Build Result Data
      *
      * @param response
-     * @param searchParam
+     * @param param
      * @return
      */
-    private SearchResult buildSearchResult(SearchResponse response, SearchParam searchParam) {
-        //TODO
-        return null;
+    private SearchResult buildSearchResult(SearchResponse response, SearchParam param) {
+        SearchResult result = new SearchResult();
+        SearchHits hits = response.getHits();
+        //???
+        List<SkuEsModel> esModels = Arrays.stream(hits.getHits()).map(hit -> {
+            // 每个命中的记录的_source部分是真正的数据的json字符串
+            String sourceAsString = hit.getSourceAsString();
+            SkuEsModel esModel = JSON.parseObject(sourceAsString, SkuEsModel.class);
+            if (!StringUtils.isEmpty(param.getKeyword())) {
+                String skuTitle = hit.getHighlightFields().get("skuTitle").getFragments()[0].toString();
+                esModel.setSkuTitle(skuTitle);
+            }
+            return esModel;
+        }).collect(Collectors.toList());
+        result.setSkuList(esModels);
+
+        //Category
+        Aggregations aggregations = response.getAggregations();
+        // debug模式下确定这个返回的具体类型
+        ParsedLongTerms catelogAgg = aggregations.get("catelogAgg");
+        // 每一个bucket是一种分类，有几个bucket就会有几个分类
+        List<SearchResult.CatelogVO> catelogs = catelogAgg.getBuckets().stream().map(bucket -> {
+            // debug查看下结果
+            long catelogId = bucket.getKeyAsNumber().longValue();
+            // debug模式下确定这个返回的具体类型
+            ParsedStringTerms catelogNameAgg = bucket.getAggregations().get("catelogNameAgg");
+            // 根据id分类后肯定是同一类，只可能有一种名字，所以直接取第一个bucket
+            String catelogName = catelogNameAgg.getBuckets().get(0).getKeyAsString();
+            SearchResult.CatelogVO catelogVO = new SearchResult.CatelogVO();
+            catelogVO.setCatelogId(catelogId);
+            catelogVO.setCatelogName(catelogName);
+            return catelogVO;
+        }).collect(Collectors.toList());
+        result.setCatelogs(catelogs);
+
+        //Brand
+        ParsedLongTerms brandAgg = aggregations.get("brandAgg");
+        List<SearchResult.BrandVO> brands = brandAgg.getBuckets().stream().map(bucket -> {
+            long brandId = bucket.getKeyAsNumber().longValue();
+            ParsedStringTerms brandNameAgg = bucket.getAggregations().get("brandNameAgg");
+            String brandName = brandNameAgg.getBuckets().get(0).getKeyAsString();
+            ParsedStringTerms brandImgAgg = bucket.getAggregations().get("brandImgAgg");
+            String brandImg = brandImgAgg.getBuckets().get(0).getKeyAsString();
+            SearchResult.BrandVO brandVO = new SearchResult.BrandVO();
+            brandVO.setBrandId(brandId);
+            brandVO.setBrandName(brandName);
+            brandVO.setBrandImg(brandImg);
+            return brandVO;
+        }).collect(Collectors.toList());
+        result.setBrands(brands);
+
+        //Attribute
+        ParsedNested attrAgg = aggregations.get("attrAgg");
+        ParsedLongTerms attrIdAgg = attrAgg.getAggregations().get("attrIdAgg");
+        List<SearchResult.AttrVO> attrs = attrIdAgg.getBuckets().stream().map(bucket -> {
+            long attrId = bucket.getKeyAsNumber().longValue();
+            ParsedStringTerms attrNameAgg = bucket.getAggregations().get("attrNameAgg");
+            // 根据id分类后肯定是同一类，只可能有一种名字，所以直接取第一个bucket
+            String attrName = attrNameAgg.getBuckets().get(0).getKeyAsString();
+            // 根据id分类后肯定是同一类，但是可以有多个值，所以会有多个bucket，把所有值组合起来
+            ParsedStringTerms attrValueAgg = bucket.getAggregations().get("attrValueAgg");
+            List<String> attrValue = attrValueAgg.getBuckets().stream().map(b -> b.getKeyAsString()).collect(Collectors.toList());
+            SearchResult.AttrVO attrVO = new SearchResult.AttrVO();
+            attrVO.setAttrId(attrId);
+            attrVO.setAttrName(attrName);
+            attrVO.setAttrValue(attrValue);
+            return attrVO;
+        }).collect(Collectors.toList());
+        result.setAttrs(attrs);
+
+        //Paging
+        // 总记录数
+        result.setTotalCount(hits.getTotalHits().value);
+        // 每页大小
+        result.setPageSize(ProductSearchConfig.PAGE_SIZE);
+        // 总页数
+        result.setTotalPage((result.getTotalCount() + ProductSearchConfig.PAGE_SIZE - 1) / ProductSearchConfig.PAGE_SIZE);
+        // 当前页码
+        int pageNum = param.getPageNum() == null ? 1 : param.getPageNum();
+        result.setCurrPage(pageNum);
+        // 构建页码导航,以当前页为中心，连续5页
+        ArrayList<Integer> pageNavs = new ArrayList<>();
+        for (int i = pageNum - 2; i <= pageNum + 2; ++i) {
+            if (i <= 0) {
+                continue;
+            }
+            if (i >= result.getTotalPage()) {
+                break;
+            }
+            pageNavs.add(i);
+        }
+        result.setPageNavs(pageNavs);
+
+        List<SearchResult.BreadCrumbsVO> breadCrumbsVOS = new LinkedList<>();
+        return result;
     }
 
 }

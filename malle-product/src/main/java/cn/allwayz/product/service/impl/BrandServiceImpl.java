@@ -1,20 +1,24 @@
 package cn.allwayz.product.service.impl;
 
-import cn.allwayz.product.service.CategoryBrandRelationService;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.util.Map;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import cn.allwayz.common.to.BrandTO;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.Query;
-
 import cn.allwayz.product.dao.BrandDao;
 import cn.allwayz.product.entity.BrandEntity;
 import cn.allwayz.product.service.BrandService;
+import cn.allwayz.product.service.CategoryBrandRelationService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author allwayz
@@ -53,5 +57,13 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, BrandEntity> impleme
 
             //TODO 更新其他关联
         }
+    }
+
+    @Override
+    public List<BrandTO> getBatch(List<Long> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
+        return this.baseMapper.getBatch(ids);
     }
 }

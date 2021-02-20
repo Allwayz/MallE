@@ -930,6 +930,10 @@ html {
       .JD_banner .JD_nav .JD_banner_main .JD_con_right {
         width: 990px;
         margin-left: 218px; }
+      myconMain{
+        width: 990px;
+        margin-left: 0px;
+      }
         .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter {
           position: relative;
           z-index: 4;
