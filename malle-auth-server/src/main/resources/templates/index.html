@@ -5,12 +5,19 @@
 		<link rel="stylesheet" type="text/css" href="JD_sass/JD1.css" />
 		<script src="JD_js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
 		<title>MallE</title>
+
+		<meta name="google-signin-scope" content="profile email">
+		<meta name="google-signin-client_id"
+			  content='983209668471-v3ilpk7o5ricp36ne3oovcd9gm9s03o9.apps.googleusercontent.com'>
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
+
 	</head>
 	<body>
 	<div style="margin-left: 650px">
 		<!--顶部logo-->
 		<header>
-			<a href="http://malle.com"><img src="JD_img/logo.jpg" /></a>
+			<a href="http://malle.com"><img src="JD_img/logo_mall.jpg" /></a>
+			<img src="JD_img/logo_mall.jpg">
 			<p>Welcome</p>
 		</header>
 		<div class="top-2">
@@ -67,17 +74,12 @@
 				<div class="si_out">
 					<ul>
 						<li>
-							<a href="#">
-								<img src="JD_img/qq.png" />
-								<span>QQ</span>
-							</a>
-						</li>
-						<li class="f4"> | </li>
-						<li>
+							<div data-onsuccess="onSignIn">
 							<a href="">
-								<img src="JD_img/weixin.png" />
-								<span>微信</span>
+								<svg aria-hidden="true" class="native svg-icon iconGoogle" width="18" height="18" viewBox="0 0 18 18"><path d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z" fill="#4285F4" style="--darkreader-inline-fill: #449df4;" data-darkreader-inline-fill=""></path><path d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z" fill="#34A853" style="--darkreader-inline-fill: #83d99a;" data-darkreader-inline-fill=""></path><path d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z" fill="#FBBC05" style="--darkreader-inline-fill: #fcca38;" data-darkreader-inline-fill=""></path><path d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z" fill="#EA4335" style="--darkreader-inline-fill: #ed5b4f;" data-darkreader-inline-fill=""></path></svg>
+								<span>Log in with Google</span>
 							</a>
+							</div>
 						</li>
 					</ul>
 					<h5 class="rig">
@@ -168,5 +170,31 @@
 				pass.style.border = '1px solid red';
 			}
 		}
+
+		function onSignIn(googleUser) {
+			//跳转到http://gntina.iok.la/sendRedirect(获取用户信息)
+			location.href = "http://gntina.iok.la/sendRedirect";
+			//获取用户基本信息，但是此id不能给后台用，不安全，改用id_token
+			/*从这往下的代码都不需要，因为是在后台验证，后台获取用户信息
+                        var profile = googleUser.getBasicProfile();
+			console.log('google自己封装好的获取用户信息');
+			console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+			console.log('Name: ' + profile.getName());
+			console.log('Image URL: ' + profile.getImageUrl());
+			console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+			//将id_token发送给后台进行验证
+			var id_token = googleUser.getAuthResponse().id_token;
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', 'http://gntina.iok.la/idToken');
+			xhr.setRequestHeader('Content-Type',
+					'application/x-www-form-urlencoded');
+			xhr.onload = function() {
+				console.log('Signed in as: ' + xhr.responseText);
+			};
+			xhr.send('idtoken=' + id_token);
+                       */
+		}
+
 	</script>
 </html>

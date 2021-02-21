@@ -77,7 +77,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
             this.save(memberEntity);
             // 唯一索引报错
         } catch (DuplicateKeyException e) {
-            throw new BizException(BizCodeEnum.MEMBER_ALREADY_EXIST, "用户名或手机号已存在");
+            throw new BizException(BizCodeEnum.MEMBER_ALREADY_EXIST, "UserName or Phone Number Already Exist");
         }
 
         return true;

@@ -28,7 +28,6 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public boolean register(RegisterVO registerVO) {
-        //TODO:验证码
         System.out.println(">>>>>>>>>>开始执行校验");
         // 调用远程服务完成保存
         MemberRegisterTO to = new MemberRegisterTO();
@@ -38,7 +37,6 @@ public class RegisterServiceImpl implements RegisterService {
             // 抛出异常,远程服务执行失败，会返回json格式的r，里面包含了错误信息
             throw new RegisterPageException(r.getCode(), r.getData(String.class));
         }
-        System.out.println("前端传回来的数据"+registerVO.toString());
         return true;
     }
 

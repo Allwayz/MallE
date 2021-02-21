@@ -21,7 +21,7 @@ public class MemberExceptionHandler {
 
     @ExceptionHandler(Throwable.class)
     public R throwableExceptionHandler(Throwable e) {
-        log.error("运行期异常：{}", e);
+        log.error("RunTimeException：{}", e);
         return R.error(BizCodeEnum.UNKNOW_EXCEPTION.getCode(), BizCodeEnum.UNKNOW_EXCEPTION.getMsg());
     }
 }

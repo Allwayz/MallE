@@ -62,7 +62,7 @@
 		.logo {
 			width: 140px;
 			height: 40px;
-			background: url(../img/icon.png) no-repeat;
+			#background: url(../img/icon.png) no-repeat;
 			position: absolute;
 			top: 20px;
 			left: 35px;
