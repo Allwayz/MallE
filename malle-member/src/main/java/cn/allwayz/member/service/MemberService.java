@@ -1,8 +1,12 @@
 package cn.allwayz.member.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import cn.allwayz.common.to.MemberInfoTO;
+import cn.allwayz.common.to.MemberLoginTO;
+import cn.allwayz.common.to.MemberRegisterTO;
+import cn.allwayz.common.to.WeiboUserAuthTO;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.member.entity.MemberEntity;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Map;
 
@@ -16,5 +20,25 @@ import java.util.Map;
 public interface MemberService extends IService<MemberEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+    /**
+     * 新用户注册
+     * @param registerTO
+     * @return
+     */
+    boolean register(MemberRegisterTO registerTO);
+
+    /**
+     * 账号密码登录
+     * @param loginTO
+     * @return
+     */
+    MemberInfoTO login(MemberLoginTO loginTO);
+
+    /**
+     * 使用微博的访问令牌获取用户信息完成登录
+     * @param authTO
+     * @return
+     */
+    MemberInfoTO weiboLogin(WeiboUserAuthTO authTO);
 }
 

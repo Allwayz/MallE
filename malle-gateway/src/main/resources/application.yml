@@ -46,3 +46,8 @@ spring:
           uri: lb://MallE-SearchService
           predicates:
             - Host=search.malle.com
+
+        - id: malle_auth_route
+          uri: lb://MallE-AuthService
+          predicates:
+            - Host=auth.malle.com

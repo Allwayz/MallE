@@ -3,10 +3,9 @@ package cn.allwayz.product.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
-import lombok.Data;
 
 /**
  * spu信息介绍
@@ -28,6 +27,6 @@ public class SpuInfoDescEntity implements Serializable {
 	/**
 	 * 商品介绍
 	 */
-	private String decript;
+	String decript;
 
 }

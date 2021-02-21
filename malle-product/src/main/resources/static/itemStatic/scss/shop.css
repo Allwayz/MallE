@@ -86,7 +86,7 @@ a {
                 color: red;
                 font-size: 14px; }
     .Shop .ShopXiangqing .allquanbushop {
-      float: right;
+      /*float: right;*/
       width: 990px;
       position: relative; }
       .Shop .ShopXiangqing .allquanbushop .shopjieshao {

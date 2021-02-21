@@ -1,20 +1,19 @@
 package cn.allwayz.member.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import cn.allwayz.member.feign.CouopnFeignService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import cn.allwayz.member.entity.MemberEntity;
-import cn.allwayz.member.service.MemberService;
+import cn.allwayz.common.to.MemberInfoTO;
+import cn.allwayz.common.to.MemberLoginTO;
+import cn.allwayz.common.to.MemberRegisterTO;
+import cn.allwayz.common.to.WeiboUserAuthTO;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.R;
+import cn.allwayz.member.entity.MemberEntity;
+import cn.allwayz.member.feign.CouopnFeignService;
+import cn.allwayz.member.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -95,6 +94,37 @@ public class MemberController {
         memberEntity.setNickname("Joker");
         R memberCoupons = couopnFeignService.memberCoupons();
         return R.ok().put("Member",memberEntity).put("Coupons",memberCoupons.get("Coupons"));
+    }
+
+    /**
+     * 新用户注册
+     * @param registerTO
+     * @return
+     */
+    @RequestMapping("/register")
+    public R register(@RequestBody MemberRegisterTO registerTO){
+        memberService.register(registerTO);
+        return R.ok();
+    }
+
+    /**
+     * 用户登录
+     */
+    @RequestMapping("/login")
+    public R login(@RequestBody MemberLoginTO loginTO){
+        // 登录失败会由异常处理机制处理
+        MemberInfoTO infoTO = memberService.login(loginTO);
+        return R.ok().setData(infoTO);
+    }
+
+    /**
+     * 社交登录--微博
+     */
+    @RequestMapping("/weibo/login")
+    public R weiboLogin(@RequestBody WeiboUserAuthTO authTO){
+        // 登录失败会由异常处理机制处理
+        MemberInfoTO infoTO = memberService.weiboLogin(authTO);
+        return R.ok().setData(infoTO);
     }
 
 }

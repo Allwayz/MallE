@@ -24,7 +24,7 @@ import lombok.Getter;
  *  </ul>
  */
 @Getter
-public enum BizCodeEnum {
+public enum BizCodeEnum implements CommonError{
     /**
      *
      */
@@ -41,11 +41,14 @@ public enum BizCodeEnum {
     PHONE_EXIST_EXCEPTION(15002, "手机号已存在"),
 
     LOGIN_EXCEPTION(15003, "用户名或密码错误"),
+    MEMBER_ALREADY_EXIST(80001, "用户已存在"),
+    MEMBER_NOT_EXIST(80002, "账户不存在"),
+    MEMBER_ACCOUNT_PASSWORD_NOT_MATCH(80003, "用户名或密码错误"),
 
     PRODUCT_PARAM_INVAILD(10001,"参数格式校验失败"),
     THREAD_POOL_TASK_FAILED(00003, "线程池执行任务失败"),
     TOO_MANY_REQUEST(00002, "请求太频繁，请稍后重试"),
-
+    AUTH_WEIBO_LOGIN_FAILED(99003, "微博登录失败，请重试"),
     NO_STOCK_EXCEPTION(22000, "商品库存不足");
 
     private int code;
@@ -54,6 +57,15 @@ public enum BizCodeEnum {
     BizCodeEnum(int code, String msg){
         this.code = code;
         this.msg = msg;
+    }
+    @Override
+    public int getErrorCode() {
+        return code;
+    }
+
+    @Override
+    public String getErrorMsg() {
+        return msg;
     }
 }
 

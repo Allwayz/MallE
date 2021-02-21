@@ -24,6 +24,14 @@
         <result property="status" column="status"/>
         <result property="createTime" column="create_time"/>
     </resultMap>
+    <select id="getByAccount" resultType="cn.allwayz.member.entity.MemberEntity">
+        SELECT
+            *
+        FROM
+            ums_member
+        WHERE
+        username = #{account} OR mobile = #{account};
+    </select>
 
 
 </mapper>

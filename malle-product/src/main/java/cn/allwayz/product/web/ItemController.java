@@ -23,6 +23,7 @@ public class ItemController {
                        Model model) {
         ItemDetailVO detail = skuInfoService.detail(skuId);
         model.addAttribute("item", detail);
+
         return "item";
     }
 

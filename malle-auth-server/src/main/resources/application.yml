@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: MallE-AuthService
+  cloud:
+    nacos:
+      server-addr: 192.168.0.21:8848
+  thymeleaf:
+    cache: false
+server:
+  port: 20000
+
+oauth2:
+  social:
+    weibo:
+      client-id: 3661722387
+      client-secret: 1b253ebc0906e625b02f73050c7cde69
+      grant-type: authorization_code
+      redirect-uri: http://auth.gulimall.com/oauth2/weibo/return

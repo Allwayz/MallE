@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * @author allwayz
  */
-@ConfigurationProperties(prefix = "thread.pool.config")
+@ConfigurationProperties(prefix = "malle.thread")
 @Component
 @Data
 @ToString

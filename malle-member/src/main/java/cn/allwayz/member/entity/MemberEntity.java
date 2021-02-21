@@ -2,10 +2,10 @@ package cn.allwayz.member.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 会员
@@ -92,5 +92,23 @@ public class MemberEntity implements Serializable {
 	 * 注册时间
 	 */
 	private Date createTime;
+
+	/**
+	 * 注册来源 0-本平台，1-微博，2-微信
+	 */
+	private Integer registerType;
+	/**
+	 * 社交平台uid
+	 */
+	private String socialUid;
+
+	/**
+	 * 社交平台令牌
+	 */
+	private String accessToken;
+	/**
+	 * 当前令牌过期时间,，单位：s
+	 */
+	private Integer expireIn;
 
 }
