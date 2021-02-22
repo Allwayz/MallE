@@ -58,14 +58,15 @@
   					</b>
         <ul>
           <li>
-            <a href="http://auth.malle.com/login.html">Hi,Sign In</a>
+            <a th:if="${session.loginUser != null}">Hi，[[${session.loginUser.nickname}]]</a>
+            <a th:if="${session.loginUser == null}"  href="http://auth.malle.com/login.html">Hi,Sign In</a>
           </li>
           <li>
-            <a href="http://auth.malle.com/reg.html" class="li_2">Sing Up For Free</a>
+            <a th:if="${session.loginUser == null}" href="http://auth.malle.com/reg.html" class="li_2">Sing Up For Free</a>
           </li>
           <span>|</span>
           <li>
-            <a href="#">My Order</a>
+            <a href="http://cart.malle.com/cart/list.html">My Order</a>
           </li>
         </ul>
       </div>

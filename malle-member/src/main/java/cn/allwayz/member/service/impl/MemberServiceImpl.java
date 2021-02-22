@@ -82,7 +82,6 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         if(!(entityByUserName == null)){
             throw new BizException(BizCodeEnum.MEMBER_ALREADY_EXIST, "UserName or Phone Number Already Exist");
         }
-
         try {
             this.save(memberEntity);
             // 唯一索引报错
@@ -158,14 +157,9 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
                     memberEntity.setCity(userFromWeibo.getLocation());
                 }
             }
-
-            // 保存
             this.save(memberEntity);
-
-            // 返回
             return convertMemberEntity2MemberInfoTO(memberEntity);
         } else {
-            // 否则，更新其本次登录用的token和过期时间即可
             MemberEntity memberEntity = new MemberEntity();
             memberEntity.setId(entity.getId());
 //            memberEntity.setAccessToken(authTO.getAccessToken());

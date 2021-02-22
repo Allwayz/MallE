@@ -2,13 +2,14 @@ package cn.allwayz.common.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author allwayz
  */
 @Data
-public class MemberInfoVO {
+public class MemberInfoVO implements Serializable {
 
     /**
      * id

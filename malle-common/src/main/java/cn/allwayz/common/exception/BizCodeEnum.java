@@ -49,6 +49,8 @@ public enum BizCodeEnum implements CommonError{
     THREAD_POOL_TASK_FAILED(00003, "线程池执行任务失败"),
     TOO_MANY_REQUEST(00002, "请求太频繁，请稍后重试"),
     AUTH_WEIBO_LOGIN_FAILED(99003, "微博登录失败，请重试"),
+    AUTH_USER_NOT_LOGIN(99004, "用户未登录"),
+    CALL_FEIGN_SERVICE_FAILED(00004, "调用远程服务失败"),
     NO_STOCK_EXCEPTION(22000, "商品库存不足");
 
     private int code;

@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="itemStatic/scss/header.css" />
 	<link rel="stylesheet" type="text/css" href="itemStatic/bootstrap/css/bootstrap.css"/>
 	<link rel="stylesheet" type="text/css" href="itemStatic/scss/index.css">
+	<link rel="stylesheet" type="text/css" href="itemStatic/css/index.scss">
 </head>
 <body>
 <div id="max">
@@ -25,10 +26,17 @@
 			</ul>
 
 			<ul class="header_ul_right">
-				<li></li><li></li><li></li><li></li><li></li><li></li>
-				<li style="border: 0;"><a href="http://auth.malle.com/login.html" class="aa">Hi,Sign In</a></li>
-				<li><a href="http://auth.malle.com/reg.html" style="color: red;">Sign Up</a>   |</li>
-				<li><a href="javascript:;" class="aa">My Order</a></li>
+				<li></li><li></li><li></li><li></li>
+
+				<li style="width: auto">
+					<a class="li_2" th:if="${session.loginUser != null}" style="width: auto">Hi, [[${session.loginUser.nickname}]]</a>
+					<a th:if="${session.loginUser == null}"  href="http://auth.gulimall.com/login.html" class="li_2">Hi,Sign In</a>
+				</li>
+				<li th:if="${session.loginUser == null}">
+					<a  href="http://auth.gulimall.com/reg.html">Sign Up</a>
+				</li>
+
+				<a href="http://cart.malle.com/cart/list.html">My Order</a>
 			</ul>
 		</div>
 	</header>
@@ -36,7 +44,7 @@
 		<div class="nav_min">
 			<div class="nav_top">
 <!--				<div class="nav_top_one"><a href="#"><img src="itemStatic/img/logo_malle.jpg"/></a></div>-->
-				<div class="nav_top_one"><a href="#"><img src="itemStatic/img/1.png"/></a></div>
+				<div class="nav_top_one"><a href="http://malle.com"><img src="itemStatic/img/logo_malle.jpg"/></a></div>
 				<div class="nav_top_two"><input type="text" id="item_keyword_input"/><button  onclick="goToList()">Search</button></div>
 				<div class="nav_top_three"><a href="../JD_Shop/One_JDshop.html">My Basket</a><span class="glyphicon glyphicon-shopping-cart"></span>
 					<div class="nav_top_three_1">
@@ -202,8 +210,8 @@
 						</div>
 					</div>
 					<div class="box-btns-two">
-						<a href="../商品分类\index.html">
-							Add To Basket
+						<a th:attr="skuId=${item.skuInfo.skuId}" href="javascript:void(0)" onclick="addToCart()" id="a_addTocart">
+							加入购物车
 						</a>
 					</div>
 				</div>
@@ -362,14 +370,12 @@
 		$(".box-attr dd").css({
 			"border": "solid 1.5px #CCC"
 		}).removeClass("attr-selected");
-		// 销售属性框回显，点击，样式变化
 		var skuId = String([[${item.skuInfo.skuId}]])
 		$(".box-attr dd").each(function() {
-			// 当前商品具有当前属性，选择框变红
 			var skuids = $(this).attr("sku_ids").split(",")
 			if (skuids.includes(skuId)) {
 				$(this).css({
-					"border": "solid 1.5px red"
+					"border": "solid 1.5px blue"
 				}).addClass("attr-selected")
 			}
 		})
@@ -377,30 +383,21 @@
 
 	// 点击事件
 	$(".box-attr dd").click(function() {
-		// 给自己添加样式，去掉它的兄弟的样式
 		$(this).css({
 			"border": "solid 1.5px red"
 		}).addClass("attr-selected")
 				.siblings("dd").css({
 			"border": "solid 1.5px #ccc"
 		}).removeClass("attr-selected");
-		// 找到所有被选择的dd，（每种属性下有一个被选中）
 		var list_skuids = new Array();
 		$("dd[class=attr-selected]").each(function (){
-			// 具有这个属性的skuids
 			var skuids = $(this).attr("sku_ids").split(",")
 			list_skuids.push(skuids)
 		})
-		// 求出所有skuids的交集就唯一确定了这些属性确定的那个skuid
-		// filter方法是juqery的，所以需要先包装
 		var to_skuid = $(list_skuids[0])
 		for (var i = 1; i < list_skuids.length; ++i) {
 			to_skuid = to_skuid.filter(list_skuids[i])
 		}
-		// 城市成农商IC狮女传说你陈女士超时空
-		// 包装完后再变为js对象
-		// console.log(to_skuid[0])
-		// 跳转到这个sku的详情页
 		window.location.href = "http://item.malle.com/" + to_skuid[0] + ".html";
 	})
 

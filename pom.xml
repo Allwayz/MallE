@@ -20,6 +20,7 @@
         <module>malle-third-party</module>
         <module>malle-search</module>
         <module>malle-auth-server</module>
+        <module>malle-cart</module>
     </modules>
 
 </project>

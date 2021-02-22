@@ -51,3 +51,13 @@ spring:
           uri: lb://MallE-AuthService
           predicates:
             - Host=auth.malle.com
+
+        - id: malle_order_route
+          uri: lb://MallE-OrderService
+          predicates:
+            - Host=order.gulimall.com
+
+        - id: malle_cart_route
+          uri: lb://MallE-CartService
+          predicates:
+            - Host=cart.malle.com

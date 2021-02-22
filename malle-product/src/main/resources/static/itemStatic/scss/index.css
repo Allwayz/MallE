@@ -43,7 +43,7 @@ html {
         width: 60px;
         text-align: center; }
       .header_head .header_head_box .header_head_p .header_head_p_a1:hover {
-        color: red; }
+        color: #1346e3; }
     .header_head .header_head_box .header_head_p_cs {
       position: absolute;
       width: 340px;
@@ -63,7 +63,7 @@ html {
         font-weight: 100;
         text-decoration: none; }
       .header_head .header_head_box .header_head_p_cs a:hover {
-        color: #C81623; }
+        color: #1346e3; }
     .header_head .header_head_box ul {
       float: right; }
       .header_head .header_head_box ul li {
@@ -74,9 +74,9 @@ html {
           color: #999;
           font-size: 12px; }
         .header_head .header_head_box ul li .li_2 {
-          color: red; }
+          color: #1346e3; }
       .header_head .header_head_box ul a:hover {
-        color: #C81623; }
+        color: #1346e3; }
       .header_head .header_head_box ul .header_wdjd {
         width: 60px;
         position: relative; }
@@ -180,13 +180,13 @@ html {
     margin: 15px 0 22px; }
   .header_sous .header_form {
     overflow: hidden;
-    background: #f10215;
+    background: #1346e3;
     position: absolute;
     left: 380px;
     top: 27px;
     width: 550px;
     height: 35px;
-    border: 2px solid #f10215;
+    border: 2px solid #1346e3;
     float: left; }
     .header_sous .header_form input {
       padding: 4px;
@@ -202,7 +202,7 @@ html {
       color: #fff;
       border: 0;
       display: block;
-      background: #f10215;
+      background: #1346e3;
       width: 76px;
       height: 35px;
       line-height: 35px;
@@ -283,9 +283,9 @@ html {
         font-size: 12px;
         text-decoration: none; }
       .header_sous .header_form_nav ul li .aaaaa {
-        color: #f10215; }
+        color: #1346e3; }
     .header_sous .header_form_nav ul li:hover a {
-      color: #f10215; }
+      color: #1346e3; }
   .header_sous nav {
     overflow: hidden;
     position: absolute;
@@ -319,12 +319,12 @@ html {
         .header_sous nav ul .nav_li1 a {
           display: block;
           height: 33px;
-          background: #f30213;
+          background: #1346e3;
           color: #fff;
           text-decoration: none;
           text-align: center; }
       .header_sous nav ul .nav_li:hover a {
-        color: red; }
+        color: #1346e3; }
     .header_sous nav .spacer {
       overflow: hidden;
       margin: 10px 0;
@@ -356,7 +356,7 @@ html {
           .header_sous .header_main_left ul li a b {
             font-weight: 700; }
           .header_sous .header_main_left ul li a b:hover {
-            color: #C81623; }
+            color: #1346e3; }
     .header_sous .header_main_left .header_li2 .header_main_left_main {
       position: absolute;
       left: 190px;
@@ -508,7 +508,7 @@ html {
         padding: 20px 10px 0 5px;
         font-size: 14px;
         text-align: center;
-        color: #f60;
+        color: #ffe100;
         background: url(../image/list.icons.other.png) no-repeat; }
       .JD_temai .JD_main .JD_left .bd {
         width: 100%;
@@ -548,7 +548,7 @@ html {
           padding-top: 5px;
           color: #666; }
           .JD_temai .JD_main .JD_left ul li .mc_div p strong {
-            color: #e4393c;
+            color: #1346e3;
             font-size: 14px;
             font-weight: 700; }
         .JD_temai .JD_main .JD_left ul li .mc_div .mc_div_a2 {
@@ -582,7 +582,7 @@ html {
         padding: 20px 10px 0 5px;
         font-size: 14px;
         text-align: center;
-        color: #f60;
+        color: #fbff00;
         background: url(../image/list.icons.other.png) no-repeat; }
       .JD_temai .JD_main .JD_right .bd {
         height: 135px;
@@ -603,7 +603,7 @@ html {
               color: #666;
               text-decoration: none; }
             .JD_temai .JD_main .JD_right .bd ul li a:hover {
-              color: red; }
+              color: #1346e3; }
 
 .JD_ipone {
   width: 1210px;
@@ -618,10 +618,10 @@ html {
         text-decoration: none;
         background: #fff; }
     .JD_ipone .JD_ipone_bar .b:hover .qqq {
-      border: 1px solid #e23a3a;
+      border: 1px solid #1346e3;
       border-bottom: 1px solid #fff; }
     .JD_ipone .JD_ipone_bar .c:hover .qqq {
-      border: 1px solid #e23a3a;
+      border: 1px solid #1346e3;
       border-bottom: 1px solid #fff; }
     .JD_ipone .JD_ipone_bar .a {
       font-size: 20px;
@@ -643,7 +643,7 @@ html {
         left: 0;
         width: 400px;
         padding: 10px 0;
-        border: 1px solid #e23a3a;
+        border: 1px solid #1346e3;
         background: #fff;
         display: none; }
         .JD_ipone .JD_ipone_bar .c div a, .JD_ipone .JD_ipone_bar .b div a {
@@ -652,7 +652,7 @@ html {
           float: left;
           margin-right: 5px; }
         .JD_ipone .JD_ipone_bar .c div a:hover, .JD_ipone .JD_ipone_bar .b div a:hover {
-          color: #e23a3a; }
+          color: #1346e3; }
     .JD_ipone .JD_ipone_bar i {
       float: left;
       margin-right: 5px; }
@@ -679,7 +679,7 @@ html {
           padding-left: 10px;
           font-size: 14px; }
           .JD_banner .JD_nav .JD_selector .title h3 b {
-            color: #e4393c;
+            color: #1346e3;
             margin-right: 5px; }
           .JD_banner .JD_nav .JD_selector .title h3 em {
             font-style: normal; }
@@ -703,7 +703,7 @@ html {
           padding-left: 10px;
           overflow: hidden; }
           .JD_banner .JD_nav .JD_selector .JD_nav_logo .sl_value a:hover {
-            color: red; }
+            color: #1346e3; }
         .JD_banner .JD_nav .JD_selector .JD_nav_logo .sl_ext {
           position: absolute;
           top: 6px;
@@ -715,14 +715,14 @@ html {
             font-size: 12px;
             text-decoration: none; }
           .JD_banner .JD_nav .JD_selector .JD_nav_logo .sl_ext a:nth-child(1):hover {
-            color: #e23a3a; }
+            color: #1346e3; }
             .JD_banner .JD_nav .JD_selector .JD_nav_logo .sl_ext a:nth-child(1):hover i {
-              border: 1px solid #e23a3a; }
+              border: 1px solid #1346e3; }
             .JD_banner .JD_nav .JD_selector .JD_nav_logo .sl_ext a:nth-child(1):hover b {
-              border: 1px solid #e23a3a; }
+              border: 1px solid #1346e3; }
           .JD_banner .JD_nav .JD_selector .JD_nav_logo .sl_ext a:nth-child(2):hover {
-            border: 1px solid #e23a3a;
-            color: #e23a3a; }
+            border: 1px solid #1346e3;
+            color: #1346e3; }
           .JD_banner .JD_nav .JD_selector .JD_nav_logo .sl_ext a:nth-child(1) {
             float: left;
             position: relative;
@@ -772,7 +772,7 @@ html {
               font-size: 20px;
               width: 13px;
               height: 20px;
-              color: #e23a3a; }
+              color: #1346e3; }
         .JD_banner .JD_nav .JD_selector .JD_nav_logo .JD_nav_wrap {
           padding-bottom: 13px;
           position: relative;
@@ -799,12 +799,12 @@ html {
                   top: -34px;
                   left: -2px;
                   background: #fff;
-                  border: 2px solid #e23a3a;
+                  border: 2px solid #1346e3;
                   width: 116px;
                   height: 46px;
                   line-height: 48px;
                   font-size: 12px;
-                  color: #e23a3a;
+                  color: #1346e3;
                   display: none; }
             .JD_banner .JD_nav .JD_selector .JD_nav_logo .JD_nav_wrap .sl_value .sl_value_logo ul li:hover div {
               display: block; }
@@ -893,7 +893,7 @@ html {
               .JD_banner .JD_nav .JD_banner_main .JD_con_left .JD_con_left_bar .JD_con_one .mc ul li a:nth-child(2) em {
                 font-size: 12px; }
             .JD_banner .JD_nav .JD_banner_main .JD_con_left .JD_con_left_bar .JD_con_one .mc ul li a:nth-child(2):hover {
-              color: #e23a3a; }
+              color: #1346e3; }
             .JD_banner .JD_nav .JD_banner_main .JD_con_left .JD_con_left_bar .JD_con_one .mc ul li .mc_price {
               height: 16px;
               line-height: 16px;
@@ -903,7 +903,7 @@ html {
               .JD_banner .JD_nav .JD_banner_main .JD_con_left .JD_con_left_bar .JD_con_one .mc ul li .mc_price .price {
                 float: left;
                 margin-right: 6px;
-                color: #e4393c;
+                color: #1346e3;
                 font-weight: 700;
                 font-size: 14px; }
               .JD_banner .JD_nav .JD_banner_main .JD_con_left .JD_con_left_bar .JD_con_one .mc ul li .mc_price .mc-ico i {
@@ -915,7 +915,7 @@ html {
                 text-align: center;
                 font-style: normal;
                 font-size: 12px;
-                background: #e23a3a;
+                background: #1346e3;
                 color: #FFF;
                 cursor: default;
                 border-radius: 2px;
@@ -954,12 +954,12 @@ html {
                 font-size: 12px;
                 text-decoration: none; }
               .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_top .filter_top_left a:hover {
-                border: 1px solid #e4393c;
-                color: #e4393c; }
+                border: 1px solid #1346e3;
+                color: #1346e3; }
               .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_top .filter_top_left a:nth-child(1) {
                 color: #FFF;
-                border-color: #e4393c;
-                background: #e4393c; }
+                border-color: #1346e3;
+                background: #1346e3; }
             .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_top .filter_top_right {
               float: right; }
               .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_top .filter_top_right .fp-text {
@@ -967,7 +967,7 @@ html {
                 line-height: 23px;
                 margin-right: 10px; }
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_top .filter_top_right .fp-text b {
-                  color: #e4393c;
+                  color: #1346e3;
                   font-weight: 700; }
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_top .filter_top_right .fp-text em {
                   font-weight: 400;
@@ -1048,7 +1048,7 @@ html {
                     color: #005aa0;
                     font-size: 12px; }
                   .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_bottom .filter_bottom_left .dizhi_con #content1 a:hover, .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_bottom .filter_bottom_left .dizhi_con #content2 a:hover, .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_bottom .filter_bottom_left .dizhi_con #content3 a:hover {
-                    color: #e23a3a; }
+                    color: #1346e3; }
               .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_bottom .filter_bottom_left .dizhi {
                 float: left;
                 height: 25px;
@@ -1103,9 +1103,9 @@ html {
                   border: 1px solid #ccc;
                   font-size: 0; }
             .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_bottom .filter_bottom_right ul li:hover a {
-              color: #e4393c; }
+              color: #1346e3; }
             .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .filter_bottom .filter_bottom_right ul li:hover i {
-              border: 1px solid #e4393c; }
+              border: 1px solid #1346e3; }
           .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab {
             padding: 15px 10px;
             overflow: hidden; }
@@ -1135,9 +1135,9 @@ html {
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .ico a {
                   color: white; }
               .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .ico:hover {
-                color: red; }
+                color: #1346e3; }
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .ico:hover a {
-                  color: red; }
+                  color: #1346e3; }
               .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .da {
                 text-align: center; }
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .da img {
@@ -1146,7 +1146,7 @@ html {
               .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div > ul {
                 overflow: hidden; }
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div > ul li:first-child {
-                  border: 2px solid red; }
+                  border: 2px solid #1346e3; }
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div > ul li {
                   overflow: hidden;
                   margin-right: 3px;
@@ -1158,7 +1158,7 @@ html {
                     width: 25px;
                     height: 25px; }
               .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .tab_R {
-                color: red;
+                color: #1346e3;
                 font-size: 18px;
                 font-weight: 800;
                 margin: 5px; }
@@ -1178,7 +1178,7 @@ html {
                   overflow: hidden;
                   text-decoration: none; }
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .tab_JE a:hover {
-                  color: red; }
+                  color: #1346e3; }
               .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .tab_PI {
                 line-height: 20px;
                 color: #a7a7a7;
@@ -1213,11 +1213,11 @@ html {
                   cursor: default;
                   border-radius: 2px; }
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .tab_FO p:first-child {
-                  background: #e23a3a;
+                  background: #1346e3;
                   color: #FFF; }
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .tab_FO p:last-child {
-                  border: 1px solid #e23a3a;
-                  color: #e23a3a; }
+                  border: 1px solid #1346e3;
+                  color: #1346e3; }
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .tab_FO p:hover span {
                   display: block; }
                 .JD_banner .JD_nav .JD_banner_main .JD_con_right .filter .rig_tab > div .tab_FO span {
@@ -1307,11 +1307,11 @@ html {
           background: #fff;
           color: #666; }
       .JD_banner .JD_nav .JD_show a:hover {
-        border-top: 1px solid #e23a3a; }
+        border-top: 1px solid #1346e3; }
         .JD_banner .JD_nav .JD_show a:hover span {
-          border: 1px solid #e23a3a;
+          border: 1px solid #1346e3;
           border-top: 0;
-          color: #e23a3a; }
+          color: #1346e3; }
 
 .JD_jx {
   width: 1210px;
@@ -1354,7 +1354,7 @@ html {
             font-style: normal;
             font-size: 12px; }
         .JD_jx .mc ul li .mc_name a:hover {
-          color: #e23a3a; }
+          color: #1346e3; }
       .JD_jx .mc ul li .mc_price {
         height: 16px;
         line-height: 16px;
@@ -1363,7 +1363,7 @@ html {
         .JD_jx .mc ul li .mc_price strong span {
           float: left;
           margin-right: 10px;
-          color: #e4393c;
+          color: #1346e3;
           font-weight: 700;
           font-size: 14px; }
         .JD_jx .mc ul li .mc_price .mc_ico {
@@ -1376,7 +1376,7 @@ html {
           text-align: center;
           font-style: normal;
           font-size: 12px;
-          background: #e23a3a;
+          background: #1346e3;
           color: #FFF;
           cursor: default;
           border-radius: 2px; }
@@ -1435,14 +1435,14 @@ html {
             font-style: normal;
             font-size: 12px; }
         .JD_cnxh .mc ul li .mc_name a:hover {
-          color: #e23a3a; }
+          color: #1346e3; }
       .JD_cnxh .mc ul li .mc_price {
         height: 16px;
         line-height: 16px;
         margin-bottom: 4px;
         overflow: hidden; }
         .JD_cnxh .mc ul li .mc_price strong span {
-          color: #e4393c;
+          color: #1346e3;
           font-size: 14px;
           font-weight: 100; }
       .JD_cnxh .mc ul li .mc_rev {
@@ -1495,7 +1495,7 @@ html {
         margin-bottom: 4px;
         overflow: hidden; }
         .JD_zuji .mc ul li .mc_price strong span {
-          color: #e4393c;
+          color: #1346e3;
           font-size: 14px;
           font-weight: 100; }
 

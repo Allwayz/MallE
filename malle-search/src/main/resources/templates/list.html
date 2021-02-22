@@ -29,19 +29,20 @@
             </div>
         </b>
         <ul>
-            <li>
-                <a href="\index.html">Hi,Sign In</a>
+            <li style="width: auto">
+                <a class="li_2" th:if="${session.loginUser != null}" href="">Hi，[[${session.loginUser.nickname}]]</a>
+                <a th:if="${session.loginUser == null}"  href="http://auth.malle.com/login.html">Hi,Sign In</a>
             </li>
-            <li>
-                <a href="\index.html" class="li_2">Sing Up For Free</a>
+            <li th:if="${session.loginUser == null}">
+                <a  href="http://auth.malle.com/reg.html" class="li_2">Sing Up For Free</a>
             </li>
             <span>|</span>
             <li>
-                <a href="">My Order</a>
+                <a href="http://cart.malle.com/cart/list.html">My Order</a>
             </li>
             <span>|</span>
             <li class="header_sjjd">
-                <a href="malle.com">Malle</a>
+                <a href="http://malle.com">Malle</a>
                 <div class="header_sjjd_div">
                     <img src="/img/01.png" />
                 </div>
@@ -53,7 +54,7 @@
 <!--搜索导航-->
 <div class="header_sous">
     <div class="logo">
-        <a href="http://malle.com"><img src="/image/logo10.jpg" alt=""></a>
+        <a href="http://malle.com"><img src="/image/logo_malle.jpg" alt=""></a>
     </div>
     <div class="header_form">
         <input id="input_keyword" type="text" placeholder="Mobile" />
@@ -78,7 +79,7 @@
     </nav>
 </div>
 
-<hr style="border: 1px solid red;margin-top: -7px;">
+<hr style="border: 1px solid #1346e3;margin-top: -7px;">
 <br>
 <!--手机-->
 <div class="JD_ipone">

@@ -4,11 +4,18 @@ spring:
   cloud:
     nacos:
       server-addr: 192.168.0.21:8848
-
   thymeleaf:
     cache: false
+  session:
+    store-type: redis
+  redis:
+    host: 192.168.0.21
+    port: 6379
 server:
   port: 20000
+  servlet:
+    session:
+      timeout: 30m
 
 oauth2:
   social:

@@ -1,0 +1,18 @@
+server:
+  port: 30000
+spring:
+  application:
+    name: MallE-CartService
+  redis:
+    host: 192.168.0.21
+    port: 6379
+  cloud:
+    nacos:
+      server-addr: 192.168.0.21:8848
+
+malle:
+  thread:
+    core-size: 20
+    maximum-size: 200
+    keep-alive-time: 10
+    block-queue-size: 10000

@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableDiscoveryClient
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableFeignClients(basePackages = "cn.allwayz.search.feign")
-//@EnableRedisHttpSession
+
 public class MalleSearchApplication {
 
 	public static void main(String[] args) {

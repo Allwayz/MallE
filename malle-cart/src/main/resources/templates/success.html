@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Success</title>
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/swiper.min.css" />
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/success.css" />
+</head>
+<body>
+<!--头部-->
+<div class="alert-info">
+    <div class="hd_wrap_top">
+        <ul class="hd_wrap_left">
+            <li class="hd_home"><i class="glyphicon glyphicon-home"></i> <a href="http://malle.com">HomePage</a> </li>
+        </ul>
+        <ul class="hd_wrap_right">
+            <li class="forel"> <a th:if="${session.loginUser != null}" href="http://auth.malle.com/login.html" class="link_login">Hi，[[${session.loginUser.nickname}]]</a>&nbsp; <a th:if="${session.loginUser == null}" href="http://auth.malle.com/login.html" class="link_login">Hi, Sign In</a>&nbsp; <a th:if="${session.loginUser == null}" href="http://auth.malle.com/reg.html" class="link_regist">Sign Up for Free</a> </li>
+            <li class="spacer"></li>
+            <li> <a href="http://order.malle.com/center/list.html">My Order</a> </li>
+        </ul>
+    </div>
+</div>
+<div class="nav-tabs-justified">
+    <div class="nav_wrap">
+        <div class="nav_top">
+            <div class="nav_top_one">
+                <a href="http://malle.com"><img src="image/logo_malle.jpg" style="height: 60px;width:180px;" /></a>
+            </div>
+            <div class="nav_top_two">
+                <input id="input_keyword" type="text" placeholder="" onfocus="this.placeholder=''" onblur="this.placeholder='' " />
+                <button id="btn_search" style="margin-left: 5px;">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div class="success-wrap">
+        <div class="w" id="result">
+            <div class="m succeed-box">
+                <h1 th:if="${item == null}">Item not exist</h1>
+                <div class="mc success-cont" th:if="${item != null}">
+                    <div class="success-lcol">
+                        <div class="success-top">
+                            <b class="succ-icon"></b>
+                            <h3 class="ftx-02">Add To Basket Successfully</h3>
+                        </div>
+                        <div class="p-item">
+                            <div class="p-img">
+                                <a th:href="|http://item.malle.com/${item.skuId}.html|" target="_blank"><img style="height: 60px;width:60px;" th:src="${item.skuImg}" /></a>
+                            </div>
+                            <div class="p-info">
+                                <div class="p-name">
+                                    <a th:text="${item.skuTitle}"></a>
+                                </div>
+                                <div class="p-extra">
+                                    <span class="txt" th:each="attr : ${item.attrs}">[[${attr}]] </span>
+                                    <span class="txt"> / Number：[[${item.count}]]</span>
+                                </div>
+                            </div>
+                            <div class="clr"></div>
+                        </div>
+                    </div>
+                    <div class="success-btns success-btns-new">
+                        <div class="success-ad">
+                            <a href="/#none"></a>
+                        </div>
+                        <div class="clr"></div>
+                        <div class="bg_shop">
+                            <a th:href="|http://item.malle.com/${item.skuId}.html|" class="btn-tobback">Item Detail</a>
+                            <a class="btn-addtocart" href="http://cart.malle.com/cart/list.html" id="GotoShoppingCart"><b></b>Go To Basket</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/success.js"></script>
+<script>
+    // 搜索按钮
+    $("#btn_search").click(function () {
+        var keyword = $.trim($("#input_keyword").val());
+        if (keyword.length == 0) {
+            return false;
+        }
+        window.location.href = "http://search.malle.com/list.html?keyword=" + keyword;
+    })
+</script>
+</body>
+</html>

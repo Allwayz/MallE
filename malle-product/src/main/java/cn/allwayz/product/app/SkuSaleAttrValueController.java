@@ -1,19 +1,15 @@
 package cn.allwayz.product.app;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import cn.allwayz.product.entity.SkuSaleAttrValueEntity;
-import cn.allwayz.product.service.SkuSaleAttrValueService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.R;
+import cn.allwayz.product.entity.SkuSaleAttrValueEntity;
+import cn.allwayz.product.service.SkuSaleAttrValueService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -79,6 +75,13 @@ public class SkuSaleAttrValueController {
 		skuSaleAttrValueService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
+    }
+
+    @RequestMapping("/stringlist/{skuId}")
+    public R liststr(@PathVariable("skuId") Long skuId){
+        List<String> attrs = skuSaleAttrValueService.stringListBySkuId(skuId);
+
+        return R.ok().setData(attrs);
     }
 
 }
