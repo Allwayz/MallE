@@ -6,6 +6,7 @@ import cn.allwayz.auth.service.RegisterService;
 import cn.allwayz.auth.vo.RegisterVO;
 import cn.allwayz.common.to.MemberRegisterTO;
 import cn.allwayz.common.utils.R;
+import com.alibaba.fastjson.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class RegisterServiceImpl implements RegisterService {
         R r = memberFeignService.register(to);
         if (r.getCode() != 0) {
             // 抛出异常,远程服务执行失败，会返回json格式的r，里面包含了错误信息
-            throw new RegisterPageException(r.getCode(), r.getData(String.class));
+            throw new RegisterPageException(r.getCode(), r.getData("msg",new TypeReference<String>(){}));
         }
         return true;
     }

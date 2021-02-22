@@ -8,6 +8,7 @@ import cn.allwayz.common.to.MemberInfoTO;
 import cn.allwayz.common.to.MemberLoginTO;
 import cn.allwayz.common.utils.R;
 import cn.allwayz.common.vo.MemberInfoVO;
+import com.alibaba.fastjson.TypeReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class LoginServiceImpl implements LoginService {
         R r = memberFeignService.login(memberLoginTO);
         // 登录失败
         if (r.getCode() != 0) {
-            throw new LoginPageException(r.getCode(), r.getData(String.class));
+            throw new LoginPageException(r.getCode(), r.getData("msg", new TypeReference<String>(){}));
         }
         return convertMemberInfoTO2MemberInfoVO(r.getData(MemberInfoTO.class));
     }

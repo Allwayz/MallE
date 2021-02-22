@@ -1,15 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" type="text/css" href="JD_sass/JD1.css" />
 		<script src="JD_js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
 		<title>MallE</title>
-
-		<meta name="google-signin-scope" content="profile email">
-		<meta name="google-signin-client_id"
-			  content='983209668471-v3ilpk7o5ricp36ne3oovcd9gm9s03o9.apps.googleusercontent.com'>
-		<script src="https://apis.google.com/js/platform.js" async defer></script>
 
 	</head>
 	<body>
@@ -17,7 +12,6 @@
 		<!--顶部logo-->
 		<header>
 			<a href="http://malle.com"><img src="JD_img/logo_mall.jpg" /></a>
-			<img src="JD_img/logo_mall.jpg">
 			<p>Welcome</p>
 		</header>
 		<div class="top-2">
@@ -34,42 +28,31 @@
 					</p>
 				</div>
 				<div class="si_cen">
-					<h2 class="act btn1">扫码登录</h2>
-					<span>|</span>
-					<h2 class="btn1">账户登录</h2>
-				</div>
-				<div class="si_bom tab">
-					<img src="JD_img/show.png" class="bom_1" />
-					<a href="#"><img src="JD_img/phone-orange.png" class="bom_2" /></a>
-					<h6>打开<span class="red">手机谷粒商城</span> 扫描二维码</h6>
-					<p>
-						<img src="JD_img/4de5019d2404d347897dee637895d02b_15.png" />
-						<span><a href="#">免输入</a></span>
-						<img src="JD_img/4de5019d2404d347897dee637895d02b_17.png" />
-						<span><a href="#">更快</a></span>
-						<img src="JD_img/4de5019d2404d347897dee637895d02b_19.png" />
-						<span><a href="#">更安全</a></span>
-					</p>
+					<h2 class="btn1">Log In</h2>
 				</div>
 				<div class="si_bom1 tab" style="display: none;">
 					<div class="error">
 						<div></div>
-						请输入账户名和密码
+						Please enter user name and password
 					</div>
-					<ul>
-						<li class="top_1">
-							<img src="JD_img/user_03.png" class="err_img1" />
-							<input type="text" placeholder=" 邮箱/用户名/已验证手机" class="user" />
-						</li>
-						<li>
-							<img src="JD_img/user_06.png" class="err_img2" />
-							<input type="password" placeholder=" 密码" class="password" />
-						</li>
-						<li class="bri">
-							<a href="">忘记密码</a>
-						</li>
-						<li class="ent"><button class="btn2"><a class="a">登 &nbsp; &nbsp;录</a></button></li>
-					</ul>
+					<form action="/login/login" method="post" id="login_form" onsubmit="return autoSubmit()">
+						<ul th:with="flag=${!#strings.isEmpty(loginErrMsg)}">
+							<li th:if="${flag}">
+								<div style="color: red" th:text="${loginErrMsg}"></div>
+							</li>
+							<li th:attr="class=${flag ? '' : 'top_1'}">
+								<img src="JD_img/user_03.png" class="err_img1"/>
+								<input name="account" id="input_account" type="text" placeholder="User Name" class="user"/>
+							</li>
+							<li>
+								<img src="JD_img/user_06.png" class="err_img2"/>
+								<input name="password" id="input_password" type="password" placeholder="Password" class="password"/>
+							</li>
+							<li class="ent">
+								<button type="submit"><a>Log&nbsp; &nbsp;In</a></button>
+							</li>
+						</ul>
+					</form>
 				</div>
 				<div class="si_out">
 					<ul>
@@ -84,12 +67,11 @@
 					</ul>
 					<h5 class="rig">
 						<img src="JD_img/4de5019d2404d347897dee637895d02b_25.png" />
-						<span><a href="http://auth.malle.com/reg.html">立即注册</a></span>
+						<span><a href="http://auth.malle.com/reg.html">Sign Up!</a></span>
 					</h5>
 				</div>
 			</div>
 		</div>
-
 
 		<!--底部-->
 		<footer>
@@ -151,7 +133,7 @@
 				err_img1.src = 'JD_img/img11.png';
 				err_img2.src = 'JD_img/img22.png';
 			} else {
-				var a = document.getElementsByClassName("a")[0].href = "http://www.baidu.com";
+				var a = document.getElementsByClassName("a")[0].href = "";
 			}
 			user.onfocus = function() {
 				err_img1.src = 'JD_img/grow1.png';
@@ -170,31 +152,5 @@
 				pass.style.border = '1px solid red';
 			}
 		}
-
-		function onSignIn(googleUser) {
-			//跳转到http://gntina.iok.la/sendRedirect(获取用户信息)
-			location.href = "http://gntina.iok.la/sendRedirect";
-			//获取用户基本信息，但是此id不能给后台用，不安全，改用id_token
-			/*从这往下的代码都不需要，因为是在后台验证，后台获取用户信息
-                        var profile = googleUser.getBasicProfile();
-			console.log('google自己封装好的获取用户信息');
-			console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-			console.log('Name: ' + profile.getName());
-			console.log('Image URL: ' + profile.getImageUrl());
-			console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
-			//将id_token发送给后台进行验证
-			var id_token = googleUser.getAuthResponse().id_token;
-			var xhr = new XMLHttpRequest();
-			xhr.open('POST', 'http://gntina.iok.la/idToken');
-			xhr.setRequestHeader('Content-Type',
-					'application/x-www-form-urlencoded');
-			xhr.onload = function() {
-				console.log('Signed in as: ' + xhr.responseText);
-			};
-			xhr.send('idtoken=' + id_token);
-                       */
-		}
-
 	</script>
 </html>

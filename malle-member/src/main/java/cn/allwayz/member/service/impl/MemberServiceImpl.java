@@ -30,6 +30,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
 
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
-    @Autowired
+    @Resource
     MemberLevelService memberLevelService;
 
     @Override
@@ -62,7 +63,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         // 默认等级
         memberEntity.setLevelId(levelEntity.getId());
         // 注册来源
-        memberEntity.setRegisterType(MemberConstant.REGISTER_TYPE_GULIMALL);
+        memberEntity.setSourceType(MemberConstant.REGISTER_TYPE_MALLE);
         // 创建时间
         memberEntity.setCreateTime(new Date());
         // 加密密码
@@ -72,6 +73,15 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         memberEntity.setNickname(registerTO.getUsername());
         // 手机号
         memberEntity.setMobile(registerTO.getPhone());
+
+        MemberEntity entityByMobile = this.getOne(new QueryWrapper<MemberEntity>().eq("mobile", memberEntity.getMobile()));
+        if(!(entityByMobile == null)){
+            throw new BizException(BizCodeEnum.MEMBER_ALREADY_EXIST, "UserName or Phone Number Already Exist");
+        }
+        MemberEntity entityByUserName = this.getOne(new QueryWrapper<MemberEntity>().eq("username", memberEntity.getUsername()));
+        if(!(entityByUserName == null)){
+            throw new BizException(BizCodeEnum.MEMBER_ALREADY_EXIST, "UserName or Phone Number Already Exist");
+        }
 
         try {
             this.save(memberEntity);
@@ -117,10 +127,10 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
             MemberLevelEntity levelEntity = memberLevelService.getDefaultLevel();
             memberEntity.setLevelId(levelEntity.getId());
             // 注册来源
-            memberEntity.setRegisterType(MemberConstant.REGISTER_TYPE_WEIBO);
-            memberEntity.setAccessToken(authTO.getAccessToken());
-            memberEntity.setExpireIn(authTO.getExpiresIn());
-            memberEntity.setSocialUid(uid);
+            memberEntity.setSourceType(MemberConstant.REGISTER_TYPE_WEIBO);
+//            memberEntity.setAccessToken(authTO.getAccessToken());
+//            memberEntity.setExpireIn(authTO.getExpiresIn());
+//            memberEntity.setSocialUid(uid);
             // 创建时间
             memberEntity.setCreateTime(new Date());
 
@@ -158,8 +168,8 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
             // 否则，更新其本次登录用的token和过期时间即可
             MemberEntity memberEntity = new MemberEntity();
             memberEntity.setId(entity.getId());
-            memberEntity.setAccessToken(authTO.getAccessToken());
-            memberEntity.setExpireIn(authTO.getExpiresIn());
+//            memberEntity.setAccessToken(authTO.getAccessToken());
+//            memberEntity.setExpireIn(authTO.getExpiresIn());
             this.updateById(memberEntity);
             // 上面这些信息不用返回给前端，前端只需要拿到基本信息即可
             return convertMemberEntity2MemberInfoTO(entity);
