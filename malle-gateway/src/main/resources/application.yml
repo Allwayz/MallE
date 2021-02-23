@@ -55,7 +55,7 @@ spring:
         - id: malle_order_route
           uri: lb://MallE-OrderService
           predicates:
-            - Host=order.gulimall.com
+            - Host=order.malle.com
 
         - id: malle_cart_route
           uri: lb://MallE-CartService

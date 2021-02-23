@@ -51,6 +51,16 @@ public enum BizCodeEnum implements CommonError{
     AUTH_WEIBO_LOGIN_FAILED(99003, "微博登录失败，请重试"),
     AUTH_USER_NOT_LOGIN(99004, "用户未登录"),
     CALL_FEIGN_SERVICE_FAILED(00004, "调用远程服务失败"),
+
+    ORDER_HAS_EXPIRED(90001, "订单已处理，请重新下单"),
+    ORDER_CREATE_FAILED(90002, "订单创建失败"),
+    ORDER_PAY_FEILED(90003, "订单支付失败"),
+
+    WARE_PURCHASE_MERGE_FAILED(11001, "无法将采购项合并到已被领取的采购单"),
+
+    WARE_PURCHASE_ASSIGN_FAILED(11002, "只能给新建的采购单分配采购员"),
+    WARE_SKU_STOCK_NOT_ENOUGH(11003, "商品库存不足"),
+
     NO_STOCK_EXCEPTION(22000, "商品库存不足");
 
     private int code;

@@ -13,5 +13,8 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface OrderDao extends BaseMapper<OrderEntity> {
-	
+    //OrderEntity getOrderById(@Param("id") Long id);
+
+//    @Update("update oms_order set status = #{status} where order_sn=#{orderSn}")
+//    boolean updateOrderStatusByOrderSn(@Param("orderSn") String orderSn, @Param("status") Integer status);
 }

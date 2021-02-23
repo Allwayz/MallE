@@ -19,3 +19,20 @@ spring:
           data-id: springConfig.yaml
           group: dev
           refresh: true
+  thymeleaf:
+    cache: false
+  # rabbitmq配置，消息确认机制配置在application.properties
+  rabbitmq:
+    host: 192.168.0.21
+    port: 5672
+    virtual-host: /
+  redis:
+    host: 192.168.0.21
+    port: 6379
+
+malle:
+  thread:
+    core-size: 20
+    maximum-size: 200
+    keep-alive-time: 10
+    block-queue-size: 10000
