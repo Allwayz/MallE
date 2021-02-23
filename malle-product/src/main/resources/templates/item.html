@@ -36,7 +36,7 @@
 					<a  href="http://auth.gulimall.com/reg.html">Sign Up</a>
 				</li>
 
-				<a href="http://cart.malle.com/cart/list.html">My Order</a>
+				<a href="http://order.malle.com/center/list.html">My Order</a>
 			</ul>
 		</div>
 	</header>
@@ -46,7 +46,7 @@
 <!--				<div class="nav_top_one"><a href="#"><img src="itemStatic/img/logo_malle.jpg"/></a></div>-->
 				<div class="nav_top_one"><a href="http://malle.com"><img src="itemStatic/img/logo_malle.jpg"/></a></div>
 				<div class="nav_top_two"><input type="text" id="item_keyword_input"/><button  onclick="goToList()">Search</button></div>
-				<div class="nav_top_three"><a href="../JD_Shop/One_JDshop.html">My Basket</a><span class="glyphicon glyphicon-shopping-cart"></span>
+				<div class="nav_top_three"><a  href="http://cart.malle.com/cart/list.html">My Basket</a><span class="glyphicon glyphicon-shopping-cart"></span>
 					<div class="nav_top_three_1">
 						<img src="itemStatic/img/44.png"/>Nothing In Basket, Shopping Now!
 					</div>
@@ -193,7 +193,7 @@
 
 				<div class="box-btns clear" th:if="${item.hasStock}">
 					<div class="box-btns-one">
-						<input type="text" name="" id="" value="1" />
+						<input type="text" name="" id="input_sku_count" value="1" />
 						<div class="box-btns-one1">
 
 							<div>
@@ -206,12 +206,11 @@
 									-
 								</button>
 							</div>
-
 						</div>
 					</div>
 					<div class="box-btns-two">
 						<a th:attr="skuId=${item.skuInfo.skuId}" href="javascript:void(0)" onclick="addToCart()" id="a_addTocart">
-							加入购物车
+							Add To Basket
 						</a>
 					</div>
 				</div>

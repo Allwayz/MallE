@@ -66,7 +66,7 @@
           </li>
           <span>|</span>
           <li>
-            <a href="http://cart.malle.com/cart/list.html">My Order</a>
+            <a href="http://order.malle.com/center/list.html">My Order</a>
           </li>
         </ul>
       </div>
@@ -81,8 +81,8 @@
       <div class="header_ico">
         <div class="header_gw">
           <img src="img/img_15.png" />
-          <span><a href="\One_JDshop.html">My Basket</a></span>
-          <span>0</span>
+          <span><a  href="http://cart.malle.com/cart/list.html">My Basket</a></span>
+<!--          <span>0</span>-->
         </div>
         <div class="header_ko">
           <p>No Items in Basket, Shopping Now!</p>
@@ -202,11 +202,8 @@
                 <a href="#"><img class="" src="img/touxiang.png"></a>
               </div>
               <div class="user_info_show">
-                <p class="">Hi, Welcome!</p>
-                <p>
-                  <a href="http://auth.malle.com/login.html" class="">Sign In</a>
-                  <a href="http://auth.malle.com/reg.html" class="">Sign Up</a>
-                </p>
+                <p th:if="${session.loginUser != null}">Hi，[[${session.loginUser.nickname}]]</p>
+                <p th:if="${session.loginUser == null}"  href="http://auth.malle.com/login.html">Hi,Sign In</p>
               </div>
             </div>
             <div class="user_info_hide">
@@ -228,34 +225,10 @@
               <div class="header_new_connter">
                 <div class="header_new_connter_1">
                   <ul>
-<!--                    <li>-->
-<!--                      <a href="#">全民纸巾大作战</a>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                      <a href="#">家具建材满999减300元</a>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                      <a href="#">黑科技冰箱，下单立减千元</a>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                      <a href="#">抢102减101神券！</a>-->
-<!--                    </li>-->
                   </ul>
                 </div>
                 <div class="header_new_connter_1" style="display: none;">
                   <ul>
-<!--                    <li>-->
-<!--                      <a href="#">关于召回普利司通（天津）轮胎有限公司2个规格乘用车轮胎的公告</a>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                      <a href="#">物流推出配送员统一外呼电话"95056”</a>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                      <a href="#">天府大件运营中心开仓公告</a>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                      <a href="#">大件物流“送装一体”服务全面升级！</a>-->
-<!--                    </li>-->
                   </ul>
                 </div>
               </div>
@@ -412,29 +385,6 @@
                           <span class="p"></span>
                         </ul>
                       </div>
-<!--                      <div class="ser_ol_li">-->
-<!--                        <ul>-->
-<!--                          <div class="guanbi">X</div>-->
-<!--                          <a class="active">点卡</a>-->
-<!--                          <a>QQ</a>-->
-<!--                          <a>页游</a>-->
-<!--                          <div class="ser_ol_div1">-->
-<!--                            <input type="text" placeholder="游戏" style="margin-top: 15px;" />-->
-<!--                            <br />面值-->
-<!--                            <select name="" style="margin: 8px 0;">-->
-<!--  																<option value="">面值</option>-->
-<!--  																<option value="">面值</option>-->
-<!--  																<option value="">面值</option>-->
-<!--  															</select><span style="color: #C81623;">￥0.00</span>-->
-<!--                            <p>-->
-<!--                              <input type="radio" name="a" style="width: 15px;vertical-align:middle;" />直充-->
-<!--                              <input type="radio" name="a" style="width: 15px;vertical-align:middle;" />卡密-->
-<!--                            </p>-->
-<!--                          </div>-->
-<!--                          <button>Fast Recharge</button>-->
-<!--                          <span class="p">吃鸡就要快人一步</span>-->
-<!--                        </ul>-->
-<!--                      </div>-->
                     </div>
                   </div>
                 </div>

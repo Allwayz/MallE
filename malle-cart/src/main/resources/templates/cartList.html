@@ -11,12 +11,13 @@
     <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.css" />
 </head>
 <body>
+
 <header>
     <a name="mao1"> </a>
     <div class="header">
         <a>
             <ul class="header-left">
-                <li> <a href="http://malle.com">首页</a> </li>
+                <li> <a href="http://malle.com">HomePage</a> </li>
             </ul></a>
         <ul class="header-right">
             <li> <a th:if="${session.loginUser != null}" href="http://auth.malle.com/login.html" style="color: blue;">Hi，[[${session.loginUser.nickname}]]</a>&nbsp; <a th:if="${session.loginUser == null}" href="http://auth.malle.com/login.html" style="color: blue;">Hi, Sign In</a> </li>
@@ -37,7 +38,7 @@
             </div>
             <div class="one_top_right">
                 <input id="input_keyword" type="text" class="one_right_txt" placeholder="" onfocus="this.placeholder=''" onblur="this.placeholder='' " />
-                <input type="button" id="btn_search" value="搜索" class="one_right_btn" />
+                <input type="button" id="btn_search" value="Search" class="one_right_btn" />
             </div>
         </div>
         <div class="one_search_load" th:if="${session.loginUser == null}">
@@ -84,15 +85,17 @@
                             <li><input type="checkbox" class="check" th:checked="${item.checked}" /></li>
                             <li>
                                 <dt>
+                                    <a th:href="|http://item.malle.com/${item.skuId}.html|">
                                     <img th:src="${item.skuImg}" src="img/shop1.jpg" alt="" />
+                                    </a>
                                 </dt>
                                 <dd>
-                                    <p> <span th:text="${item.skuTitle}">TCL 55A950C 55英寸32核</span> </p>
-                                    <p th:each="attr : ${item.attrs}" th:text="${attr}">人工智能 HDR曲面超薄4K电视金属机</p>
+                                    <p><a th:href="|http://item.malle.com/${item.skuId}.html|"><span th:text="${item.skuTitle}"> </span></a>  </p>
+                                    <p th:each="attr : ${item.attrs}" th:text="${attr}"> </p>
                                 </dd> </li>
-                            <li> <p class="dj">￥[[${#numbers.formatDecimal(item.price, 1, 2)}]]</p> </li>
-                            <li> <p th:attr="skuId=${item.skuId}"> <span>-</span> <span th:text="${item.count}">5</span> <span>+</span> </p> </li>
-                            <li style="font-weight:bold"><p class="zj">￥[[${#numbers.formatDecimal(item.totalPrice, 1, 2)}]]</p></li>
+                            <li> <p class="dj">£[[${#numbers.formatDecimal(item.price, 1, 2)}]]</p> </li>
+                            <li style="width: auto"> <p th:attr="skuId=${item.skuId}"> <span>-</span> <span th:text="${item.count}"> </span> <span>+</span> </p> </li>
+                            <li style="font-weight:bold"><p class="zj">£[[${#numbers.formatDecimal(item.totalPrice, 1, 2)}]]</p></li>
                             <li> <p>Delete</p> </li>
                         </ol>
                     </div> </li>
@@ -101,15 +104,12 @@
         <div class="One_ShopFootBuy fix1">
             <div>
                 <ul>
-                    <li><input type="checkbox" class="allCheck" style="margin-right: 5px; " /><span>全选</span></li>
-                    <li>删除选中的商品</li>
-                    <li>移到我的关注</li>
-                    <li>清除下柜商品</li>
+                    <li><input type="checkbox" class="allCheck" style="margin-right: 5px; " /><span>Select All</span></li>
                 </ul>
             </div>
-            <div>
-                已选择：
-                <font style="color:#e64346;font-weight:bold;" class="sumNum" th:text="${cart.totalCount}"> </font>&nbsp;件
+            <div style="margin-left: 500px">
+                Selected：
+                <font style="color:#e64346;font-weight:bold;" class="sumNum" th:text="${cart.totalCount}"> </font>&nbsp;item
                 <ul>
                     <li><img src="img/buyNumleft.png" alt="" /></li>
                     <li><img src="img/buyNumright.png" alt="" /></li>
@@ -117,12 +117,12 @@
             </div>
             <div>
                 <ol>
-                    <li>总价：<span style="color:#e64346;font-weight:bold;font-size:16px;" class="fnt">￥[[${#numbers.formatDecimal(cart.totalPrice, 1, 2)}]]</span> </li>
-                    <li>优惠：[[${#numbers.formatDecimal(cart.totalReduce, 1, 2)}]]</li>
+                    <li>Total：<span style="color:#e64346;font-weight:bold;font-size:16px;" class="fnt">£[[${#numbers.formatDecimal(cart.totalPrice, 1, 2)}]]</span> </li>
+                    <li>Discount：£[[${#numbers.formatDecimal(cart.totalReduce, 1, 2)}]]</li>
                 </ol>
             </div>
             <div>
-                <button onclick="toTrade()" type="button">去结算</button>
+                <button onclick="toTrade()" type="button">Check</button>
             </div>
         </div>
     </div>
@@ -136,7 +136,7 @@
             </dt>
             <dd>
                 <li>Delete？</li>
-                <li>您可以选择移到关注，或删除商品。</li>
+                <li></li>
             </dd>
         </dl>
     </div>
@@ -180,7 +180,7 @@
             <img src="img/感叹三角形 (2).png" alt="" />
         </dt>
         <dd>
-            没有下柜商品!
+
         </dd>
     </dl>
 </div>

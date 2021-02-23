@@ -25,10 +25,8 @@ public class CartController {
      */
     @GetMapping("/list.html")
     public String cartList(Model model) {
-
         // 执行目标方法之前会被拦截，并保存登录状态
         // UserLoginStatusTO statusTO = CartInterceptor.threadLocal.get();
-
         CartVO cart = cartService.getCart();
         model.addAttribute("cart", cart);
 
@@ -48,6 +46,8 @@ public class CartController {
     @GetMapping("/additem")
     public String addToCart(@RequestParam("skuId") Long skuId,
                             @RequestParam("count") Integer count) {
+        System.out.println(">>>>>>>>>>>>>>addItem>>>>>>>>>>>>>>>"+skuId+count);
+        //int stringToCount = Integer.parseInt(count);
         CartItemVO itemVO = cartService.addToCart(skuId, count);
         return "redirect:http://cart.malle.com/cart/addToCart?skuId=" + skuId.toString();
     }
