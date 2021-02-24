@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * @author allwayz
  */
-@FeignClient("gulimall-product")
+@FeignClient("MallE-ProductService")
 public interface ProductFeignService {
 
     @RequestMapping("/product/skuinfo/info/{skuId}")

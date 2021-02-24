@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,6 +54,9 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
     @Autowired
     OrderFeignService orderFeignService;
 
+    @Resource
+    private WareOrderTaskService wareOrderTaskService;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         /**
@@ -64,13 +68,10 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         if(!StringUtils.isEmpty(skuId)){
             queryWrapper.eq("sku_id",skuId);
         }
-
         String wareId = (String) params.get("wareId");
         if(!StringUtils.isEmpty(wareId)){
             queryWrapper.eq("ware_id",wareId);
         }
-
-
         IPage<WareSkuEntity> page = this.page(
                 new Query<WareSkuEntity>().getPage(params),
                 queryWrapper
@@ -156,21 +157,27 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             Long skuId = skuLockStock.getSkuId();
             // 先查询此商品在哪些仓库有货
             List<Long> wareIds = this.baseMapper.listWaresBySkuId(skuId);
+            System.out.println("该商品在{}仓库有货"+wareIds);
             if (CollectionUtils.isEmpty(wareIds)) {
                 // 当前商品库存不足，锁定失败
-                throw new BizException(BizCodeEnum.WARE_SKU_STOCK_NOT_ENOUGH, "库存不足，商品：" + skuLockStock);
+                throw new BizException(BizCodeEnum.WARE_SKU_STOCK_NOT_ENOUGH, "Out Of Stoke：" + skuLockStock);
             }
             // 挨个仓库尝试锁定
             boolean currSkuLockRes = false;
             for (Long wareId : wareIds) {
                 long rows = this.baseMapper.lockSkuStock(wareId, skuId, skuLockStock.getCount());
+                System.out.println("锁定结果："+rows);
                 if (rows == 1) {
                     // 当前商品库存锁定成功
                     // 创键任务详情
-                    WareOrderTaskDetailEntity taskDetailEntity = new WareOrderTaskDetailEntity(
-                            null, skuId, skuLockStock.getSkuName(),
-                            skuLockStock.getCount(), taskEntity.getId(),
-                            wareId, WareConstant.StockLockStatus.LOCKED.getValue());
+                    WareOrderTaskDetailEntity taskDetailEntity = new WareOrderTaskDetailEntity();
+//                            null, skuId, skuLockStock.getSkuName(),
+//                            skuLockStock.getCount(), taskEntity.getId(),
+//                            wareId, WareConstant.StockLockStatus.LOCKED.getValue());
+                    taskDetailEntity.setSkuId(skuId);
+                    taskDetailEntity.setSkuName(skuLockStock.getSkuName());
+                    taskDetailEntity.setSkuNum(WareConstant.StockLockStatus.LOCKED.getValue());
+                    taskDetailEntity.setTaskId(taskEntity.getId());
 
                     taskDetailService.save(taskDetailEntity);
                     // 向mq发送当前锁定消息
@@ -182,7 +189,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             }
             // 全部仓库都锁定失败
             if (currSkuLockRes == false) {
-                throw new BizException(BizCodeEnum.WARE_SKU_STOCK_NOT_ENOUGH, "库存不足，商品：" + skuLockStock);
+                throw new BizException(BizCodeEnum.WARE_SKU_STOCK_NOT_ENOUGH, "Out Of Stoke：" + skuLockStock);
             }
         }
         return true;
@@ -200,14 +207,14 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         WareOrderTaskDetailEntity taskDetail = taskDetailService.getById(taskDetailId);
         // 库存扣减时的任务单已不存在，说明扣减时失败已被回滚，无需处理
         // 库存单虽存在，但是状态已经是已解锁状态或已扣除状态(非锁定状态)，也无需处理
-        if (taskDetail == null || taskDetail.getLockStatus() != WareConstant.StockLockStatus.LOCKED.getValue()) {
+        if (taskDetail == null || taskDetail.getSkuNum() != WareConstant.StockLockStatus.LOCKED.getValue()) {
             return;
         }
         // 库存扣减时的任务单仍然存在，且仍然是已锁定状态
         // 远程调用，判断当时这个订单目前的状态
         R r = orderFeignService.getOrderDetail(stockLockTO.getOrderSn());
         if (r.getCode() != 0) {
-            log.error("gulimall-ware调用gulimall-order查询订单失败");
+            log.error("nalle-ware调用malle-order查询订单失败");
             // 消费失败，重新入队
             throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED);
         } else {
@@ -236,10 +243,14 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             if (!CollectionUtils.isEmpty(detailEntities)) {
                 // 3.找出其中状态为锁定状态的工作项，执行解锁库存方法
                 detailEntities.stream()
-                        .filter(detailEntity -> detailEntity.getLockStatus() == WareConstant.StockLockStatus.LOCKED.getValue())
-                        .forEach(detailEntity -> unlockStock(detailEntity.getId(), detailEntity.getWareId(), detailEntity.getSkuId(), detailEntity.getSkuNum()));
+                        .filter(detailEntity -> detailEntity.getSkuNum() == WareConstant.StockLockStatus.LOCKED.getValue())
+                        .forEach(detailEntity -> unlockStock(detailEntity.getId(), getWareOrderTaskEntity(detailEntity).getWareId(), detailEntity.getSkuId(), detailEntity.getSkuNum()));
             }
         }
+    }
+
+    private WareOrderTaskEntity getWareOrderTaskEntity(WareOrderTaskDetailEntity wareOrderTaskDetailEntity){
+        return wareOrderTaskService.getById(wareOrderTaskDetailEntity.getTaskId());
     }
 
     /**
@@ -255,7 +266,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         // 修改库存工作单状态为已释放
         WareOrderTaskDetailEntity detailEntity = new WareOrderTaskDetailEntity();
         detailEntity.setId(taskDetailId);
-        detailEntity.setLockStatus(WareConstant.StockLockStatus.RELEASED.getValue());
+        detailEntity.setSkuNum(WareConstant.StockLockStatus.RELEASED.getValue());
         return taskDetailService.updateById(detailEntity);
     }
 

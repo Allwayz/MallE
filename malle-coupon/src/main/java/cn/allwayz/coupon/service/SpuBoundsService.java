@@ -1,5 +1,6 @@
 package cn.allwayz.coupon.service;
 
+import cn.allwayz.common.to.SpuBoundsTO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.coupon.entity.SpuBoundsEntity;
@@ -16,5 +17,9 @@ import java.util.Map;
 public interface SpuBoundsService extends IService<SpuBoundsEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    SpuBoundsTO getBySpuId(Long spuId);
+
+    boolean saveSpuBoundS(SpuBoundsEntity spuBounds);
 }
 

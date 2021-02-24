@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -24,9 +25,11 @@ public interface WareSkuDao extends BaseMapper<WareSkuEntity> {
 
     List<Long> listWareIdHasSkuStock(@Param("skuId") Long skuId);
 
-    Long lockSkuStock(@Param("skuId") Long skuId, @Param("wareId") Long wareId, @Param("num") Integer num);
+    @Update("UPDATE wms_ware_sku SET stock_locked = stock_locked + #{count} WHERE sku_id = #{skuId} AND ware_id = #{wareId} AND stock - stock_locked >= #{count}")
+    int lockSkuStock(@Param("wareId") Long wareId, @Param("skuId") Long skuId, @Param("count") Integer count);
 
-    void unlockStock(@Param("skuId") Long skuId, @Param("wareId") Long wareId, @Param("num") Integer num);
+    @Update("UPDATE wms_ware_sku SET stock_locked = stock_locked - #{count} WHERE sku_id = #{skuId} AND ware_id = #{wareId}")
+    boolean unlockStock(@Param("wareId") Long wareId, @Param("skuId") Long skuId, @Param("count") Integer count);
 
     // 查询此商品在哪些仓库有库存
     @Select("SELECT ware_id FROM wms_ware_sku WHERE sku_id = #{skuId} AND stock - stock_locked > 0")

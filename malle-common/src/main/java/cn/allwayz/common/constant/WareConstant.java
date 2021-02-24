@@ -13,7 +13,7 @@ public class WareConstant {
     public static final Integer DEAD_LETTER_TTL = 3 * 60 * 1000; // 单位是ms
 
     public enum  PurchaseStatusEnum{
-        CREATED(0,"新建"),ASSIGNED(1,"已分配"),
+        CREATED(0,"New"),ASSIGNED(1,"已分配"),
         RECEIVE(2,"已领取"),FINISH(3,"已完成"),
         HASERROR(4,"有异常");
         private int code;

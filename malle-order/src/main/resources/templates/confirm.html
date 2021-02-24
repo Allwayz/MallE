@@ -97,11 +97,6 @@
             <span class="con">Expected to be delivered：</span>
             <a href="#">Delivery service unavailable</a>
         </p>
-        <!--        <div class="updata-1">-->
-        <!--            <img src="confirm/img/im_06.png"/>-->
-        <!--            <span>京准达 标准达</span>-->
-        <!--            <span style="color: black;"> 配送服务全面升级</span>-->
-        <!--        </div>-->
         <div class="hh1"></div>
         <p class="tui">
             <span class="til">Return: </span>
@@ -422,17 +417,9 @@
             $('.h-r-1').css('display', 'none')
         });
 
-
         $(".item-addr p").click(function () {
             $(".item-addr p").css({'border': '2px solid gray'})
-            $(this).css({'border': '2px solid red'})
-            var addrid = $(this).attr("addrId")
-            getFare(addrid)
-        })
-
-        $(".item-addr").click(function () {
-            $(".item-addr p").css({'border': '2px solid gray'})
-            $(this).css({'border': '2px solid red'})
+            $(this).css({'border': '2px solid blue'})
             var addrid = $(this).attr("addrId")
             getFare(addrid)
         })
@@ -450,8 +437,8 @@
             if (res.code == 0) {
                 var address = res.data.address;
                 var fare = res.data.fare * 1;
-                $("#receiverAddress").text("寄送至：" + address.province + " " + address.city + " " + address.detailAddress)
-                $("#receiverPhone").text("收货人：" + address.name + " " + address.phone)
+                $("#receiverAddress").text("Delivery to: " + address.province + " " + address.city + " " + address.detailAddress)
+                $("#receiverPhone").text("Consignee：" + address.name + " " + address.phone)
                 $("#fare").text(fare.toFixed(2));
                 var pay = ([[${order.payPrice}]] + fare).toFixed(2)
                 $("#payAmount").text(pay)

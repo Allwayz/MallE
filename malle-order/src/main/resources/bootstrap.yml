@@ -29,7 +29,9 @@ spring:
   redis:
     host: 192.168.0.21
     port: 6379
-
+logging:
+  level:
+    cn.allwayz.ware: debug
 malle:
   thread:
     core-size: 20

@@ -1,15 +1,15 @@
 package cn.allwayz.coupon.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
+import cn.allwayz.common.to.SpuBoundsTO;
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.R;
+import cn.allwayz.coupon.entity.SpuBoundsEntity;
+import cn.allwayz.coupon.service.SpuBoundsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import cn.allwayz.coupon.entity.SpuBoundsEntity;
-import cn.allwayz.coupon.service.SpuBoundsService;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.R;
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -75,6 +75,14 @@ public class SpuBoundsController {
         spuBoundsService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
+    }
+
+    @RequestMapping("/info/spuId/{spuId}")
+    // @RequiresPermissions("coupon:spubounds:info")
+    public R getBySpuId(@PathVariable("spuId") Long spuId){
+        SpuBoundsTO spuBounds = spuBoundsService.getBySpuId(spuId);
+
+        return R.ok().setData(spuBounds);
     }
 
 }
