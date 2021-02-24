@@ -1,16 +1,16 @@
 package cn.allwayz.product.app;
 
-import java.util.Arrays;
-import java.util.Map;
-
+import cn.allwayz.common.to.SpuInfoTO;
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.R;
+import cn.allwayz.product.entity.SpuInfoEntity;
+import cn.allwayz.product.service.SpuInfoService;
 import cn.allwayz.product.vo.SpuSaveVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import cn.allwayz.product.entity.SpuInfoEntity;
-import cn.allwayz.product.service.SpuInfoService;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.R;
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -84,5 +84,14 @@ public class SpuInfoController {
     public R spuUp(@PathVariable("spuId") Long spuId){
         spuInfoService.up(spuId);
         return R.ok();
+    }
+
+    /**
+     * 远程调用，根据skuId查找
+     */
+    @GetMapping("/skuId/{skuId}")
+    public R getBySkuId(@PathVariable("skuId") Long skuId) {
+        SpuInfoTO spuInfoTO = spuInfoService.getBySkuId(skuId);
+        return R.ok().setData(spuInfoTO);
     }
 }

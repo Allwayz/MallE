@@ -4,8 +4,10 @@ import cn.allwayz.common.to.SkuReductionTo;
 import cn.allwayz.common.to.SpuBoundTo;
 import cn.allwayz.common.utils.R;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient("MallE-CouponService")
 public interface CouponFeignService {
@@ -27,4 +29,8 @@ public interface CouponFeignService {
 
     @PostMapping("/coupon/skufullreduction/saveinfo")
     R saveSkuReduction(@RequestBody SkuReductionTo skuReductionTo);
+
+    @RequestMapping("/coupon/spubounds/info/spuId/{spuId}")
+    R getBySpuId(@PathVariable("spuId") Long spuId);
+
 }

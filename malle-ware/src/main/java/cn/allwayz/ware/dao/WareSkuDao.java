@@ -4,6 +4,7 @@ import cn.allwayz.ware.entity.WareSkuEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -26,4 +27,8 @@ public interface WareSkuDao extends BaseMapper<WareSkuEntity> {
     Long lockSkuStock(@Param("skuId") Long skuId, @Param("wareId") Long wareId, @Param("num") Integer num);
 
     void unlockStock(@Param("skuId") Long skuId, @Param("wareId") Long wareId, @Param("num") Integer num);
+
+    // 查询此商品在哪些仓库有库存
+    @Select("SELECT ware_id FROM wms_ware_sku WHERE sku_id = #{skuId} AND stock - stock_locked > 0")
+    List<Long> listWaresBySkuId(@Param("skuId") Long skuId);
 }

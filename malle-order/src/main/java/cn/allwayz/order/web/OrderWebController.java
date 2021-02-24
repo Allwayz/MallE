@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +46,7 @@ public class OrderWebController {
      * 用户从购物车页面点击去结算
      */
     @GetMapping("/toTrade")
-    public String toTrade(Model model) {
+    public String toTrade(Model model, HttpServletRequest request) {
         // 得到用户本次结算时购物车中选中的那些购物项
         OrderConfirmVO orderConfirmVO = orderService.confirmOrder();
         model.addAttribute("order", orderConfirmVO);
@@ -58,6 +59,7 @@ public class OrderWebController {
      */
     @PostMapping("/submit")
     public String submit(OrderSubmitVO submitVO) {
+        System.out.println(submitVO.toString());
         OrderCreateVO resp = orderService.submit(submitVO);
         return "redirect:http://order.malle.com/topay?orderSn=" + resp.getOrder().getOrderSn();
     }

@@ -6,7 +6,7 @@
     <script src="confirm/js/jquery-3.1.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="confirm/css/JD2.css"/>
 
-    <title>订单结算页</title>
+    <title>Confirm The Order</title>
 </head>
 
 <body>
@@ -16,12 +16,12 @@
         <ul class="header-left">
             <li>
                 <img src="confirm/img/header_1.png"/>
-                <a href="http://gulimall.com">谷粒学院首页</a>
+                <a href="http://malle.com">HomePage</a>
             </li>
         </ul>
         <ul class="header-right">
             <li th:if="${session.loginUser == null}">
-                <a href="http://auth.gulimall.com/login.html" style="color: red">Hi, Sign In</a>
+                <a href="http://auth.malle.com/login.html" style="color: red">Hi, Sign In</a>
             </li>
             <li th:if="${session.loginUser != null}">
                 [[${session.loginUser.nickname}]]<img src="confirm/img/03.png"
@@ -29,7 +29,7 @@
                 <img src="confirm/img/06.png"/>
             </li>
             <li class="spacer"></li>
-            <li><a href="http://order.gulimall.com/center/list.html">My Order</a></li>
+            <li><a href="http://order.malle.com/center/list.html">My Order</a></li>
             <li class="spacer"></li>
         </ul>
         <div style="clear: both;"></div>
@@ -40,18 +40,18 @@
 
 <!--logo图片-->
 <div class="top-1">
-    <img src="confirm/img/logo_malle.jpg" class="img1"/><span>结算页</span>
+    <img src="confirm/img/logo_malle.jpg" class="img1"/><span>Order Detail</span>
     <!--右侧绿色-->
-    <img src="confirm/img/08.png" class="img2"/>
+    <img src="confirm/img/img_009.jpg" class="img2"/>
 </div>
 
 <!--主体部分-->
-<p class="p1">填写并核对订单信息</p>
+<p class="p1">Fill in and check the order information</p>
 <div class="section">
     <!--收货人信息-->
     <div class="top-2">
-        <span>收货人信息</span>
-        <span>新增收货地址</span>
+        <span>Consignee information</span>
+        <span>Add Address</span>
     </div>
 
     <!--地址-->
@@ -69,149 +69,125 @@
 <!--********************************************************************************************-->
 <!--谷粒学院自提-->
 <div class="top-4">
-    <p>谷粒学院自提</p>
-    <p>省运费·无续重·随时取</p>
-    <p class="xiang">详情</p>
+    <p>Express</p>
+    <p>Contactless Delivery</p>
+<!--    <p class="xiang">Detail</p>-->
 </div>
 <div class="hh1"/>
 </div>
 
 <!--支付方式-->
-<h4 class="h4">支付方式</h4>
+<h4 class="h4">Pay Method</h4>
 
 <div class="top-6">
-    <p>货到付款</p>
-    <p><span>惠</span>在线支付</p>
+    <p>Credit card</p>
+    <p>debit card</p>
 </div>
 <div class="hh1"></div>
 <!--送货清单-->
-<h4 class="h4" style="margin-top: 5px;">送货清单</h4>
+<h4 class="h4" style="margin-top: 5px;">Order Detail</h4>
 <div class="top_1">
     <div class="to_left">
-        <h5><span class="peisong">配送方式</span><span class="dui"><img src="confirm/img/i_03.png"/> 对应商品</span></h5>
+        <h5><span class="peisong">Delivery</span><span class="dui"><img src="confirm/img/i_03.png"/> Items</span></h5>
         <div class="box">
-            谷粒学院快递
+            Unknow Express
         </div>
         <p class="biao">
-            <span class="til">标 准 达 ：</span>
-            <span class="con">预计 12月16日[今天] 15:00-19:00 送达</span>
-            <a href="#">修改</a>
+            <span class="til">Standard：</span>
+            <span class="con">Expected to be delivered：</span>
+            <a href="#">Delivery service unavailable</a>
         </p>
-        <div class="updata-1">
-            <img src="confirm/img/im_06.png"/>
-            <span>京准达 标准达</span>
-            <span style="color: black;"> 配送服务全面升级</span>
-        </div>
+        <!--        <div class="updata-1">-->
+        <!--            <img src="confirm/img/im_06.png"/>-->
+        <!--            <span>京准达 标准达</span>-->
+        <!--            <span style="color: black;"> 配送服务全面升级</span>-->
+        <!--        </div>-->
         <div class="hh1"></div>
         <p class="tui">
-            <span class="til">退换无忧：</span>
+            <span class="til">Return: </span>
             <span class="con">
-						、
-							<input type="checkbox"/>
-							自签收后7天内退货，15天内换<span style="font-size: 12px;margin-left: 5px"> ￥ 0.50</span><br/>
-						<span class="nul">货，</span>可享1次上门取件服务 ﹀
+
+                Support 7 days return
 						</span>
 
-        <div class="updata-2">
-            <img src="confirm/img/im_11.png"/>
-            <span>京准达运费大促（限自营中小件）</span>
-        </div>
-
         </p>
-        <p class="kg" style="color:#666666;margin-top: 13px;font-size: 12px">总重量 :<span
+        <p class="kg" style="color:#666666;margin-top: 13px;font-size: 12px">Total Weight: <span
                 style="color:#999999;font-size: 12px">0.095kg</span></p>
     </div>
     <div class="to_right">
-        <h5>商家：谷粒学院自营</h5>
-        <!--				<div><button>换购</button><span>已购满20.00元，再加49.90元，可返回购物车领取赠品</span></div>-->
-        <!--图片-->
+        <h5>Merchants: MallE</h5>
         <div class="yun1" th:each="item:${order.items}">
             <img src="confirm/img/im_03.png" th:src="${item.skuImg}" class="yun"/>
             <div class="mi">
-                <!--						th:text="${item.skuTitle}" 小米（MI）小米手环2 智能运动 心率检测 来-->
                 <p>[[${item.skuTitle}]]
-                    <span style="color: red;"> ￥ [[${#numbers.formatDecimal(item.price,1,2)}]]</span>
+                    <span style="color: red;"> £ [[${#numbers.formatDecimal(item.price,1,2)}]]</span>
                     <span> x[[${item.count}]] </span>
-                    <span style="font-weight: bold" th:text="${item.stock > 0? '有货':'无货'}">有货</span>
+                    <span style="font-weight: bold" th:text="${item.stock > 0? 'In stock':'Out of stock'}">有货</span>
                 </p>
                 <div style="float: left">
                     <p th:each="attr:${item.attrs}" th:text="${attr} " style="float: left">电提醒 久坐提醒 LED显示器 时间显示 防水记 </p>
                     <p style="float: left">0.095kg</p>
                 </div>
-                <p class="tui-1"><img src="confirm/img/i_07.png"/>支持7天无理由退货</p>
+                <p class="tui-1"><img src="confirm/img/i_07.png"/>Support 7 days return</p>
             </div>
         </div>
 
         <div class="hh1"></div>
-        <!--				<p>退换无忧 <span class="money">￥ [[${#numbers.formatDecimal(order.totalPrice,1,2)}]]</span></p>-->
+        <!--				<p>退换无忧 <span class="money">£ [[${#numbers.formatDecimal(order.totalPrice,1,2)}]]</span></p>-->
     </div>
 </div>
 <div class="bto">
     <div class="hh2"></div>
-    <h4 class="float">发票信息</h4>
-    <div class="note float"><img src="confirm/img/i_11.png"/> <span>开企业抬头发票须填写纳税人识别号，以免影响报销</span></div>
+    <h4 class="float">Bill Address</h4>
+    <div class="note float"><img src="confirm/img/i_11.png"/> <span>Default is the same as the shipping address</span></div>
     <ul style="clear: both;">
-        <li>电子普通发票 <img src="confirm/img/i_14.png"/></li>
-        <li>个人</li>
-        <li>商品明细</li>
-        <li>
-            <a href="">修改</a>
-        </li>
+<!--        <li>电子普通发票 <img src="confirm/img/i_14.png"/></li>-->
+<!--        <li>个人</li>-->
+<!--        <li>商品明细</li>-->
+<!--        <li>-->
+<!--            <a href="">修改</a>-->
+<!--        </li>-->
     </ul>
     <div class="hh3"></div>
-    <h4 class="clear">使用优惠/礼品卡/抵用 ^</h4>
+    <h4 class="clear">Gift Card</h4>
     <ul>
-        <li class="red">优惠卡</li>
-        <li>礼品卡</li>
-        <li>京豆</li>
-        <li>余额</li>
-        <li>领奖码</li>
+
     </ul>
     <div class="tuijian clear">
-        <input type="checkbox"/>
-        <span>优惠组合推荐</span>
     </div>
 </div>
 <div class="xia">
     <div class="qian">
         <p class="qian_y">
-            <span>共 [[${order.totalCount}]]</span>
-            <span>件商品，总金额：</span>
-            <span class="rmb">￥[[${#numbers.formatDecimal(order.totalPrice,1,2)}]]</span>
+            <span>[[${order.totalCount}]]</span>
+            <span>Items In Total，Price：</span>
+            <span class="rmb">£[[${#numbers.formatDecimal(order.totalPrice,1,2)}]]</span>
         </p>
         <p class="qian_y">
-            <span>返现：</span>
-            <span class="rmb">  -￥0.00</span>
+            <span>Postage： </span>
+            <span class="rmb"> &nbsp £0.00<span id="fare"></span></span>
         </p>
         <p class="qian_y">
-            <span>运费： </span>
-            <span class="rmb"> &nbsp ￥<span id="fare"><span></span>
-        </p>
-        <p class="qian_y">
-            <span>服务费： </span>
-            <span class="rmb"> &nbsp ￥0.00</span>
-        </p>
-        <p class="qian_y">
-            <span>退换无忧： </span>
-            <span class="rmb"> &nbsp ￥0.00</span>
+            <span>The service fee： </span>
+            <span class="rmb"> &nbsp £0.00</span>
         </p>
 
     </div>
 
     <div class="yfze">
         <p class="yfze_a">
-            <span class="z">应付总额：</span>
-            <span class="hq" id="payAmount">[[${#numbers.formatDecimal(order.payPrice,1,2)}]]</span>
+            <span class="z">Total Price：</span>
+            <span class="hq" id="payAmount">£ [[${#numbers.formatDecimal(order.payPrice,1,2)}]]</span>
         </p>
-        <p class="yfze_b" id="receiverAddress">寄送至： 北京 朝阳区 三环到四环之间 朝阳北路复兴国际大厦23层麦田房产 IT-中心研发二部</p>
-        <p class="yfze_b" id="receiverPhone">收货人：赵存权 188****5052</p>
+        <p class="yfze_b" id="receiverAddress">Address: </p>
+        <p class="yfze_b" id="receiverPhone">Consignee: [[${session.loginUser.nickname}]]</p>
     </div>
     <form action="/submit" method="post">
         <input type="hidden" name="orderToken" th:value="${order.token}"/>
         <input type="hidden" name="payType" value="1"/>
-        <input type="hidden" id="input_totalPrice" name="totalPrice"/>
-        <input type="hidden" id="input_addrId" name="addressId"/>
-        <button class="tijiao" type="submit">提交订单</button>
+        <input type="hidden" id="input_totalPrice" name="totalPrice"  value="1"/>
+        <input type="hidden" id="input_addrId" name="addressId"  value="1"/>
+        <button class="tijiao" type="submit">Confirm</button>
     </form>
 </div>
 </div>
@@ -320,7 +296,7 @@
                 <a href="##">谷粒学院通信</a>
             </dd>
             <dd>
-                <a href="##">谷粒学院gulimall+</a>
+                <a href="##">谷粒学院malle+</a>
             </dd>
         </dl>
     </div>
@@ -402,7 +378,7 @@
         <a href="##">：4006561155 </a>
     </p>
     <p class="p1">
-        <a href="##"> Copyright © 2004-2017 谷粒学院gulimall.com 版权所有</a>|
+        <a href="##"> Copyright © 2004-2017 谷粒学院malle.com 版权所有</a>|
         <a href="##"> 消费者维权热线：4006067733 经营证照</a>|
     </p>
     <p class="p1">
@@ -446,7 +422,15 @@
             $('.h-r-1').css('display', 'none')
         });
 
+
         $(".item-addr p").click(function () {
+            $(".item-addr p").css({'border': '2px solid gray'})
+            $(this).css({'border': '2px solid red'})
+            var addrid = $(this).attr("addrId")
+            getFare(addrid)
+        })
+
+        $(".item-addr").click(function () {
             $(".item-addr p").css({'border': '2px solid gray'})
             $(this).css({'border': '2px solid red'})
             var addrid = $(this).attr("addrId")
@@ -458,7 +442,6 @@
     })
 
     function getFare(addrid) {
-
         // 修改要提交的表单内容
         $("#input_addrId").val(addrid)
 

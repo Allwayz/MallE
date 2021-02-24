@@ -1,9 +1,11 @@
 package cn.allwayz.member.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import cn.allwayz.common.to.MemberAddressTO;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.member.entity.MemberReceiveAddressEntity;
+import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +18,9 @@ import java.util.Map;
 public interface MemberReceiveAddressService extends IService<MemberReceiveAddressEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<MemberAddressTO> listByMemberId(Long memberId);
+
+    MemberAddressTO getMemberDefaultAddress(Long memberId);
 }
 

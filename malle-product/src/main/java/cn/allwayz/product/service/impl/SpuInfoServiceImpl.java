@@ -1,38 +1,35 @@
 package cn.allwayz.product.service.impl;
 
 import cn.allwayz.common.constant.ProductConstant;
-import cn.allwayz.common.to.SkuHasStockVO;
-import cn.allwayz.common.to.SkuReductionTo;
-import cn.allwayz.common.to.SpuBoundTo;
+import cn.allwayz.common.exception.BizCodeEnum;
+import cn.allwayz.common.exception.BizException;
+import cn.allwayz.common.to.*;
 import cn.allwayz.common.to.es.SkuEsModel;
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.Query;
 import cn.allwayz.common.utils.R;
-import cn.allwayz.product.dao.*;
+import cn.allwayz.product.dao.SpuInfoDao;
 import cn.allwayz.product.entity.*;
-import cn.allwayz.product.feign.SearchFeignService;
 import cn.allwayz.product.feign.CouponFeignService;
+import cn.allwayz.product.feign.SearchFeignService;
 import cn.allwayz.product.feign.WareFeignService;
 import cn.allwayz.product.service.*;
 import cn.allwayz.product.vo.*;
 import com.alibaba.fastjson.TypeReference;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.Query;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service("spuInfoService")
@@ -319,5 +316,35 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         }
     }
 
+    @Override
+    public SpuInfoTO getBySkuId(Long skuId) {
+
+        SpuInfoTO spuInfoTO = new SpuInfoTO();
+
+        SkuInfoEntity sku = skuInfoService.getById(skuId);
+        Long spuId = sku.getSpuId();
+
+        SpuInfoEntity spu = this.getById(spuId);
+        // 公共属性拷贝
+        BeanUtils.copyProperties(spu, spuInfoTO);
+
+        CategoryEntity categoryEntity = categoryService.getById(spu.getCatalogId());
+        BrandEntity brandEntity = brandService.getById(spu.getBrandId());
+        // 独有属性赋值
+        spuInfoTO.setCatelogName(categoryEntity.getName());
+        spuInfoTO.setBrandName(brandEntity.getName());
+
+        R r = couponFeignService.getBySpuId(spuId);
+        if (r.getCode() != 0) {
+            log.error("gulimall-product调用gulimall-coupon失败");
+            throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "查询积分失败");
+        }
+        SpuBoundsTO boundsTO = r.getData(SpuBoundsTO.class);
+
+        spuInfoTO.setGrowBounds(boundsTO.getGrowBounds());
+        spuInfoTO.setIntegration(boundsTO.getBuyBounds());
+
+        return spuInfoTO;
+    }
 
 }

@@ -1,9 +1,13 @@
 package cn.allwayz.ware.service;
 
+import cn.allwayz.common.to.OrderLockStockTO;
+import cn.allwayz.common.to.OrderTO;
 import cn.allwayz.common.to.SkuHasStockVO;
-import com.baomidou.mybatisplus.extension.service.IService;
+import cn.allwayz.common.to.SkuStockTO;
+import cn.allwayz.common.to.mp.StockLockTO;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.ware.entity.WareSkuEntity;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 import java.util.Map;
@@ -22,5 +26,34 @@ public interface WareSkuService extends IService<WareSkuEntity> {
     void addStock(Long skuId, Long wareId, Integer skuNum);
 
     List<SkuHasStockVO> getSkuHasStock(List<Long> skuIds);
+
+    List<SkuStockTO> getSkusStock(List<Long> skuIds);
+
+    /**
+     * 查出某个sku的库存信息
+     * @param skuId
+     * @return
+     */
+    Long getSkuStock(Long skuId);
+
+    /**
+     * 为订单锁定库存
+     * @param lockStockTO
+     * @return
+     */
+    boolean lockOrderStock(OrderLockStockTO lockStockTO);
+
+    /**
+     * 收到库存锁定过期消息，释放库存
+     * @param stockLockTO
+     * @return
+     */
+    void unlockStock(StockLockTO stockLockTO);
+
+    /**
+     * 收到订单关闭消息，释放库存
+     */
+    void unlockStock(OrderTO orderTO);
+
 }
 

@@ -1,19 +1,16 @@
 package cn.allwayz.member.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import cn.allwayz.member.entity.MemberReceiveAddressEntity;
-import cn.allwayz.member.service.MemberReceiveAddressService;
+import cn.allwayz.common.to.MemberAddressTO;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.R;
+import cn.allwayz.member.entity.MemberReceiveAddressEntity;
+import cn.allwayz.member.service.MemberReceiveAddressService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -85,5 +82,24 @@ public class MemberReceiveAddressController {
 
         return R.ok();
     }
+
+    @RequestMapping("/listby/{memberId}")
+    public R listBy(@PathVariable("memberId") Long memberId){
+        List<MemberAddressTO> list = memberReceiveAddressService.listByMemberId(memberId);
+
+        return R.ok().setData(list);
+    }
+
+    /**
+     * 获取用户默认地址
+     * @param memberId
+     * @return
+     */
+    @RequestMapping("/default/{memberId}")
+    R getMemberDefaultAddress(@PathVariable("memberId") Long memberId) {
+        MemberAddressTO memberReceiveAddress = memberReceiveAddressService.getMemberDefaultAddress(memberId);
+        return R.ok().setData(memberReceiveAddress);
+    }
+
 
 }

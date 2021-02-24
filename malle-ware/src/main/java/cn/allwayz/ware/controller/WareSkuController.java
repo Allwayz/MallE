@@ -1,17 +1,18 @@
 package cn.allwayz.ware.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import cn.allwayz.common.to.OrderLockStockTO;
 import cn.allwayz.common.to.SkuHasStockVO;
+import cn.allwayz.common.to.SkuStockTO;
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.R;
+import cn.allwayz.ware.entity.WareSkuEntity;
+import cn.allwayz.ware.service.WareSkuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import cn.allwayz.ware.entity.WareSkuEntity;
-import cn.allwayz.ware.service.WareSkuService;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.R;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -82,6 +83,29 @@ public class WareSkuController {
     public R getSkusHasStock(@RequestBody List<Long> skuIds) {
         List<SkuHasStockVO> vos = wareSkuService.getSkuHasStock(skuIds);
         return R.ok().setData(vos);
+    }
+
+    @RequestMapping("/stock/batch")
+    public R getSkuStockBatch(@RequestBody List<Long> skuIds) {
+        List<SkuStockTO> skuStockTOS = wareSkuService.getSkusStock(skuIds);
+        R ok = R.ok();
+        ok.setData(skuStockTOS);
+        return ok;
+    }
+
+    @RequestMapping("/stock/{skuId}")
+    public R getSkuStock(@PathVariable("skuId") Long skuId) {
+        Long stock  = wareSkuService.getSkuStock(skuId);
+        return R.ok().setData(stock);
+    }
+
+    /**
+     * 为订单锁定库存
+     */
+    @PostMapping("/lockStock")
+    public R lockStock(@RequestBody OrderLockStockTO lockStockTO) {
+        wareSkuService.lockOrderStock(lockStockTO);
+        return R.ok();
     }
 
 }
