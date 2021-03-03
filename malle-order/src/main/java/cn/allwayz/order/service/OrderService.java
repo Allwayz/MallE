@@ -2,6 +2,7 @@ package cn.allwayz.order.service;
 
 import cn.allwayz.common.to.OrderTO;
 import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.vo.UserCheckVO;
 import cn.allwayz.order.entity.OrderEntity;
 import cn.allwayz.order.vo.AlipayNotifyVO;
 import cn.allwayz.order.vo.OrderConfirmVO;
@@ -74,6 +75,8 @@ public interface OrderService extends IService<OrderEntity> {
      * @param notifyVO
      */
     String handleAlipayNotify(AlipayNotifyVO notifyVO, HttpServletRequest request);
+
+    String updateOrder(UserCheckVO userCheckVO);
 
 }
 

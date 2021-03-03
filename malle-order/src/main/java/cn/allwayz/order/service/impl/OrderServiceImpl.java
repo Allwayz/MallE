@@ -8,6 +8,7 @@ import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.Query;
 import cn.allwayz.common.utils.R;
 import cn.allwayz.common.vo.MemberInfoVO;
+import cn.allwayz.common.vo.UserCheckVO;
 import cn.allwayz.order.config.AlipayTemplate;
 import cn.allwayz.order.dao.OrderDao;
 import cn.allwayz.order.entity.OrderEntity;
@@ -284,17 +285,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     public String payOrder(String orderSn) {
         OrderEntity order = getOrderByOrderSn(orderSn);
         if (order == null) {
-            throw new BizException(BizCodeEnum.ORDER_PAY_FEILED, "订单不存在");
+            throw new BizException(BizCodeEnum.ORDER_PAY_FEILED, "Order Does not Exist");
         } else if(order.getStatus() == OrderConstant.OrderStatusEnum.PAYED.getCode()) {
             // 订单已支付
-            throw new BizException(BizCodeEnum.ORDER_PAY_FEILED, "此订单已支付");
+            throw new BizException(BizCodeEnum.ORDER_PAY_FEILED, "Already Paied");
         }
         AlipayVO alipayVO = new AlipayVO();
         alipayVO.setOutTradeNo(orderSn);
         // 支付宝支付要求金额必须为小数点后两位
         alipayVO.setTotalAmount(order.getPayAmount().setScale(2, BigDecimal.ROUND_UP).toString());
-        alipayVO.setSubject("谷粒商城订单");
-        alipayVO.setBody("谷粒商城订单");
+        alipayVO.setSubject("Malle Order");
+        alipayVO.setBody("Malle Order");
         try {
             String response = alipayTemplate.pay(alipayVO);
             log.info("支付宝支付响应：{}", response);
@@ -354,6 +355,30 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             String orderSn = notifyVO.getOut_trade_no();
             updateOrderStatusByOrderSn(orderSn, OrderConstant.OrderStatusEnum.PAYED.getCode());
         }
+        return "success";
+    }
+
+    @Transactional
+    @Override
+    public String updateOrder(UserCheckVO userCheckVO) {
+        OrderEntity orderEntity = this.baseMapper.selectOne(new QueryWrapper<OrderEntity>().eq("order_sn",userCheckVO.getOrderSN()));
+        System.out.println("拿到OrderEntity"+orderEntity);
+        List<OrderItemEntity> orderItemEntityList = orderItemService.listByOrderSn(orderEntity.getOrderSn());
+        String items = null;
+        for (OrderItemEntity itemz: orderItemEntityList) {
+            items += itemz.getSkuName();
+            System.out.println("遍历items"+items);
+        }
+        PaymentInfoEntity paymentInfoEntity = new PaymentInfoEntity();
+        paymentInfoEntity.setOrderSn(userCheckVO.getOrderSN());
+        paymentInfoEntity.setPaymentStatus("TRADE_FINISH");
+        paymentInfoEntity.setTotalAmount(orderEntity.getTotalAmount());
+        paymentInfoEntity.setSubject(items);
+        paymentInfoService.save(paymentInfoEntity);
+        System.out.println("保存付款信息"+paymentInfoEntity);
+        updateOrderStatusByOrderSn(orderEntity.getOrderSn(), OrderConstant.OrderStatusEnum.PAYED.getCode());
+        //解锁库存并更新
+        wareFeignService.reseaseStock(orderEntity.getOrderSn());
         return "success";
     }
 

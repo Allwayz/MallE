@@ -28,7 +28,8 @@ public interface WareSkuDao extends BaseMapper<WareSkuEntity> {
     @Update("UPDATE wms_ware_sku SET stock_locked = stock_locked + #{count} WHERE sku_id = #{skuId} AND ware_id = #{wareId} AND stock - stock_locked >= #{count}")
     int lockSkuStock(@Param("wareId") Long wareId, @Param("skuId") Long skuId, @Param("count") Integer count);
 
-    @Update("UPDATE wms_ware_sku SET stock_locked = stock_locked - #{count} WHERE sku_id = #{skuId} AND ware_id = #{wareId}")
+    //UPDATE wms_ware_sku SET stock = stock - stock_locked, stock_locked = stock_locked - 3 WHERE sku_id = 71 AND ware_id = 1
+    @Update("UPDATE wms_ware_sku SET stock = stock - stock_locked, stock_locked = stock_locked -  #{count} WHERE sku_id = #{skuId} AND ware_id = #{wareId}")
     boolean unlockStock(@Param("wareId") Long wareId, @Param("skuId") Long skuId, @Param("count") Integer count);
 
     // 查询此商品在哪些仓库有库存

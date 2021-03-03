@@ -33,7 +33,6 @@ public class RegisterController {
     @PostMapping("/register")
     public String register(@Validated RegisterVO registerVO,
                            RedirectAttributes redirectAttributes) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>注册方法");
         // 数据校验失败会抛异常并被处理，这里只需要执行校验成功后的逻辑
         // 完成用户注册逻辑
         boolean res = registerService.register(registerVO);

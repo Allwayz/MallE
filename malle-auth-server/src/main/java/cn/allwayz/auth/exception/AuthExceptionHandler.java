@@ -30,12 +30,6 @@ public class AuthExceptionHandler {
     @ExceptionHandler({BindException.class})
     public String bindingExceptionHandler(BindException e, RedirectAttributes redirectAttributes) {
         BindingResult bindingResult = e.getBindingResult();
-        // Map<String, String> map = new HashMap<>();
-        // bindingResult.getFieldErrors().forEach(fieldError -> {
-        //     String field = fieldError.getField();
-        //     String message = fieldError.getDefaultMessage();
-        //     map.put(field, map.getOrDefault(field, "") + " " + message);
-        // });
         Map<String, String> map = bindingResult.getFieldErrors().stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
         redirectAttributes.addFlashAttribute("errMap", map);
         // 重回注册页

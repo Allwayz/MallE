@@ -30,10 +30,10 @@
 
 				<li style="width: auto">
 					<a class="li_2" th:if="${session.loginUser != null}" style="width: auto">Hi, [[${session.loginUser.nickname}]]</a>
-					<a th:if="${session.loginUser == null}"  href="http://auth.gulimall.com/login.html" class="li_2">Hi,Sign In</a>
+					<a th:if="${session.loginUser == null}"  href="http://auth.malle.com/login.html" class="li_2">Hi,Sign In</a>
 				</li>
 				<li th:if="${session.loginUser == null}">
-					<a  href="http://auth.gulimall.com/reg.html">Sign Up</a>
+					<a  href="http://auth.malle.com/reg.html">Sign Up</a>
 				</li>
 
 				<a href="http://order.malle.com/center/list.html">My Order</a>

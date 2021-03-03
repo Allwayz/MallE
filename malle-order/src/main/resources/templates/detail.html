@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>订单</title>
+    <title>Order</title>
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE"/>
     <link rel="stylesheet" type="text/css" href="detail/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="detail/css/scss.css"/>
@@ -21,7 +21,7 @@
             </ul>
             <ul class="header_ul_right">
                 <li style="border: 0;">
-                    <a class="aa" th:if="${session.loginUser != null}" style="margin-right: 10px">欢迎，[[${session.loginUser.nickname}]]</a>
+                    <a class="aa" th:if="${session.loginUser != null}" style="margin-right: 10px">Hi,[[${session.loginUser.nickname}]]</a>
                     <a th:if="${session.loginUser == null}" href="http://auth.malle.com/login.html"
                        class="aa">Hi, Sign In</a>
                 </li>
@@ -48,9 +48,6 @@
                 <div class="nav_top_three">
                     <a href="detail/../JD_Shop/One_JDshop.html">My Basket</a><span
                         class="glyphicon glyphicon-shopping-cart"></span>
-<!--                    <div class="nav_top_three_1">-->
-<!--                        <img src="detail/img/44.png"/>购物车还没有商品，赶紧选购吧！-->
-<!--                    </div>-->
                 </div>
             </div>
         </div>
@@ -72,27 +69,25 @@
             <div class="state-cont">
                 <!-- 工具条 -->
                 <div class="state-lcol">
-                    <div class="state-top">订单号：70716422916</div>
+                    <div class="state-top">Order SN：70716422916</div>
                     <h3 class="state-txt">等待付款</h3>
 
                     <span class="remain-time" style=""><b class="b1"></b>剩余4时51分</span>
                     <div class="state-btns">
-                        <a class="btn-1">付款</a>
+                        <a class="btn-1">Pay</a>
                         <a class="btn-2">找人代付</a>
                     </div>
                     <div class="state-bottom">
-                        <span class="span1"><b class="b1"></b>打印订单</span>
-                        <span class="span2"><b class="b2"></b>取消订单</span>
+                        <span class="span1"><b class="b1"></b>Print Order</span>
+                        <span class="span2"><b class="b2"></b>Cancel order</span>
                     </div>
-
                 </div>
-
                 <!-- 进度条 -->
                 <div class="state-rcol">
                     <div class="state-rtop">
                         <!--提示信息 -->
                         <div class="ftx-03">
-                            该订单会为您保留6.0小时（从下单之日算起），6.0小时之后如果还未付款，系统将自动取消该订单。
+                            The order will be held for 6.0 hours (from the date of the order) and the system will automatically cancel the order if the payment is not made after 6.0 hours.
                         </div>
                     </div>
                     <!--进度条 -->
@@ -100,7 +95,7 @@
                     <div id="process-04" class="order-process order-strike-process">
                         <div class="lioucheng">
                             <ul>
-                                <li>等待付款</li>
+                                <li>Waiting for payment</li>
                                 <li></li>
                                 <li></li>
                                 <li></li>
@@ -122,23 +117,23 @@
                         <div class="lioucheng_2">
                             <ul>
                                 <li>
-                                    <p>提交订单</p>
+                                    <p>Submit</p>
                                     <p id='time'></p>
                                 </li>
                                 <li>
-                                    <p class="color_p">付款成功</p>
+                                    <p class="color_p">Payment success</p>
                                     <p></p>
                                 </li>
                                 <li>
-                                    <p class="color_p">商品出库</p>
+                                    <p class="color_p">Outbound goods</p>
                                     <p></p>
                                 </li>
                                 <li>
-                                    <p class="color_p">等待收货</p>
+                                    <p class="color_p">Shipped</p>
                                     <p></p>
                                 </li>
                                 <li class="wancheng">
-                                    <p class="color_p">完成</p>
+                                    <p class="color_p">Complete</p>
                                     <p></p>
                                 </li>
 

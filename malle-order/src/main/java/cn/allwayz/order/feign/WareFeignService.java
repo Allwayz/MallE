@@ -24,4 +24,7 @@ public interface WareFeignService {
 
     @PostMapping("/ware/waresku/lockStock")
     R lockStock(@RequestBody OrderLockStockTO lockStockTO);
+
+    @RequestMapping("/ware/waresku/releaseStock")
+    R reseaseStock(@RequestBody String orderSN);
 }

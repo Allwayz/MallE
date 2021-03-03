@@ -1,7 +1,6 @@
 package cn.allwayz.ware.service;
 
 import cn.allwayz.common.to.OrderLockStockTO;
-import cn.allwayz.common.to.OrderTO;
 import cn.allwayz.common.to.SkuHasStockVO;
 import cn.allwayz.common.to.SkuStockTO;
 import cn.allwayz.common.to.mp.StockLockTO;
@@ -53,7 +52,6 @@ public interface WareSkuService extends IService<WareSkuEntity> {
     /**
      * 收到订单关闭消息，释放库存
      */
-    void unlockStock(OrderTO orderTO);
-
+    void unlockStock(String orderSN);
 }
 

@@ -9,6 +9,7 @@ import cn.allwayz.common.utils.R;
 import cn.allwayz.member.entity.MemberEntity;
 import cn.allwayz.member.feign.CouopnFeignService;
 import cn.allwayz.member.service.MemberService;
+import cn.allwayz.common.vo.UserCheckVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -125,6 +126,12 @@ public class MemberController {
         // 登录失败会由异常处理机制处理
         MemberInfoTO infoTO = memberService.weiboLogin(authTO);
         return R.ok().setData(infoTO);
+    }
+
+    @RequestMapping("/checkPasswd")
+    public R checkPasswd(@RequestBody UserCheckVO userCheckVO){
+        System.out.println(userCheckVO.getUsername()+userCheckVO.getPassword());
+        return R.ok().setData(memberService.comparePasswd(userCheckVO.getUsername(),userCheckVO.getPassword()));
     }
 
 }

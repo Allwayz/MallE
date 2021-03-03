@@ -44,6 +44,7 @@ public enum BizCodeEnum implements CommonError{
     MEMBER_ALREADY_EXIST(80001, "用户已存在"),
     MEMBER_NOT_EXIST(80002, "账户不存在"),
     MEMBER_ACCOUNT_PASSWORD_NOT_MATCH(80003, "用户名或密码错误"),
+    INVALIDE_PASSWORD(8004,"Wrong Password"),
 
     PRODUCT_PARAM_INVAILD(10001,"参数格式校验失败"),
     THREAD_POOL_TASK_FAILED(00003, "线程池执行任务失败"),

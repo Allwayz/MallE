@@ -150,7 +150,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         // 1. 创建库存工作单
         WareOrderTaskEntity taskEntity = new WareOrderTaskEntity();
         taskEntity.setOrderSn(lockStockTO.getOrderSn());
-        taskService.save(taskEntity);
+
         // 2. 尝试锁定所有订单项库存
         List<OrderLockStockTO.SkuLockStock> locks = lockStockTO.getLocks();
         for (OrderLockStockTO.SkuLockStock skuLockStock : locks) {
@@ -170,13 +170,17 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
                 if (rows == 1) {
                     // 当前商品库存锁定成功
                     // 创键任务详情
+                    taskEntity.setWareId(wareId);
+                    if(taskService.getTaskByOrderSn(taskEntity.getOrderSn())==null){
+                        taskService.save(taskEntity);
+                    }
                     WareOrderTaskDetailEntity taskDetailEntity = new WareOrderTaskDetailEntity();
 //                            null, skuId, skuLockStock.getSkuName(),
 //                            skuLockStock.getCount(), taskEntity.getId(),
 //                            wareId, WareConstant.StockLockStatus.LOCKED.getValue());
                     taskDetailEntity.setSkuId(skuId);
                     taskDetailEntity.setSkuName(skuLockStock.getSkuName());
-                    taskDetailEntity.setSkuNum(WareConstant.StockLockStatus.LOCKED.getValue());
+                    taskDetailEntity.setSkuNum(skuLockStock.getCount());
                     taskDetailEntity.setTaskId(taskEntity.getId());
 
                     taskDetailService.save(taskDetailEntity);
@@ -234,17 +238,19 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
      */
     @Transactional
     @Override
-    public void unlockStock(OrderTO orderTO) {
+    public void unlockStock(String orderSN) {
         // 1.获取库存工作单
-        WareOrderTaskEntity taskEntity = taskService.getTaskByOrderSn(orderTO.getOrderSn());
+        WareOrderTaskEntity taskEntity = taskService.getTaskByOrderSn(orderSN);
         if (taskEntity != null) {
             // 2.获取此条工作单上的全部工作项
             List<WareOrderTaskDetailEntity> detailEntities = taskDetailService.listByTtaskId(taskEntity.getId());
+            System.out.println(detailEntities);
             if (!CollectionUtils.isEmpty(detailEntities)) {
                 // 3.找出其中状态为锁定状态的工作项，执行解锁库存方法
-                detailEntities.stream()
-                        .filter(detailEntity -> detailEntity.getSkuNum() == WareConstant.StockLockStatus.LOCKED.getValue())
-                        .forEach(detailEntity -> unlockStock(detailEntity.getId(), getWareOrderTaskEntity(detailEntity).getWareId(), detailEntity.getSkuId(), detailEntity.getSkuNum()));
+                for (WareOrderTaskDetailEntity entity:detailEntities) {
+                    unlockStock(entity.getTaskId(),getWareOrderTaskEntity(entity).getWareId(),entity.getSkuId(),entity.getSkuNum());
+                    System.out.println("Unlock "+entity.getSkuId()+"Success.");
+                }
             }
         }
     }
@@ -267,6 +273,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         WareOrderTaskDetailEntity detailEntity = new WareOrderTaskDetailEntity();
         detailEntity.setId(taskDetailId);
         detailEntity.setSkuNum(WareConstant.StockLockStatus.RELEASED.getValue());
+        System.out.println("解锁方法调用");
         return taskDetailService.updateById(detailEntity);
     }
 

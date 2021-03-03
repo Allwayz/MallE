@@ -71,7 +71,7 @@
 <div class="top-4">
     <p>Express</p>
     <p>Contactless Delivery</p>
-<!--    <p class="xiang">Detail</p>-->
+    <!--    <p class="xiang">Detail</p>-->
 </div>
 <div class="hh1"/>
 </div>
@@ -134,14 +134,9 @@
 <div class="bto">
     <div class="hh2"></div>
     <h4 class="float">Bill Address</h4>
-    <div class="note float"><img src="confirm/img/i_11.png"/> <span>Default is the same as the shipping address</span></div>
+    <div class="note float"><img src="confirm/img/i_11.png"/> <span>Default is the same as the shipping address</span>
+    </div>
     <ul style="clear: both;">
-<!--        <li>电子普通发票 <img src="confirm/img/i_14.png"/></li>-->
-<!--        <li>个人</li>-->
-<!--        <li>商品明细</li>-->
-<!--        <li>-->
-<!--            <a href="">修改</a>-->
-<!--        </li>-->
     </ul>
     <div class="hh3"></div>
     <h4 class="clear">Gift Card</h4>
@@ -160,7 +155,7 @@
         </p>
         <p class="qian_y">
             <span>Postage： </span>
-            <span class="rmb"> &nbsp £0.00<span id="fare"></span></span>
+            <span class="rmb"> &nbsp £<span id="fare"></span></span>
         </p>
         <p class="qian_y">
             <span>The service fee： </span>
@@ -180,8 +175,8 @@
     <form action="/submit" method="post">
         <input type="hidden" name="orderToken" th:value="${order.token}"/>
         <input type="hidden" name="payType" value="1"/>
-        <input type="hidden" id="input_totalPrice" name="totalPrice"  value="1"/>
-        <input type="hidden" id="input_addrId" name="addressId"  value="1"/>
+        <input type="hidden" id="input_totalPrice" name="totalPrice" value="1"/>
+        <input type="hidden" id="input_addrId" name="addressId" value="1"/>
         <button class="tijiao" type="submit">Confirm</button>
     </form>
 </div>

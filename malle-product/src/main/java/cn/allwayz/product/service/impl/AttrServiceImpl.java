@@ -1,40 +1,36 @@
 package cn.allwayz.product.service.impl;
 
 import cn.allwayz.common.constant.ProductConstant;
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.Query;
 import cn.allwayz.product.dao.AttrAttrgroupRelationDao;
+import cn.allwayz.product.dao.AttrDao;
 import cn.allwayz.product.dao.AttrGroupDao;
 import cn.allwayz.product.dao.CategoryDao;
 import cn.allwayz.product.entity.AttrAttrgroupRelationEntity;
+import cn.allwayz.product.entity.AttrEntity;
 import cn.allwayz.product.entity.AttrGroupEntity;
 import cn.allwayz.product.entity.CategoryEntity;
+import cn.allwayz.product.service.AttrService;
 import cn.allwayz.product.service.CategoryService;
 import cn.allwayz.product.vo.AttrGroupRelationVo;
 import cn.allwayz.product.vo.AttrRespVo;
 import cn.allwayz.product.vo.AttrVo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.Query;
-
-import cn.allwayz.product.dao.AttrDao;
-import cn.allwayz.product.entity.AttrEntity;
-import cn.allwayz.product.service.AttrService;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 
 @Service("attrService")

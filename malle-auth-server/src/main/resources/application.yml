@@ -23,4 +23,4 @@ oauth2:
       client-id: 3661722387
       client-secret: 1b253ebc0906e625b02f73050c7cde69
       grant-type: authorization_code
-      redirect-uri: http://auth.gulimall.com/oauth2/weibo/return
+      redirect-uri: http://auth.malle.com/oauth2/weibo/return

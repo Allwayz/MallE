@@ -26,7 +26,7 @@ public class OrderReleaseListener {
 
     @RabbitHandler
     public void releaseOrder(OrderEntity orderEntity, Message message, Channel channel) throws IOException {
-        System.out.println("收到过期订单：" + orderEntity.getOrderSn());
+        //System.out.println("Receive back order：" + orderEntity.getOrderSn());
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
 
         try {
@@ -37,7 +37,7 @@ public class OrderReleaseListener {
         } catch (Exception e) {
             // 消费失败，消息重新入队
             channel.basicReject(deliveryTag, true);
-            log.error("消息队列手动ack失败：com.vivi.gulimall.order.listener.OrderReleaseListener.releaseOrder, Error: {}", e.getMessage());
+            //log.error("Message queue manual ACK failed：cn.allwayz.order.listener.OrderReleaseListener.releaseOrder, Error: {}", e.getMessage());
         }
     }
 }

@@ -40,5 +40,7 @@ public interface MemberService extends IService<MemberEntity> {
      * @return
      */
     MemberInfoTO weiboLogin(WeiboUserAuthTO authTO);
+
+    boolean comparePasswd(String username, String password);
 }
 

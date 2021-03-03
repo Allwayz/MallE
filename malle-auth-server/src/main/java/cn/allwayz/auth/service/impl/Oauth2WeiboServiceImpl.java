@@ -49,7 +49,7 @@ public class Oauth2WeiboServiceImpl implements Oauth2WeiboService {
         map.put("client_secret", "1b253ebc0906e625b02f73050c7cde69");
         map.put("grant_type", "authorization_code");
         map.put("code", code);
-        map.put("redirect_uri", "http://auth.gulimall.com/oauth2/weibo/return");
+        map.put("redirect_uri", "http://auth.malle.com/oauth2/weibo/return");
         try {
             HttpResponse response = HttpUtils.doPost("https://api.weibo.com", "/oauth2/access_token", "post", new HashMap<>(), null, map);
             if (response.getStatusLine().getStatusCode() == 200) {

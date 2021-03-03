@@ -24,6 +24,11 @@ spring:
     host: 192.168.0.21
     port: 5672
     virtual-host: /
+    username: guest
+    password: guest
+    listener:
+      simple:
+        acknowledge-mode: manual
 malle:
   thread:
     core-size: 20

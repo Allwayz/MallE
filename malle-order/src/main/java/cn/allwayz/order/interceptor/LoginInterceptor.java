@@ -38,7 +38,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         MemberInfoVO attribute = (MemberInfoVO) session.getAttribute(AuthServerConstant.LOGIN_USER_KEY);
         if (attribute == null) {
             // 用户未登录
-            response.sendRedirect("http://auth.gulimall.com/login.html");
+            response.sendRedirect("http://auth.malle.com/login.html");
             return false;
         } else {
             // 已登录，用threadLocal共享数据

@@ -1,8 +1,10 @@
 package cn.allwayz.order.feign;
 
 import cn.allwayz.common.utils.R;
+import cn.allwayz.common.vo.UserCheckVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient("MallE-MemberService")
@@ -16,4 +18,7 @@ public interface MemberFeignService {
 
     @RequestMapping("/member/memberreceiveaddress/default/{memberId}")
     R getMemberDefaultAddress(@PathVariable("memberId") Long memberId);
+
+    @RequestMapping("/member/member/checkPasswd")
+    R checkPasswd(@RequestBody UserCheckVO userCheckVO);
 }

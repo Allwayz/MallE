@@ -209,4 +209,12 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
             return null;
         }
     }
+
+    @Override
+    public boolean comparePasswd(String username, String password) {
+        MemberEntity memberEntity = this.baseMapper.selectOne(new QueryWrapper<MemberEntity>().eq("username",username));
+
+        System.out.println(memberEntity);
+        return passwordEncoder.matches(password, memberEntity.getPassword());
+    }
 }

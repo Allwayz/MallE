@@ -108,4 +108,10 @@ public class WareSkuController {
         return R.ok();
     }
 
+    @RequestMapping("/releaseStock")
+    public R reseaseStock(@RequestBody String orderSN){
+        wareSkuService.unlockStock(orderSN);
+        return R.ok();
+    }
+
 }
