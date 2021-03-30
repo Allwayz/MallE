@@ -165,7 +165,7 @@
 
 						</li>
 						<li>
-							<span th:text="${item.hasStock ? 'In stock' : 'out of stoc'}"></span>
+							<span th:text="${item.hasStock ? 'In stock' : 'out of stock'}"></span>
 						</li>
 					</ul>
 				</div>
@@ -195,20 +195,15 @@
 					<div class="box-btns-one">
 						<input type="text" name="" id="input_sku_count" value="1" />
 						<div class="box-btns-one1">
-
 							<div>
-								<button id="jia">
-									+
-								</button>
+								<button id="jia">+</button>
 							</div>
 							<div>
-								<button id="jian">
-									-
-								</button>
+								<button id="jian">-</button>
 							</div>
 						</div>
 					</div>
-					<div class="box-btns-two">
+					<div class="box-btns-two" >
 						<a th:attr="skuId=${item.skuInfo.skuId}" href="javascript:void(0)" onclick="addToCart()" id="a_addTocart">
 							Add To Basket
 						</a>

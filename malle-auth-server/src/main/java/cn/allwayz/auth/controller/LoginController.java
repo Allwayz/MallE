@@ -20,8 +20,6 @@ public class LoginController {
     @PostMapping("/login")
     public String login(LoginVO loginVO, HttpSession session) {
         MemberInfoVO info = loginService.doLogin(loginVO);
-        // 登录失败会被异常处理器处理
-        // 登录成功要保存会话信息，返回主页面
         session.setAttribute(AuthServerConstant.LOGIN_USER_KEY, info);
         return "redirect:http://malle.com/";
     }

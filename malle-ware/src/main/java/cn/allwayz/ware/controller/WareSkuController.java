@@ -100,7 +100,7 @@ public class WareSkuController {
     }
 
     /**
-     * 为订单锁定库存
+     * lockStock
      */
     @PostMapping("/lockStock")
     public R lockStock(@RequestBody OrderLockStockTO lockStockTO) {

@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSession;
 public class IndexController {
 
     @GetMapping("/login.html")
-    public String loginPage(HttpSession session) {
-        if (session.getAttribute(AuthServerConstant.LOGIN_USER_KEY) != null) {
+    public String loginPage(HttpSession httpSession) {
+        if (httpSession.getAttribute(AuthServerConstant.LOGIN_USER_KEY) != null) {
             // 用户已登录
             return "redirect:http://malle.com";
         }

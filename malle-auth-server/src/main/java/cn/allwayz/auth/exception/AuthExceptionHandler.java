@@ -32,7 +32,6 @@ public class AuthExceptionHandler {
         BindingResult bindingResult = e.getBindingResult();
         Map<String, String> map = bindingResult.getFieldErrors().stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
         redirectAttributes.addFlashAttribute("errMap", map);
-        // 重回注册页
         return "redirect:http://auth.malle.com/reg.html";
     }
 
@@ -44,9 +43,7 @@ public class AuthExceptionHandler {
     @ExceptionHandler({RegisterPageException.class})
     public String registerPageException(RegisterPageException e,
                                         RedirectAttributes redirectAttributes) {
-        // 放入错误消息
         redirectAttributes.addFlashAttribute("regErrMsg", e.getMessage());
-        // 重回注册页
         return "redirect:http://auth.malle.com/reg.html";
     }
 
@@ -58,9 +55,7 @@ public class AuthExceptionHandler {
     @ExceptionHandler({LoginPageException.class})
     public String loginPageException(LoginPageException e,
                                      RedirectAttributes redirectAttributes) {
-        // 放入错误消息
         redirectAttributes.addFlashAttribute("loginErrMsg", e.getMessage());
-        // 重回登录页
         return "redirect:http://auth.malle.com/login.html";
     }
 
@@ -72,9 +67,7 @@ public class AuthExceptionHandler {
     @ResponseBody
     @ExceptionHandler({BizException.class})
     public R bizException(BizException e) {
-        // 其他业务异常则直接返回json数据
         return R.error(e.getErrorCode(), e.getErrorMsg());
     }
-
 }
 

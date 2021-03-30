@@ -25,7 +25,7 @@ import java.util.Map;
 public class RabbitmqConfig {
 
     /**
-     * 消息转换器，json格式
+     * Massage Converter: Json Format
      * @return
      */
     @Bean

@@ -30,7 +30,6 @@ public interface CartService {
 
     void deleteBatch(List<String> skuIds);
 
-
     /**
      * 改变购物车中某个购物项选中状态
      */

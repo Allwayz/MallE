@@ -55,22 +55,16 @@ public class CartServiceImpl implements CartService {
     public CartVO getCart() {
         CartVO cartVO = new CartVO();
         UserLoginStatusTO userLoginStatusTO = CartInterceptor.threadLocal.get();
-        // 1. 先拿到临时购物车数据
         String tempCartKey = CartConstant.CART_REDIS_KEY_PREFIX + userLoginStatusTO.getUserKey();
         List<CartItemVO> tempCartItems = getCartItems(tempCartKey);
-        // 1.1 临时用户，只有临时购物车，直接返回
         if (userLoginStatusTO.getId() == null) {
             cartVO.setItems(tempCartItems);
-            // 1.2 登录用户，合并临时购物车到正式购物车，清空临时购物车，返回正式购物车
         } else {
             String userCartKey = CartConstant.CART_REDIS_KEY_PREFIX + userLoginStatusTO.getId();
             if (!CollectionUtils.isEmpty(tempCartItems)) {
-                // 转移合并
                 tempCartItems.forEach(tempCartItem -> moveToCertainCart(tempCartItem, userCartKey));
-                // 清空临时购物车
                 clearCart(tempCartKey);
             }
-            // 重新获取该用户的正式购物车
             List<CartItemVO> cartItems = getCartItems(userCartKey);
             cartVO.setItems(cartItems);
         }
@@ -85,7 +79,6 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public CartItemVO addToCart(Long skuId, Integer count) {
-        // 当前用户的购物车key
         String cartKey = getCurrentUserCartKey();
         return addToCertainCart(skuId, count, cartKey);
     }
@@ -97,7 +90,6 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public CartItemVO getCartItem(Long skuId) {
-        // 得到当前登录用户在redis中的购物车数据的操作器
         BoundHashOperations<String, String, String> op = getCurrentUserCartOps();
         String dataStr = op.get(skuId.toString());
         if (!StringUtils.isEmpty(dataStr)) {
@@ -143,11 +135,9 @@ public class CartServiceImpl implements CartService {
      */
     private String getCurrentUserCartKey() {
         UserLoginStatusTO userLoginStatusTO = CartInterceptor.threadLocal.get();
-        // 未登录用户，其购物车数据在redis中的key
         if (userLoginStatusTO.getId() == null) {
             return CartConstant.CART_REDIS_KEY_PREFIX + userLoginStatusTO.getUserKey();
         } else {
-            // 已登录
             return CartConstant.CART_REDIS_KEY_PREFIX + userLoginStatusTO.getId().toString();
         }
     }
@@ -184,7 +174,7 @@ public class CartServiceImpl implements CartService {
             // 调用远程服务查询sku详情
             R res = productFeignService.getSkuInfo(skuId);
             if (res.getCode() != 0) {
-                log.error("远程调用gulimall-product查询skuinfo失败");
+                log.error("远程调用malle-product查询skuinfo失败");
                 throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "加入购物车失败");
             }
             SkuInfoTO skuInfo = res.getData("skuInfo",new TypeReference<SkuInfoTO>(){});
@@ -197,7 +187,7 @@ public class CartServiceImpl implements CartService {
             // 调用远程服务查询sku saleattrs
             R r = productFeignService.getSaleAttrStringList(skuId);
             if (r.getCode() != 0) {
-                log.error("远程调用gulimall-product查询sku saleattr失败");
+                log.error("远程调用malle-product查询sku saleattr失败");
                 throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED);
             } else {
                 itemVO.setAttrs(r.getData(new TypeReference<List<String>>() {
@@ -287,7 +277,7 @@ public class CartServiceImpl implements CartService {
                     // 重新查询，得到最新价格
                     R res = productFeignService.getSkuInfo(itemVO.getSkuId());
                     if (res.getCode() != 0) {
-                        log.error("远程调用gulimall-product查询skuinfo失败");
+                        log.error("远程调用malle-product查询skuinfo失败");
                         throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "查询购物车失败");
                     }
                     SkuInfoTO skuInfo = res.getData("skuInfo",new TypeReference<SkuInfoTO>(){});

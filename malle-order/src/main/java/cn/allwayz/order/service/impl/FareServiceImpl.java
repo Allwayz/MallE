@@ -29,7 +29,7 @@ public class FareServiceImpl implements FareService {
     public FareInfoTO getFare(Long addressId) {
         R r = memberFeignService.getAddress(addressId);
         if (r.getCode() != 0) {
-            log.error("调用gulimall-member服务查询地址信息失败");
+            log.error("调用malle-member服务查询地址信息失败");
             throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED);
         }
         MemberAddressTO address = r.getData("memberReceiveAddress", new TypeReference<MemberAddressTO>(){});
@@ -43,7 +43,7 @@ public class FareServiceImpl implements FareService {
     public FareInfoTO getMemberDefaultAddressFare(Long memberId) {
         R r = memberFeignService.getMemberDefaultAddress(memberId);
         if (r.getCode() != 0) {
-            log.error("调用gulimall-member服务查询用户默认地址");
+            log.error("调用malle-member服务查询用户默认地址");
             throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED);
         }
         MemberAddressTO address = r.getData(MemberAddressTO.class);

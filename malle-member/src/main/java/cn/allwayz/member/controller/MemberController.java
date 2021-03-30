@@ -3,13 +3,12 @@ package cn.allwayz.member.controller;
 import cn.allwayz.common.to.MemberInfoTO;
 import cn.allwayz.common.to.MemberLoginTO;
 import cn.allwayz.common.to.MemberRegisterTO;
-import cn.allwayz.common.to.WeiboUserAuthTO;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.R;
+import cn.allwayz.common.vo.UserCheckVO;
 import cn.allwayz.member.entity.MemberEntity;
 import cn.allwayz.member.feign.CouopnFeignService;
 import cn.allwayz.member.service.MemberService;
-import cn.allwayz.common.vo.UserCheckVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -115,16 +114,6 @@ public class MemberController {
     public R login(@RequestBody MemberLoginTO loginTO){
         // 登录失败会由异常处理机制处理
         MemberInfoTO infoTO = memberService.login(loginTO);
-        return R.ok().setData(infoTO);
-    }
-
-    /**
-     * 社交登录--微博
-     */
-    @RequestMapping("/weibo/login")
-    public R weiboLogin(@RequestBody WeiboUserAuthTO authTO){
-        // 登录失败会由异常处理机制处理
-        MemberInfoTO infoTO = memberService.weiboLogin(authTO);
         return R.ok().setData(infoTO);
     }
 

@@ -1,24 +1,23 @@
 package cn.allwayz.ware.controller;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.R;
+import cn.allwayz.ware.entity.PurchaseEntity;
+import cn.allwayz.ware.service.PurchaseService;
 import cn.allwayz.ware.vo.MergeVo;
 import cn.allwayz.ware.vo.PurchaseDoneVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import cn.allwayz.ware.entity.PurchaseEntity;
-import cn.allwayz.ware.service.PurchaseService;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.R;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 
 /**
- * 采购信息
+ * Purchase Info
  *
  * @author allwayz
  * @email allwayz_org@icloud.com
@@ -39,7 +38,7 @@ public class PurchaseController {
     }
 
     /**
-     * 领取采购单
+     * Accept Purchase
      * @return
      */
     @PostMapping("/received")
@@ -65,7 +64,7 @@ public class PurchaseController {
     }
 
     /**
-     * 列表
+     * List
      */
     @RequestMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
@@ -76,7 +75,7 @@ public class PurchaseController {
 
 
     /**
-     * 信息
+     * Infomation
      */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Long id){
@@ -86,7 +85,7 @@ public class PurchaseController {
     }
 
     /**
-     * 保存
+     * Save
      */
     @RequestMapping("/save")
     public R save(@RequestBody PurchaseEntity purchase){
@@ -98,7 +97,7 @@ public class PurchaseController {
     }
 
     /**
-     * 修改
+     * Update
      */
     @RequestMapping("/update")
     public R update(@RequestBody PurchaseEntity purchase){
@@ -108,7 +107,7 @@ public class PurchaseController {
     }
 
     /**
-     * 删除
+     * Delete
      */
     @RequestMapping("/delete")
     public R delete(@RequestBody Long[] ids){

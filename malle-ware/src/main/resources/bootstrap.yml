@@ -23,7 +23,7 @@ spring:
     host: 192.168.0.21
     port: 5672
     virtual-host: /
-    # 手动ack
+
     listener:
       simple:
         acknowledge-mode: manual

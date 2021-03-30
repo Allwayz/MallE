@@ -3,6 +3,7 @@ package cn.allwayz.product.service.impl;
 import cn.allwayz.common.exception.BizCodeEnum;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.Query;
+import cn.allwayz.common.utils.R;
 import cn.allwayz.product.dao.SkuInfoDao;
 import cn.allwayz.product.entity.SkuImagesEntity;
 import cn.allwayz.product.entity.SkuInfoEntity;
@@ -130,12 +131,14 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
         }, executor);
         // TODO 6.商品是否有库存，与1无关，与1并列
         CompletableFuture<Void> skuStockFuture = CompletableFuture.runAsync(() -> {
-//            R r = wareFeignService.getSkuStock(skuId);
-//            if (r.getCode() == 0) {
-//                Long stock = r.getData(Long.class);
-//                itemDetailVO.setHasStock(stock > 0);
-//            }
-            itemDetailVO.setHasStock(true);
+            R r = wareFeignService.getSkuStock(skuId);
+            if (r.getCode() != null) {
+                if(r.getData(Long.class) != null){
+                    Long stock = r.getData(Long.class);
+                    itemDetailVO.setHasStock(stock > 0);
+                }
+            }
+            //itemDetailVO.setHasStock(false);
         }, executor);
         // TODO 2.此sku的图片集 不需要1的结果，也无返回值，与6并列
         CompletableFuture<Void> skuImageFuture = CompletableFuture.runAsync(() -> {
@@ -161,7 +164,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
 //        CompletableFuture<Void> skuSeckillFuture = skuInfoFuture.runAsync(() -> {
 //            R r = seckillFeignService.getSkuSeckillInfo(skuId);
 //            if (r.getCode() != 0) {
-//                log.warn("gulimall-product调用gulimall-seckill获取秒杀信息失败");
+//                log.warn("malle-product调用malle-seckill获取秒杀信息失败");
 //            } else {
 //                SeckillSkuTO seckillSkuTO = r.getData(SeckillSkuTO.class);
 //                itemDetailVO.setSeckillInfo(seckillSkuTO);

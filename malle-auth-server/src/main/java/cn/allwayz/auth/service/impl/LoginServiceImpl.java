@@ -27,7 +27,6 @@ public class LoginServiceImpl implements LoginService {
         MemberLoginTO memberLoginTO = new MemberLoginTO();
         BeanUtils.copyProperties(loginVO, memberLoginTO);
         R r = memberFeignService.login(memberLoginTO);
-        // 登录失败
         if (r.getCode() != 0) {
             throw new LoginPageException(r.getCode(), r.getData("msg", new TypeReference<String>(){}));
         }

@@ -49,9 +49,7 @@ public class CartInterceptor implements HandlerInterceptor {
                 }
             }
         }
-
         // 如果该用户既没有登录，也没有user-key，一定要为其分配，保证业务能正常处理
-        // TODO 然后返回的时候再告诉浏览器把这个key保存进cookie，下次访问句会携带 postHandle()
         if (StringUtils.isEmpty(loginStatusTO.getUserKey())) {
             // 分配user-key
             String key = UUID.randomUUID().toString().replace("-", "");

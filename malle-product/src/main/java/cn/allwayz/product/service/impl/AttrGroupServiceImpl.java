@@ -1,9 +1,17 @@
 package cn.allwayz.product.service.impl;
 
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.Query;
+import cn.allwayz.product.dao.AttrGroupDao;
 import cn.allwayz.product.entity.AttrEntity;
+import cn.allwayz.product.entity.AttrGroupEntity;
+import cn.allwayz.product.service.AttrGroupService;
 import cn.allwayz.product.service.AttrService;
 import cn.allwayz.product.vo.AttrGroupWithAttrsVo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,16 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.Query;
-
-import cn.allwayz.product.dao.AttrGroupDao;
-import cn.allwayz.product.entity.AttrGroupEntity;
-import cn.allwayz.product.service.AttrGroupService;
 
 
 /**
@@ -72,7 +70,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
      */
     @Override
     public List<AttrGroupWithAttrsVo> getAttrGroupWithAttrsByCatelogId(Long catelogId) {
-        //com.atguigu.gulimall.product.vo
+        //com.atguigu.malle.product.vo
         //1、查询分组信息
         List<AttrGroupEntity> attrGroupEntities = this.list(new QueryWrapper<AttrGroupEntity>().eq("catelog_id", catelogId));
 

@@ -7,13 +7,6 @@ import cn.allwayz.auth.vo.RegisterVO;
  */
 public interface RegisterService {
     /**
-     * 发送验证码
-     * @param phone
-     */
-    @Deprecated
-    void sendCode(String phone);
-
-    /**
      * 用户注册
      * @param registerVO
      * @return

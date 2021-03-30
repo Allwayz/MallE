@@ -2,29 +2,26 @@ package cn.allwayz.coupon.service.impl;
 
 import cn.allwayz.common.to.MemberPrice;
 import cn.allwayz.common.to.SkuReductionTo;
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.Query;
+import cn.allwayz.coupon.dao.SkuFullReductionDao;
 import cn.allwayz.coupon.entity.MemberPriceEntity;
+import cn.allwayz.coupon.entity.SkuFullReductionEntity;
 import cn.allwayz.coupon.entity.SkuLadderEntity;
 import cn.allwayz.coupon.service.MemberPriceService;
+import cn.allwayz.coupon.service.SkuFullReductionService;
 import cn.allwayz.coupon.service.SkuLadderService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.Query;
-
-import cn.allwayz.coupon.dao.SkuFullReductionDao;
-import cn.allwayz.coupon.entity.SkuFullReductionEntity;
-import cn.allwayz.coupon.service.SkuFullReductionService;
-
-import javax.annotation.Resource;
 
 
 @Service("skuFullReductionService")
@@ -47,7 +44,7 @@ public class SkuFullReductionServiceImpl extends ServiceImpl<SkuFullReductionDao
 
     @Override
     public void saveSkuReduction(SkuReductionTo reductionTo) {
-        //1、// //5.4）、sku的优惠、满减等信息；gulimall_sms->sms_sku_ladder\sms_sku_full_reduction\sms_member_price
+        //1、// //5.4）、sku的优惠、满减等信息；malle_sms->sms_sku_ladder\sms_sku_full_reduction\sms_member_price
         //sms_sku_ladder
         SkuLadderEntity skuLadderEntity = new SkuLadderEntity();
         skuLadderEntity.setSkuId(reductionTo.getSkuId());

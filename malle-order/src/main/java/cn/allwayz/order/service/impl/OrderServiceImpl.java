@@ -124,7 +124,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             List<Long> ids = orderConfirmVO.getItems().stream().map(OrderSkuVO::getSkuId).collect(Collectors.toList());
             R r = wareFeignService.getSkuStockBatch(ids);
             if (r.getCode() != 0) {
-                log.error("调用gulimall-ware查询商品库存失败：{}");
+                log.error("调用malle-ware查询商品库存失败：{}");
                 throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "查询库存失败");
             }
             List<SkuStockTO> stockTOList = r.getData(new TypeReference<List<SkuStockTO>>() {
@@ -229,7 +229,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         List<Long> skuIds = items.stream().map(item -> item.getSkuId()).collect(Collectors.toList());
         R r = cartFeignService.delBatch(skuIds);
         if (r.getCode() != 0) {
-            log.error("gulimall-order调用gulimall-cart删除购物项失败：{}");
+            log.error("malle-order调用malle-cart删除购物项失败：{}");
             throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "下单失败，请重试");
         }
         return createVO;
@@ -497,7 +497,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         // 2. spu部分
         R r = productFeignService.getSpuBySkuId(cartItem.getSkuId());
         if (r.getCode() != 0) {
-            log.error("gulimall-order调用gulimall-product查询spuinfo失败");
+            log.error("malle-order调用malle-product查询spuinfo失败");
             throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "下单失败请重新");
 
         }

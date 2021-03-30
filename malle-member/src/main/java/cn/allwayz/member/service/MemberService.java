@@ -3,7 +3,6 @@ package cn.allwayz.member.service;
 import cn.allwayz.common.to.MemberInfoTO;
 import cn.allwayz.common.to.MemberLoginTO;
 import cn.allwayz.common.to.MemberRegisterTO;
-import cn.allwayz.common.to.WeiboUserAuthTO;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.member.entity.MemberEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -33,13 +32,6 @@ public interface MemberService extends IService<MemberEntity> {
      * @return
      */
     MemberInfoTO login(MemberLoginTO loginTO);
-
-    /**
-     * 使用微博的访问令牌获取用户信息完成登录
-     * @param authTO
-     * @return
-     */
-    MemberInfoTO weiboLogin(WeiboUserAuthTO authTO);
 
     boolean comparePasswd(String username, String password);
 }
