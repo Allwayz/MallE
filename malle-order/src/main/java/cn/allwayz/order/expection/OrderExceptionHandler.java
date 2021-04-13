@@ -24,7 +24,7 @@ public class OrderExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public String runtimeExceptionHandler(RuntimeException e) {
         log.error("Expection：{}", e.getMessage());
-        // 重定向到购物车列表
+        // Redirect to the shopping cart list
         return "redirect:http://cart.malle.com/cart/list.html";
     }
 }

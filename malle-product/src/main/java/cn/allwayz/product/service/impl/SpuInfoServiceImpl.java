@@ -77,25 +77,25 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
     @Override
     public void saveSpuInfo(SpuSaveVo vo) {
 
-        //1、保存spu基本信息 pms_spu_info
+        //1、Save SPU basic information pms_spu_info
         SpuInfoEntity infoEntity = new SpuInfoEntity();
         BeanUtils.copyProperties(vo,infoEntity);
         infoEntity.setCreateTime(new Date());
         infoEntity.setUpdateTime(new Date());
         this.saveBaseSpuInfo(infoEntity);
 
-        //2、保存Spu的描述图片 pms_spu_info_desc
+        //2、Save the description image of the SPU pms_spu_info_desc
         List<String> decript = vo.getDecript();
         SpuInfoDescEntity descEntity = new SpuInfoDescEntity();
         descEntity.setSpuId(infoEntity.getId());
         descEntity.setDecript(String.join(",",decript));
         spuInfoDescService.saveSpuInfoDesc(descEntity);
 
-        //3、保存spu的图片集 pms_spu_images
+        //3、Save the SPU's photo gallery pms_spu_images
         List<String> images = vo.getImages();
         imagesService.saveImages(infoEntity.getId(),images);
 
-        //4、保存spu的规格参数;pms_product_attr_value
+        //4、Save SPU specification parameters;pms_product_attr_value
         List<BaseAttrs> baseAttrs = vo.getBaseAttrs();
         List<ProductAttrValueEntity> collect = baseAttrs.stream().map(attr -> {
             ProductAttrValueEntity valueEntity = new ProductAttrValueEntity();
@@ -110,17 +110,17 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         }).collect(Collectors.toList());
         attrValueService.saveProductAttr(collect);
 
-        //5、保存spu的积分信息；malle_sms->sms_spu_bounds
+        //5、Save SPU credit information；malle_sms->sms_spu_bounds
         Bounds bounds = vo.getBounds();
         SpuBoundTo spuBoundTo = new SpuBoundTo();
         BeanUtils.copyProperties(bounds,spuBoundTo);
         spuBoundTo.setSpuId(infoEntity.getId());
         R r = couponFeignService.saveSpuBounds(spuBoundTo);
         if(r.getCode() != 0){
-            log.error("远程保存spu积分信息失败");
+            log.error("Failed to save SPU credit information remotely");
         }
 
-        //5、保存当前spu对应的所有sku信息；
+        //5、Save all SKU information corresponding to the current SPU;
         List<Skus> skus = vo.getSkus();
         if(skus!=null && skus.size()>0){
             skus.forEach(item->{
@@ -137,7 +137,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                 skuInfoEntity.setSaleCount(0L);
                 skuInfoEntity.setSpuId(infoEntity.getId());
                 skuInfoEntity.setSkuDefaultImg(defaultImg);
-                //5.1）、sku的基本信息；pms_sku_info
+                //5.1）、Basic information about the SKU；pms_sku_info
                 skuInfoService.saveSkuInfo(skuInfoEntity);
 
                 Long skuId = skuInfoEntity.getSkuId();
@@ -149,13 +149,11 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                     skuImagesEntity.setDefaultImg(img.getDefaultImg());
                     return skuImagesEntity;
                 }).filter(entity->{
-                    //返回true就是需要，false就是剔除
+                    //Returns true for required and false for cull
                     return !StringUtils.isEmpty(entity.getImgUrl());
                 }).collect(Collectors.toList());
-                //5.2）、sku的图片信息；pms_sku_image
+                //5.2）、SKU picture information；pms_sku_image
                 skuImagesService.saveBatch(imagesEntities);
-                //TODO 没有图片路径的无需保存
-
                 List<Attr> attr = item.getAttr();
                 List<SkuSaleAttrValueEntity> skuSaleAttrValueEntities = attr.stream().map(a -> {
                     SkuSaleAttrValueEntity attrValueEntity = new SkuSaleAttrValueEntity();
@@ -164,10 +162,10 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
                     return attrValueEntity;
                 }).collect(Collectors.toList());
-                //5.3）、sku的销售属性信息：pms_sku_sale_attr_value
+                //5.3）、Sales attribute information for the SKU：pms_sku_sale_attr_value
                 skuSaleAttrValueService.saveBatch(skuSaleAttrValueEntities);
 
-                // //5.4）、sku的优惠、满减等信息；malle_sms->sms_sku_ladder\sms_sku_full_reduction\sms_member_price
+                // //5.4）、SKU discount, full reduction and other information；malle_sms->sms_sku_ladder\sms_sku_full_reduction\sms_member_price
                 SkuReductionTo skuReductionTo = new SkuReductionTo();
                 BeanUtils.copyProperties(item,skuReductionTo);
                 skuReductionTo.setSkuId(skuId);
@@ -222,19 +220,19 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
     }
 
     /**
-     * 商品上架
+     * products release
      *
-     * @param spuId 1、将属性改为已上架，
-     *              2、构建SkuEsModel模型,再远程调用搜索服务,向搜索服务索引记录
-     */
+     * 1、Change the property to Shelved，
+     * 2、Build the SkuesModel model, then call the search service remotely and index records to the search service
+     *
+     * @param spuId
+     *              */
     @Override
     public void up(Long spuId) {
-        // 1 查出当前 spuId 对应的所有 sku 信息，品牌的名字
         List<SkuInfoEntity> skuInfoEntities = skuInfoService.getSkusBySpuId(spuId);
 
         List<Long> skuIdList = skuInfoEntities.stream().map(SkuInfoEntity::getSkuId).collect(Collectors.toList());
 
-        // TODO 4 查询当前 sku 的所有可以用来被检索的规格属性
         List<ProductAttrValueEntity> baseAttrs = attrValueService.baseAttrlistforspu(spuId);
         List<Long> attrIds = baseAttrs.stream().map(attr -> attr.getAttrId()).collect(Collectors.toList());
 
@@ -249,7 +247,6 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                     return attrs1;
                 }).collect(Collectors.toList());
 
-        // TODO 1 发送远程调用 在仓库系统中查询是否有库存
         Map<Long, Boolean> stockMap = null;
         try {
             R r = wareFeignService.getSkusHasStock(skuIdList);
@@ -259,59 +256,50 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             log.error("Inventory service query abnormal, cause：", e);
         }
 
-        // 2 封装每个 sku 的信息
+        // 2 Encapsulate information for each SKU
         Map<Long, Boolean> finalStockMap = stockMap;
         List<SkuEsModel> upProducts = skuInfoEntities.stream()
                 .map(skuInfoEntity -> {
-                    // 组装需要的数据
+                    // Data required for assembly
                     SkuEsModel esSkuModel = new SkuEsModel();
                     BeanUtils.copyProperties(skuInfoEntity, esSkuModel);
-                    // 手动设置 field 不一致的名称的值
+                    // Manually set values for fields with inconsistent names
                     // skuPrice -> price skuImg -> skuDefaultImg
                     esSkuModel.setSkuPrice(skuInfoEntity.getPrice());
                     esSkuModel.setSkuImg(skuInfoEntity.getSkuDefaultImg());
-                    // hasStock hotScore
-
-                    // 设置库存信息
                     if (finalStockMap == null) {
                         esSkuModel.setHasStock(true);
                     } else {
                         esSkuModel.setHasStock(finalStockMap.get(skuInfoEntity.getSkuId()));
                     }
 
-                    // TODO 2 热度评分 0
                     esSkuModel.setHotScore(0L);
 
-                    // TODO 3 查询品牌和分类的名字信息
                     BrandEntity brandEntity = brandService.getById(esSkuModel.getBrandId());
                     esSkuModel.setBrandName(brandEntity.getName());
                     esSkuModel.setBrandImg(brandEntity.getLogo());
                     CategoryEntity categoryEntity = categoryService.getById(esSkuModel.getCatalogId());
                     esSkuModel.setCatalogName(categoryEntity.getName());
 
-                    // 设置检索属性
+                    // Set retrieval properties
                     esSkuModel.setAttrs(attrsList);
 
                     return esSkuModel;
                 }).collect(Collectors.toList());
 
-        // TODO 5 将数据发送给 es 进行保存 mall-search
-
         R r = searchFeignService.productStatusUp(upProducts);
         if (r.getCode() == 0) {
-            // TODO 6 修改SPU状态
             baseMapper.updateSpuStatus(spuId, ProductConstant.StatusEnum.SPU_UP.getCode());
         } else {
-            // 上架失败
-            // TODO 7 幂等性问题
-            /*
-             * Feign 调用流程
-             * 1. 构造请求数据 将对象转为 JSON
-             *      RequestTemplate
-             * 2. 发送请求进行执行(执行成功会解码相应数据)
-             *     executeAndDecode(template)
-             * 3. 执行请求会有重试机制
-             */
+            // Failed to put on the shelf
+        /**
+        * Feign call flow
+        * 1. Construct the request data to convert the object to JSON
+        *      RequestTemplate
+        * 2. Send a request for execution (successful execution will decode the corresponding data)
+        *     executeAndDecode(template)
+        * 3. There is a retry mechanism for executing requests
+        */
         }
     }
 
@@ -324,19 +312,19 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         Long spuId = sku.getSpuId();
 
         SpuInfoEntity spu = this.getById(spuId);
-        // 公共属性拷贝
+        // Copy of public attributes
         BeanUtils.copyProperties(spu, spuInfoTO);
 
         CategoryEntity categoryEntity = categoryService.getById(spu.getCatalogId());
         BrandEntity brandEntity = brandService.getById(spu.getBrandId());
-        // 独有属性赋值
+        // Unique attribute assignment
         spuInfoTO.setCatelogName(categoryEntity.getName());
         spuInfoTO.setBrandName(brandEntity.getName());
 
         R r = couponFeignService.getBySpuId(spuId);
         if (r.getCode() != 0) {
-            log.error("malle-product调用malle-coupon失败");
-            throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "查询积分失败");
+            log.error("The malle-product call to malle-coupon failed");
+            throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "Query credits failed");
         }
         SpuBoundsTO boundsTO = r.getData(SpuBoundsTO.class);
 

@@ -1,28 +1,25 @@
 package cn.allwayz.product.service.impl;
 
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.Query;
 import cn.allwayz.product.dao.BrandDao;
+import cn.allwayz.product.dao.CategoryBrandRelationDao;
 import cn.allwayz.product.dao.CategoryDao;
 import cn.allwayz.product.entity.BrandEntity;
+import cn.allwayz.product.entity.CategoryBrandRelationEntity;
 import cn.allwayz.product.entity.CategoryEntity;
 import cn.allwayz.product.service.BrandService;
+import cn.allwayz.product.service.CategoryBrandRelationService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.Query;
-
-import cn.allwayz.product.dao.CategoryBrandRelationDao;
-import cn.allwayz.product.entity.CategoryBrandRelationEntity;
-import cn.allwayz.product.service.CategoryBrandRelationService;
-
-import javax.annotation.Resource;
 
 /**
  * @author allwayz
@@ -55,7 +52,7 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
     public void saveDetail(CategoryBrandRelationEntity categoryBrandRelation) {
         Long brandId = categoryBrandRelation.getBrandId();
         Long catelogId = categoryBrandRelation.getCatelogId();
-        //1、查询详细名字
+        //1、Query name
         BrandEntity brandEntity = brandDao.selectById(brandId);
         CategoryEntity categoryEntity = categoryDao.selectById(catelogId);
 

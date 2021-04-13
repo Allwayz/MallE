@@ -13,20 +13,20 @@ public class WeiboUserAuthTO {
      */
 
     /**
-     * 用户授权的唯一票据，用于访问用户在微博平台的信息
+     * A unique ticket authorized by the user to access the user's information on the Weibo platform
      */
     private String accessToken;
     /**
-     * access_token的生命周期，单位是秒数。
+     * The lifetime of access_token, in seconds.
      */
     private int expiresIn;
     /**
-     * access_token的生命周期（该参数即将废弃，开发者请使用expires_in）。
+     * The access_token lifecycle (this parameter is about to be deprecated; developers should use expires_in).
      */
     private String remindIn;
     /**
-     * 当前授权用户在微博的UID，本字段只是为了方便开发者，减少一次user/show接口调用而返回的，
-     * 第三方应用不能用此字段作为用户登录状态的识别，只有access_token才是用户授权的唯一票据。
+     * UID of the current authorized user in Weibo. This field is only returned for the convenience of the developer to reduce one user/show interface call.
+     * Third-party applications cannot use this field to identify the user's login status. Only the access_token is the only ticket authorized by the user.
      */
     private String uid;
 

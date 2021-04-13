@@ -103,29 +103,27 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     public OrderConfirmVO confirmOrder() {
         MemberInfoVO loginUser = LoginInterceptor.threadLocal.get();
         OrderConfirmVO orderConfirmVO = new OrderConfirmVO();
-        // 原线程绑定的requestAttributes
-        // 异步,防止feign丢失请求头
+        // RequestAttributes of the original thread binding
+        // Asynchronous to prevent FEIGN from losing headers
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         CompletableFuture<Void> orderItemsTask = CompletableFuture.runAsync(() -> {
-            // 赋值到新线程绑定的request
+            // Assign a request to the new thread binding
             RequestContextHolder.setRequestAttributes(requestAttributes);
-            // TODO 1.异步查询购物车
             R res = cartFeignService.getCheckedItems();
             if (res.getCode() != 0) {
-                log.error("确认订单远程调用购物车服务查询购物车失败");
-                throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "查询购物车失败");
+                log.error("Confirm order Remote call to shopping cart service failed to query shopping cart");
+                throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "Query for shopping cart failed");
             }
             List<CartItemTO> itemTOS = res.getData(new TypeReference<List<CartItemTO>>() {
             });
             orderConfirmVO.setItems(itemTOS.stream().map(to -> convertOrderItemTO2OrderSkuVO(to)).collect(Collectors.toList()));
         }, executor);
         CompletableFuture<Void> stockTask = orderItemsTask.thenRunAsync(() -> {
-            // TODO 3.查询商品库存
             List<Long> ids = orderConfirmVO.getItems().stream().map(OrderSkuVO::getSkuId).collect(Collectors.toList());
             R r = wareFeignService.getSkuStockBatch(ids);
             if (r.getCode() != 0) {
-                log.error("调用malle-ware查询商品库存失败：{}");
-                throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "查询库存失败");
+                log.error("Failed to call malle-ware to query commodity inventory: {}",r.getCode());
+                throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "Inventory query failed");
             }
             List<SkuStockTO> stockTOList = r.getData(new TypeReference<List<SkuStockTO>>() {
             });
@@ -133,38 +131,34 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             orderConfirmVO.getItems().forEach(item -> item.setStock(collect.getOrDefault(item.getSkuId(), 0L)));
         }, executor);
         CompletableFuture<Void> memberAddressTask = CompletableFuture.runAsync(() -> {
-            // TODO 2.异步查询用户地址列表
             R r2 = memberFeignService.getMemberAddresses(loginUser.getId());
             if (r2.getCode() != 0) {
-                log.error("确认订单远程调用会员服务查询地址失败");
-                throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "查询收货地址失败");
+                log.error("Confirm order Remote call member service query address failed");
+                throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "Failed to query shipping address");
             }
             List<MemberAddressTO> addressTOS = r2.getData(new TypeReference<List<MemberAddressTO>>() {
             });
             orderConfirmVO.setAddresses(addressTOS.stream().map(to -> convert2MemberAddressVO(to)).collect(Collectors.toList()));
         }, executor);
-        // TODO 4.异步查询用户优惠，这里简化为用户积分
         orderConfirmVO.setIntegration(loginUser.getIntegration());
-
-        // TODO 5.生成防重令牌，有效时间30min
         String token = UUID.randomUUID().toString().replace("-", "");
         stringRedisTemplate.opsForValue().set(OrderConstant.ORDER_TOKEN_PREFIX + loginUser.getId(), token, 30, TimeUnit.MINUTES);
         orderConfirmVO.setToken(token);
 
-        // 等待异步任务执行完毕
+        // Wait for the asynchronous task to complete
         try {
             CompletableFuture.allOf(stockTask, memberAddressTask).get();
         } catch (Exception e) {
-            log.error("异步编排获取确认订单页面数据失败：{}", e);
-            throw new BizException(BizCodeEnum.THREAD_POOL_TASK_FAILED, "出错了，请重试");
+            log.error("Asynchronous Choreographer failed to obtain confirmation order page data: {}", e);
+            throw new BizException(BizCodeEnum.THREAD_POOL_TASK_FAILED, "There was an error. Please try again");
         }
 
         return orderConfirmVO;
     }
 
-    // 使用seata分布式事务，seata at模式(自动提交，全局锁，并发串行化)不适合高并发
+    // With Seata distributed transactions, the Seata AT mode (auto-commit, global lock, concurrent serialization) is not suitable for high concurrency
     // @GlobalTransactional
-    // 使用消息队列实现最终一致性
+    // Use message queues to achieve final consistency
     @Transactional
     @Override
     public OrderCreateVO submit(OrderSubmitVO submitVO) {
@@ -172,65 +166,49 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         OrderCreateVO createVO = new OrderCreateVO();
 
         String orderToken = submitVO.getOrderToken();
-        // TODO 1.验证令牌
         String key = OrderConstant.ORDER_TOKEN_PREFIX + loginUser.getId();
-        // 获取令牌、验证令牌、删除令牌 应该是原子性操作
-        // String redisToken = redisTemplate.opsForValue().get(OrderConstant.ORDER_TOKEN_PREFIX + loginUser.getId());
-        // if (StringUtils.equals(orderToken, redisToken)) {
-        //     // 删除令牌
-        //     redisTemplate.delete(OrderConstant.ORDER_TOKEN_PREFIX + loginUser.getId());
-        // }
+        // Getting, validating, and deleting tokens should be atomic operations
         String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
         Long res = stringRedisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(key), orderToken);
         if (res == 0) {
-            log.warn("订单令牌校验失败，已创建或已过期，请重新下单");
+            log.warn("Order token validation failed. Created or expired. Please reorder");
             throw new BizException(BizCodeEnum.ORDER_HAS_EXPIRED);
         }
-        // TODO 2.构建订单
         OrderEntity orderEntity = buildOrder(submitVO);
         createVO.setOrder(orderEntity);
-        // TODO 3.构建订单项
+
         List<OrderItemEntity> items = buildOrderItems(orderEntity.getOrderSn());
         createVO.setItems(items);
-        // TODO 4.设置订单需要求和项
+
         calculateOrder(orderEntity, items);
 
-        // TODO 5.后端计算的价格和前端传来的价格进行验证
         BigDecimal totalPrice = submitVO.getTotalPrice();
         BigDecimal payAmount = orderEntity.getPayAmount();
         // 差距大于0.01验价失败
         if (!(Math.abs(totalPrice.subtract(payAmount).doubleValue()) < 0.01)) {
-            log.warn("创建订单，前后端验价失败");
-            throw new BizException(BizCodeEnum.UNKNOW_EXCEPTION, "下单失败，请重试");
+            log.warn("Create order, front and back end price test failed");
+            throw new BizException(BizCodeEnum.UNKNOW_EXCEPTION, "Order failed, please try again");
         }
-        // TODO 6.远程锁定库存
+
         lockStock(createVO);
 
-
-        // TODO 7.保存订单，保存订单项
         this.save(orderEntity);
         orderItemService.saveBatch(items);
 
-        // TODO 8.向mq中发送订单创建完成消息
         try {
             rabbitTemplate.convertAndSend(OrderConstant.ORDER_EVENT_EXCHANGE, OrderConstant.ORDER_CREATE_ROUTING_KEY, orderEntity);
         } catch (AmqpException e) {
-            log.warn("向mq发送订单新创建消息失败，自动重试一次");
+            log.warn("Failed to send order new creation message to MQ, retry automatically");
             rabbitTemplate.convertAndSend(OrderConstant.ORDER_EVENT_EXCHANGE, OrderConstant.ORDER_CREATE_ROUTING_KEY, orderEntity);
         }
 
-        /**
-         * 此处出错，本地事务无法控制远程库存回滚，seata分布式事务可解决，
-         * 也可以选择消息队列实现最终一致性
-         */
-        // int a = 1 / 0;
-
-        // TODO 9.清空购物车中这些购物项
+        // Error here, local transaction cannot control the remote inventory rollback, Seata distributed transaction can be resolved,
+        // You can also select message queues for ultimate consistency
         List<Long> skuIds = items.stream().map(item -> item.getSkuId()).collect(Collectors.toList());
         R r = cartFeignService.delBatch(skuIds);
         if (r.getCode() != 0) {
-            log.error("malle-order调用malle-cart删除购物项失败：{}");
-            throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "下单失败，请重试");
+            log.error("The malle-order call to malle-cart failed to delete the shopping item：{}");
+            throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "Order failed, please try again");
         }
         return createVO;
     }
@@ -239,7 +217,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     public OrderCreateVO getOrderDetail(String orderSn) {
         OrderEntity orderEntity = this.getOne(new QueryWrapper<OrderEntity>().eq("order_sn", orderSn));
         if (orderEntity == null) {
-            throw new BizException(BizCodeEnum.ORDER_CREATE_FAILED, "订单不存在");
+            throw new BizException(BizCodeEnum.ORDER_CREATE_FAILED, "The order does not exist");
         }
         OrderCreateVO createVO = new OrderCreateVO();
         List<OrderItemEntity> items = orderItemService.listByOrderSn(orderSn);
@@ -268,15 +246,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     @Transactional
     @Override
     public void closeOrder(OrderEntity orderEntity) {
-        // 获取订单最新状态
+        // Get the latest status of the order
         OrderEntity order = getOrderByOrderSn(orderEntity.getOrderSn());
-        // 仍然是未付款状态
+        // It's still unpaid
         if (order.getStatus() == OrderConstant.OrderStatusEnum.CREATE_NEW.getCode()) {
             OrderEntity entity = new OrderEntity();
             entity.setId(order.getId());
             entity.setStatus(OrderConstant.OrderStatusEnum.CANCLED.getCode());
             this.updateById(entity);
-            // 向mq发送释放库存消息
+            // Send an inventory release message to MQ
             rabbitTemplate.convertAndSend(OrderConstant.ORDER_EVENT_EXCHANGE, OrderConstant.ORDER_RELEASE_STOCK_ROUTING_KEY, getOrderTOByOrderSn(order.getOrderSn()));
         }
     }
@@ -287,42 +265,47 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         if (order == null) {
             throw new BizException(BizCodeEnum.ORDER_PAY_FEILED, "Order Does not Exist");
         } else if(order.getStatus() == OrderConstant.OrderStatusEnum.PAYED.getCode()) {
-            // 订单已支付
+            // The order has been paid
             throw new BizException(BizCodeEnum.ORDER_PAY_FEILED, "Already Paied");
         }
         AlipayVO alipayVO = new AlipayVO();
         alipayVO.setOutTradeNo(orderSn);
-        // 支付宝支付要求金额必须为小数点后两位
+        // Alipay payment requirements must be two decimal places
         alipayVO.setTotalAmount(order.getPayAmount().setScale(2, BigDecimal.ROUND_UP).toString());
         alipayVO.setSubject("Malle Order");
         alipayVO.setBody("Malle Order");
         try {
             String response = alipayTemplate.pay(alipayVO);
-            log.info("支付宝支付响应：{}", response);
+            log.info("Alipay payment response：{}", response);
             return response;
         } catch (AlipayApiException e) {
-            log.error("阿里支付失败：{}", e.getMessage());
+            log.error("AliPay failed：{}", e.getMessage());
             throw new BizException(BizCodeEnum.ORDER_PAY_FEILED);
         }
     }
 
     @Override
     public PageUtils getCurrentUserOrderList(Map<String, Object> params) {
+        System.out.println("Enter getCurrentUserOrderList() Method");
         MemberInfoVO memberInfoVO = LoginInterceptor.threadLocal.get();
-        // 获取当前登录用户的所有订单
+        System.out.println("Get MemberId:"+memberInfoVO.getId());
+        // Gets all orders for the current logged-in user
         IPage<OrderEntity> page = this.page(
                 new Query<OrderEntity>().getPage(params),
                 new QueryWrapper<OrderEntity>().eq("member_id", memberInfoVO.getId()).orderByDesc("id")
         );
-        // 查出每个订单下的订单项
+        // Find the order item under each order
         List<OrderEntity> collect = page.getRecords().stream().map(order -> {
             List<OrderItemEntity> orderItemEntities = orderItemService.listByOrderSn(order.getOrderSn());
             order.setItems(orderItemEntities);
             return order;
         }).collect(Collectors.toList());
 
+        System.out.println("Get Order List From Database:");
+        for(int i = 0;i < collect.size();i++){
+            System.out.println(collect.get(i).toString());
+        }
         page.setRecords(collect);
-
         return new PageUtils(page);
     }
 
@@ -330,18 +313,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     @Override
     public String handleAlipayNotify(AlipayNotifyVO notifyVO, HttpServletRequest request) {
         boolean verified;
-        // 1.验签
+        // 1.attestation
         try {
             verified = alipayTemplate.signVerify(request);
         } catch (Exception e) {
-            log.warn("阿里支付异步通知验签失败");
+            log.warn("AliPay Asynchronous Notification Checking Failure");
             return "error";
         }
         // 验签失败
         if (!verified) {
             return "error";
         }
-        // 2.保存支付流水
+        // 2.Save payment flow
         PaymentInfoEntity paymentInfo = new PaymentInfoEntity();
         paymentInfo.setAlipayTradeNo(notifyVO.getTrade_no());
         paymentInfo.setCallbackTime(notifyVO.getNotify_time());
@@ -350,7 +333,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         paymentInfo.setTotalAmount(new BigDecimal(notifyVO.getTotal_amount()));
         paymentInfo.setSubject(notifyVO.getSubject());
         paymentInfoService.save(paymentInfo);
-        // 3.修改订单状态为已支付
+        // 3.Modify the order status to Paid
         if (notifyVO.getTrade_status().equals("TRADE_SUCCESS") || notifyVO.getTrade_status().equals("TRADE_FINISHED")) {
             String orderSn = notifyVO.getOut_trade_no();
             updateOrderStatusByOrderSn(orderSn, OrderConstant.OrderStatusEnum.PAYED.getCode());
@@ -362,12 +345,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     @Override
     public String updateOrder(UserCheckVO userCheckVO) {
         OrderEntity orderEntity = this.baseMapper.selectOne(new QueryWrapper<OrderEntity>().eq("order_sn",userCheckVO.getOrderSN()));
-        System.out.println("拿到OrderEntity"+orderEntity);
         List<OrderItemEntity> orderItemEntityList = orderItemService.listByOrderSn(orderEntity.getOrderSn());
         String items = null;
         for (OrderItemEntity itemz: orderItemEntityList) {
             items += itemz.getSkuName();
-            System.out.println("遍历items"+items);
         }
         PaymentInfoEntity paymentInfoEntity = new PaymentInfoEntity();
         paymentInfoEntity.setOrderSn(userCheckVO.getOrderSN());
@@ -375,15 +356,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         paymentInfoEntity.setTotalAmount(orderEntity.getTotalAmount());
         paymentInfoEntity.setSubject(items);
         paymentInfoService.save(paymentInfoEntity);
-        System.out.println("保存付款信息"+paymentInfoEntity);
         updateOrderStatusByOrderSn(orderEntity.getOrderSn(), OrderConstant.OrderStatusEnum.PAYED.getCode());
-        //解锁库存并更新
+        //Unlock inventory and update it
         wareFeignService.reseaseStock(orderEntity.getOrderSn());
         return "success";
     }
 
     /**
-     * 更新订单状态
+     * Update order status
      * @param orderSn
      * @param status
      * @return
@@ -400,7 +380,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     }
 
     /**
-     * 锁定库存
+     * Locking the inventory
      * @param createVO
      */
     private void lockStock(OrderCreateVO createVO) {
@@ -414,25 +394,25 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             return skuLock;
         }).collect(Collectors.toList());
         lockStockTO.setLocks(collect);
-        // 远程调用
+
         R r = wareFeignService.lockStock(lockStockTO);
         if (r.getCode() != 0) {
-            throw new BizException(BizCodeEnum.WARE_SKU_STOCK_NOT_ENOUGH, "下单失败：" + r.get("msg"));
+            throw new BizException(BizCodeEnum.WARE_SKU_STOCK_NOT_ENOUGH, "Place the order failed：" + r.get("msg"));
         }
     }
 
     /**
-     * 创建订单
+     * Create Order
      * @param submitVO
      * @return
      */
     private OrderEntity buildOrder(OrderSubmitVO submitVO) {
         MemberInfoVO loginUser = LoginInterceptor.threadLocal.get();
         OrderEntity orderEntity = new OrderEntity();
-        // 1.订单创建者
+        // 1.Order creator
         orderEntity.setMemberId(loginUser.getId());
         orderEntity.setMemberUsername(loginUser.getUsername());
-        // 2.收货地址和运费
+        // 2.Shipping address and freight
         FareInfoTO fare = fareService.getFare(submitVO.getAddressId());
         MemberAddressTO address = fare.getAddress();
         orderEntity.setReceiverProvince(address.getProvince());
@@ -442,28 +422,20 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         // orderEntity.setReceiverPostCode();
         orderEntity.setReceiverName(address.getName());
         orderEntity.setReceiverPhone(address.getPhone());
-        // orderEntity.setReceiveTime();
-        // 运费
         orderEntity.setFreightAmount(fare.getFare());
-        // 自动确认收货天数
         orderEntity.setAutoConfirmDay(7);
-        // 3.支付信息
         orderEntity.setPayType(submitVO.getPayType());
-        // 4.订单/订单项部分
         orderEntity.setOrderSn(IdWorker.getTimeId());
         orderEntity.setCreateTime(new Date());
         orderEntity.setModifyTime(new Date());
         orderEntity.setStatus(OrderConstant.OrderStatusEnum.CREATE_NEW.getCode());
         orderEntity.setDeleteStatus(0);
         orderEntity.setConfirmStatus(0);
-        // 备注
-        // orderEntity.setNote();
-        // 5.优惠/发票/快递部分
         return orderEntity;
     }
 
     /**
-     * 构建一个订单项
+     * Build an order item
      * @param orderSn
      * @return
      */
@@ -472,8 +444,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         // TODO 1.异步查询购物车
         R res = cartFeignService.getCheckedItems();
         if (res.getCode() != 0) {
-            log.error("确认订单远程调用购物车服务查询购物车失败");
-            throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "查询购物车失败");
+            log.error("Confirm order Remote call to shopping cart service failed to query shopping cart");
+            throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "Query for shopping cart failed");
         }
         List<CartItemTO> itemTOS = res.getData(new TypeReference<List<CartItemTO>>() {
         });
@@ -487,18 +459,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
 
     private OrderItemEntity buildOrderItemFromCartItem(CartItemTO cartItem) {
         OrderItemEntity orderItemVO = new OrderItemEntity();
-        // 1. sku部分
+        // 1. Sku part
         orderItemVO.setSkuId(cartItem.getSkuId());
         orderItemVO.setSkuName(cartItem.getSkuTitle());
         orderItemVO.setSkuPrice(cartItem.getPrice());
         orderItemVO.setSkuPic(cartItem.getSkuImg());
         orderItemVO.setSkuQuantity(cartItem.getCount());
         orderItemVO.setSkuAttrsVals(cartItem.getAttrs().stream().collect(Collectors.joining(";")));
-        // 2. spu部分
+        // 2. The spu part
         R r = productFeignService.getSpuBySkuId(cartItem.getSkuId());
         if (r.getCode() != 0) {
-            log.error("malle-order调用malle-product查询spuinfo失败");
-            throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "下单失败请重新");
+            log.error("Malle-order failed to call malle-product to query spuinfo");
+            throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "Please try again if the order fails");
 
         }
         SpuInfoTO spuInfoTO = r.getData(SpuInfoTO.class);
@@ -508,26 +480,21 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         orderItemVO.setSpuBrand(spuInfoTO.getBrandName());
         orderItemVO.setCategoryId(spuInfoTO.getCatelogId());
 
-        // 3.积分部分
         orderItemVO.setGiftGrowth(spuInfoTO.getGrowBounds().intValue() * cartItem.getCount());
         orderItemVO.setGiftIntegration(spuInfoTO.getIntegration().intValue() * cartItem.getCount());
 
-        // 4. 价格部分
         BigDecimal zero = new BigDecimal("0");
-        // 各种优惠，简略为0
         orderItemVO.setCouponAmount(zero);
         orderItemVO.setIntegrationAmount(zero);
         orderItemVO.setPromotionAmount(zero);
         BigDecimal origin = orderItemVO.getSkuPrice().multiply(new BigDecimal(orderItemVO.getSkuQuantity().toString()));
-        // 原价 数量 * 单价
         BigDecimal subtract = origin.subtract(orderItemVO.getCouponAmount()).subtract(orderItemVO.getIntegrationAmount()).subtract(orderItemVO.getPromotionAmount());
-        // 实际价格=原价-优惠
         orderItemVO.setRealAmount(subtract);
         return orderItemVO;
     }
 
     /**
-     * 订单中一些属性需要订单项总和的计算
+     * Some properties in the order require calculation of the sum of the order items
      * @param items
      * @return
      */
@@ -547,16 +514,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
                 integrationAmount = integrationAmount.add(item.getIntegrationAmount());
             }
         }
-        // 积分和成长值，所有订单项的总和
         orderEntity.setIntegration(integration);
         orderEntity.setGrowth(growth);
-        // 总优惠 = 每项优惠了的总和
         orderEntity.setPromotionAmount(promotionAmount);
         orderEntity.setCouponAmount(couponAmount);
         orderEntity.setIntegrationAmount(integrationAmount);
-        // 总金额 = 每项应付金额和
         orderEntity.setTotalAmount(totalAmount);
-        // 总应付金额 = 总金额+运费
         orderEntity.setPayAmount(totalAmount.add(orderEntity.getFreightAmount()));
     }
     private OrderSkuVO convertOrderItemTO2OrderSkuVO(CartItemTO itemTO) {

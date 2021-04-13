@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMVCConfig implements WebMvcConfigurer {
     /**
-     * 添加拦截器
+     * Add an interceptor
      * @param registry
      */
     @Override

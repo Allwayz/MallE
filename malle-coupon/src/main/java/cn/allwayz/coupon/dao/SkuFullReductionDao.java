@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 商品满减信息
+ * SkuFullReductionDao
  * 
  * @author allwayz
  * @email allwayz_org@icloud.com

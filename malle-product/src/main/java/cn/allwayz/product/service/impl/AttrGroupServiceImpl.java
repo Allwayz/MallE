@@ -64,17 +64,17 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
     }
 
     /**
-     * 根据分类id查出所有的分组以及这些组里面的属性
+     * Find all the groups and the attributes within those groups by the category ID
      * @param catelogId
      * @return
      */
     @Override
     public List<AttrGroupWithAttrsVo> getAttrGroupWithAttrsByCatelogId(Long catelogId) {
         //com.atguigu.malle.product.vo
-        //1、查询分组信息
+        //1、Query group information
         List<AttrGroupEntity> attrGroupEntities = this.list(new QueryWrapper<AttrGroupEntity>().eq("catelog_id", catelogId));
 
-        //2、查询所有属性
+        //2、Query all attributes
         List<AttrGroupWithAttrsVo> collect = attrGroupEntities.stream().map(group -> {
             AttrGroupWithAttrsVo attrsVo = new AttrGroupWithAttrsVo();
             BeanUtils.copyProperties(group,attrsVo);

@@ -9,41 +9,41 @@ import java.util.List;
 
 /**
  * @author allwayz
- * 购物车--用于结算页查看总金额
+ * Shopping cart -- Used to view the total amount on the billing page
  *
- * 需要计算的属性，重写其get方法，保证每次或者这个属性值都是重新计算的最新值
+ * Override the get method for the property to be evaluated to ensure that each time or value of the property is recalculated to the latest value
  *
- * 这样我们只需要关注于 items ，其他属性每次获取值都能自动计算
+ * This way we only need to focus on items, and the other properties are automatically evaluated every time they get a value
  */
 public class CartVO {
 
     /**
-     * 全部购物项
+     * Total shopping items
      */
     @Getter
     @Setter
     private List<CartItemVO> items;
 
     /**
-     * 总共几件商品
+     * A few items altogether
      */
     @Setter
     private Integer totalCount;
 
     /**
-     * 总共是几种类型的商品
+     * There are several types of goods
      */
     @Setter
     private Integer totalType;
 
     /**
-     * 总价格
+     * The total price
      */
     @Setter
     private BigDecimal totalPrice;
 
     /**
-     * 总减免金额，这里先写死
+     * The total amount of remission is written here first
      */
     @Getter @Setter
     private BigDecimal totalReduce = new BigDecimal("0");
@@ -56,7 +56,7 @@ public class CartVO {
     }
 
     /**
-     * 总共几种类型商品
+     * There are several types of goods
      * @return
      */
     public Integer getTotalType() {
@@ -67,7 +67,7 @@ public class CartVO {
     }
 
     /**
-     * 当前【所选】购物项总价格
+     * Current total price of [selected] shopping item
      * @return
      */
     public BigDecimal getTotalPrice() {

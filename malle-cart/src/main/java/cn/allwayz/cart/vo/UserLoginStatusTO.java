@@ -9,17 +9,17 @@ import lombok.Data;
 public class UserLoginStatusTO {
 
     /**
-     * 登录用户既有key，又有id
+     * The login user has both a key and an ID
      */
     private Long id;
 
     /**
-     * 未登录会有一个key，id为null
+     * If you are not logged in, you will get a key with a null ID
      */
     private String userKey;
 
     /**
-     * 是否是第一次访问，第一次访问购物车，会为其分配user-key
+     * Is it the first time the cart is accessed? The first time the cart is accessed, it will be assigned a user-key
      */
     private boolean firstVisit;
 }

@@ -27,9 +27,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
-        // 有些远程调用不需要登录，直接放行
+        // Some remote calls do not require a login and simply let go
         boolean match = new AntPathMatcher().match("/api/**", uri);
-        // 支付宝异步通知不需要拦截
+        // Alipay asynchronous notification does not need to intercept
         boolean match1 = new AntPathMatcher().match("/alipay/notify", uri);
         if (match || match1) {
             return true;
@@ -37,11 +37,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         MemberInfoVO attribute = (MemberInfoVO) session.getAttribute(AuthServerConstant.LOGIN_USER_KEY);
         if (attribute == null) {
-            // 用户未登录
+            // User not logged in
             response.sendRedirect("http://auth.malle.com/login.html");
             return false;
         } else {
-            // 已登录，用threadLocal共享数据
+            // Log in and share data with ThreadLocal
             threadLocal.set(attribute);
             return true;
         }

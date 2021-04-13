@@ -21,20 +21,24 @@ public class SpuInfoTO {
      * 所属分类id
      */
     private Long catelogId;
-    // 新加，分类名
+    /**
+     * catelogName
+     */
     private String catelogName;
     /**
      * 品牌id
      */
     private Long brandId;
-    // 新加。品牌名
+    /**
+     * brandName
+     */
     private String brandName;
     /**
-     * 重量
+     * weight
      */
     private BigDecimal weight;
     /**
-     * 上架状态[0-新建，1 - 上架，2 - 下架]
+     * publishStatus
      */
     private Integer publishStatus;
     /**
@@ -46,10 +50,14 @@ public class SpuInfoTO {
      */
     private Date updateTime;
 
-    // 成长值
+    /**
+     * growBounds
+     */
     private BigDecimal growBounds;
 
-    // 积分
+    /**
+     * integration
+     */
     private BigDecimal integration;
 }
 

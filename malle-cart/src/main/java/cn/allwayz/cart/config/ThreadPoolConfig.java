@@ -18,17 +18,17 @@ import java.util.concurrent.*;
 public class ThreadPoolConfig {
 
     /**
-     * corePoolSize: 核心线程数
-     * maximumPoolSize: 最大线程数
-     * keepAliveTime: 核心线程以外的线程空闲多长时间将被释放
-     * unit: 时间单位
-     * blockQueue: 阻塞队列，超过最大线程数之后的请求会放进阻塞队列等待执行
-     * factory: 线程池创建工厂
-     * handler: 阻塞队列满之后，其他请求如何处理(使用默认策略记得处理异常)
-     *       ThreadPoolExecutor.AbortPolicy 默认：抛出异常 RejectedExecutionException
-     *       ThreadPoolExecutor.CallerRunsPolicy,直接执行线程的call方法，相当于同步执行
-     *        ThreadPoolExecutor.DiscardPolicy：直接抛弃，不处理
-     *        ThreadPoolExecutor.DiscardOldestPolicy：抛弃最久未处理的请求(队列头)，尝试执行新请求
+     * corePoolSize: Number of core threads
+     * maximumPoolSize: Maximum number of threads
+     * keepAliveTime: How long a thread other than the core thread is idle will be freed
+     * unit: Unit of time
+     * blockQueue: Blocking queue. Requests that exceed the maximum number of threads are placed in a blocking queue waiting to be executed
+     * factory: Thread pool creation factory
+     * handler: How other requests are handled once the blocking queue is full (remember to handle exceptions using the default policy)
+     *       ThreadPoolExecutor.AbortPolicy Default: Throw an exception RejectedExecutionException
+     *       ThreadPoolExecutor.CallerRunsPolicy, Direct execution of the thread's call method, equivalent to synchronous execution
+     *        ThreadPoolExecutor.DiscardPolicy：Throw it away without dealing with it
+     *        ThreadPoolExecutor.DiscardOldestPolicy：Discard the longest unprocessed request (queue header) and attempt to execute a new request
      * @param properties
      * @return
      */

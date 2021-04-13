@@ -1,25 +1,20 @@
 package cn.allwayz.coupon.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.R;
+import cn.allwayz.coupon.entity.CouponEntity;
+import cn.allwayz.coupon.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import cn.allwayz.coupon.entity.CouponEntity;
-import cn.allwayz.coupon.service.CouponService;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.R;
+import java.util.Arrays;
+import java.util.Map;
 
 
 /**
- * 优惠券信息
+ * Coupon information
  *
  * @author allwayz
  * @email allwayz_org@icloud.com

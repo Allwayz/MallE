@@ -16,39 +16,39 @@ public class SkuInfoTO {
      */
     private Long spuId;
     /**
-     * sku名称
+     * skuName
      */
     private String skuName;
     /**
-     * sku介绍描述
+     * skuDesc
      */
     private String skuDesc;
     /**
-     * 所属分类id
+     * catelogId
      */
     private Long catelogId;
     /**
-     * 品牌id
+     * brandId
      */
     private Long brandId;
     /**
-     * 默认图片
+     * skuDefaultImg
      */
     private String skuDefaultImg;
     /**
-     * 标题
+     * skuTitle
      */
     private String skuTitle;
     /**
-     * 副标题
+     * skuSubtitle
      */
     private String skuSubtitle;
     /**
-     * 价格
+     * price
      */
     private BigDecimal price;
     /**
-     * 销量
+     * saleCount
      */
     private Long saleCount;
 }

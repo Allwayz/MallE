@@ -29,7 +29,7 @@ public class FareServiceImpl implements FareService {
     public FareInfoTO getFare(Long addressId) {
         R r = memberFeignService.getAddress(addressId);
         if (r.getCode() != 0) {
-            log.error("调用malle-member服务查询地址信息失败");
+            log.error("Failed to call the malle-member service to query address information");
             throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED);
         }
         MemberAddressTO address = r.getData("memberReceiveAddress", new TypeReference<MemberAddressTO>(){});
@@ -43,7 +43,7 @@ public class FareServiceImpl implements FareService {
     public FareInfoTO getMemberDefaultAddressFare(Long memberId) {
         R r = memberFeignService.getMemberDefaultAddress(memberId);
         if (r.getCode() != 0) {
-            log.error("调用malle-member服务查询用户默认地址");
+            log.error("Invoke the malle-member service to query the user's default address");
             throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED);
         }
         MemberAddressTO address = r.getData(MemberAddressTO.class);
@@ -54,16 +54,16 @@ public class FareServiceImpl implements FareService {
     }
 
     /**
-     * 简单的运费计算
+     * Simple freight calculation
      * @param address
      * @return
      */
     private BigDecimal getSimpleFare(MemberAddressTO address) {
-        // 简化运费计算
+        // Simplified Freight Calculation
         if (address != null) {
             String phone = address.getPhone();
             if (!StringUtils.isEmpty(phone)) {
-                // 简化计算运费过程
+                // Simplify the process of calculating freight charges
                 return new BigDecimal(phone.substring(phone.length() - 1));
             }
         }

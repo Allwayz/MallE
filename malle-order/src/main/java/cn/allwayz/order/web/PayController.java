@@ -34,7 +34,7 @@ public class PayController {
     MemberFeignService memberFeignService;
 
     /**
-     * 告诉浏览器，返回的字符串是text/html
+     * Tells the browser that the string returned is text/ HTML
      * @param orderSn
      * @return
      */
@@ -46,10 +46,7 @@ public class PayController {
     }
 
     /**
-     * 支付宝支付完成后，向我们指定的地址发送支付结果POST
-     *
-     * 程序执行完后必须打印输出 success。如果商户反馈给支付宝的字符不是 success 这 7 个字符，支付宝服务器会不断重发通知，直到超过 24 小时 22 分钟
-     * @return
+     *  @return
      */
     @ResponseBody
     @PostMapping("/alipay/notify")

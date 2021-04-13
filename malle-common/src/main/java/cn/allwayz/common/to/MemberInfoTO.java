@@ -15,70 +15,68 @@ public class MemberInfoTO {
      */
     private Long id;
     /**
-     * 会员等级id
+     * level
      */
-    // private Long levelId;
-    // 会员等级名
     private String level;
     /**
-     * 用户名
+     * username
      */
     private String username;
 
     /**
-     * 昵称
+     * nickname
      */
     private String nickname;
     /**
-     * 手机号码
+     * mobile
      */
     private String mobile;
     /**
-     * 邮箱
+     * email
      */
     private String email;
     /**
-     * 头像
+     * header
      */
     private String header;
     /**
-     * 性别
+     * gender
      */
     private Integer gender;
     /**
-     * 生日
+     * birth
      */
     private Date birth;
     /**
-     * 所在城市
+     * city
      */
     private String city;
     /**
-     * 职业
+     * job
      */
     private String job;
     /**
-     * 个性签名
+     * sign
      */
     private String sign;
     /**
-     * 用户来源
+     * sourceType
      */
     private Integer sourceType;
     /**
-     * 积分
+     * integration
      */
     private Integer integration;
     /**
-     * 成长值
+     * growth
      */
     private Integer growth;
     /**
-     * 启用状态
+     * status
      */
     private Integer status;
     /**
-     * 注册时间
+     * createTime
      */
     private Date createTime;
 }

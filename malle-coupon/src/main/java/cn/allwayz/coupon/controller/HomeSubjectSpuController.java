@@ -1,24 +1,19 @@
 package cn.allwayz.coupon.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import cn.allwayz.coupon.entity.HomeSubjectSpuEntity;
-import cn.allwayz.coupon.service.HomeSubjectSpuService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.R;
+import cn.allwayz.coupon.entity.HomeSubjectSpuEntity;
+import cn.allwayz.coupon.service.HomeSubjectSpuService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
 /**
- * 专题商品
+ * Special goods
  *
  * @author allwayz
  * @email allwayz_org@icloud.com

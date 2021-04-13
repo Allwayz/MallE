@@ -1,24 +1,19 @@
 package cn.allwayz.order.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import cn.allwayz.order.entity.OrderItemEntity;
-import cn.allwayz.order.service.OrderItemService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.R;
+import cn.allwayz.order.entity.OrderItemEntity;
+import cn.allwayz.order.service.OrderItemService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
 /**
- * 订单项信息
+ * Order item information
  *
  * @author allwayz
  * @email allwayz_org@icloud.com

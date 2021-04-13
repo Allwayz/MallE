@@ -15,8 +15,9 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 @Configuration
 public class MallESessionConfig {
     /**
-     * 序列化机制选择json格式，默认使用jdk序列化。所有要保存的对象都要实现Serializable接口
-     * 方法名不能修改
+     * The serialization mechanism selects JSON format, and JDK serialization is used by default.
+     * All objects to be saved will implement the Serializable interface
+     * Method names cannot be modified
      * @return
      */
     @Bean
@@ -25,16 +26,16 @@ public class MallESessionConfig {
     }
 
     /**
-     * 自定义服务器返回给浏览器的cookie设置
+     * Customize the cookie Settings that the server returns to the browser
      * @return
      */
     @Bean
     public CookieSerializer cookieSerializer() {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-        // 设置coolie名字
+        // Set the Coolie name
         serializer.setCookieName("MALLESESSION"); // <1>
-        // 默认coolie有效域是当前域。比如访问auth.malle.com服务器返回的cookie数据的有效域就是auth.malle.com
-        // 为了实现一处登录处处可用。将其有效域设置为顶级域 malle.com
+        // The default Coolie valid domain is the current domain. For example, the valid field for the cookie data returned by the auth.malle.com server is auth.malle.com
+        // To make a login available everywhere. Set its valid domain to the top-level domain malle.com
         serializer.setDomainName("malle.com");
         return serializer;
     }

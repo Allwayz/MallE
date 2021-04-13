@@ -58,18 +58,18 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         MemberEntity memberEntity = new MemberEntity();
 
         MemberLevelEntity levelEntity = memberLevelService.getDefaultLevel();
-        // 默认等级
+        // The default level
         memberEntity.setLevelId(levelEntity.getId());
-        // 注册来源
+        // Registered source
         memberEntity.setSourceType(MemberConstant.REGISTER_TYPE_MALLE);
-        // 创建时间
+        // Creation time
         memberEntity.setCreateTime(new Date());
-        // 加密密码
+        // Encrypted password
         memberEntity.setPassword(passwordEncoder.encode(registerTO.getPassword()));
-        // 用户名
+        // The user name
         memberEntity.setUsername(registerTO.getUsername());
         memberEntity.setNickname(registerTO.getUsername());
-        // 手机号
+        // Mobile phone
         memberEntity.setMobile(registerTO.getPhone());
 
         MemberEntity entityByMobile = this.getOne(new QueryWrapper<MemberEntity>().eq("mobile", memberEntity.getMobile()));
@@ -82,7 +82,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         }
         try {
             this.save(memberEntity);
-            // 唯一索引报错
+            // Unique index reported an error
         } catch (DuplicateKeyException e) {
             throw new BizException(BizCodeEnum.MEMBER_ALREADY_EXIST, "UserName or Phone Number Already Exist");
         }
@@ -92,36 +92,36 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
 
     @Override
     public MemberInfoTO login(MemberLoginTO loginTO) {
-        // 查询账户是否存在
+        // Check if the account exists
         MemberEntity entity = this.baseMapper.getByAccount(loginTO.getAccount());
         if (entity == null) {
             throw new BizException(BizCodeEnum.MEMBER_NOT_EXIST);
         }
-        // 存在则比对密码，比对密码失败
+        // The existence compares the password, compares the password to fail
         if (!passwordEncoder.matches(loginTO.getPassword(), entity.getPassword())) {
             throw new BizException(BizCodeEnum.MEMBER_ACCOUNT_PASSWORD_NOT_MATCH);
         }
-        // 认证成功
+        // Authentication success
         return convertMemberEntity2MemberInfoTO(entity);
     }
 
     /**
-     * 将从数据库中查出来的用户信息转换成前端需要的用户信息
+     * Convert the user information retrieved from the database to the user information needed by the front end
      * @param entity
      * @return
      */
     private MemberInfoTO convertMemberEntity2MemberInfoTO(MemberEntity entity) {
         MemberInfoTO memberInfoTO = new MemberInfoTO();
-        // 基本属性拷贝
+        // Copy of basic attributes
         BeanUtils.copyProperties(entity, memberInfoTO);
-        // 设置会员等级名
+        // Set the member rank name
         MemberLevelEntity levelEntity = memberLevelService.getById(entity.getLevelId());
         memberInfoTO.setLevel(levelEntity.getName());
         return memberInfoTO;
     }
 
     /**
-     * // 通过微博accessToken拿到该用户在微博平台的基本信息，用于注册
+     * 通过微博accessToken拿到该用户在微博平台的基本信息，用于注册
      */
     private WeiboUserInfoVO getUserFromWeibo(String accessToken, String uid) {
         MemberEntity entity = new MemberEntity();
@@ -135,12 +135,12 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
                 WeiboUserInfoVO weiboUserInfoVO = JSON.parseObject(json, WeiboUserInfoVO.class);
                 return weiboUserInfoVO;
             } else {
-                log.warn("获取用户微博信息失败");
+                log.warn("Failed to obtain user third party information");
                 return null;
                 //EntityUtils.toString(response.getEntity())
             }
         } catch (Exception e) {
-            log.warn("获取用户微博信息失败");
+            log.warn("Failed to obtain user third party information");
             return null;
         }
     }

@@ -21,7 +21,7 @@ public class CartInterceptor implements HandlerInterceptor {
     public static final ThreadLocal<UserLoginStatusTO> threadLocal = new ThreadLocal<>();
 
     /**
-     * 目标方法执行前，判断用户登录状态
+     * Determine the user's login status before the target method executes
      * @param request
      * @param response
      * @param handler
@@ -31,41 +31,41 @@ public class CartInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         UserLoginStatusTO loginStatusTO = new UserLoginStatusTO();
-        // 判断该用户是否登录过
+        // Determine whether the user is logged in
         MemberInfoVO loginUser = (MemberInfoVO) request.getSession().getAttribute(AuthServerConstant.LOGIN_USER_KEY);
-        // 已登录
+        // Lggined
         if (loginUser != null) {
-            // 记录其登录状态，id标识
+            // Record its login status, ID as identification
             loginStatusTO.setId(loginUser.getId());
         }
-        // 未登录也不用管，因为临时用户也可以
-        // 判断请求cookie中是否存在user-key，也就是说该用户是否已拿到过user-key
+        // don't care if you're not logged in, because casual users can do that
+        // Check if the request cookie has a user-key, that is, whether the user has already obtained the user-key
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(CartConstant.COOKIE_TEMP_USER_KEY)) {
-                    // 记录其user-key
+                    // record user-key
                     loginStatusTO.setUserKey(cookie.getValue());
                 }
             }
         }
-        // 如果该用户既没有登录，也没有user-key，一定要为其分配，保证业务能正常处理
+        // If the user is neither logged in nor has a User-key, it must be assigned to ensure that the business can be handled normally
         if (StringUtils.isEmpty(loginStatusTO.getUserKey())) {
-            // 分配user-key
+            // Assign the user - key
             String key = UUID.randomUUID().toString().replace("-", "");
             loginStatusTO.setUserKey(key);
-            // 标记他是第一次访问
+            // Mark it as his first visit
             loginStatusTO.setFirstVisit(true);
         }
 
-        // 将用户登录状态存入threadlocal
+        // Store the user login status in a ThreadLocal
         threadLocal.set(loginStatusTO);
         return true;
     }
 
     /**
-     * 业务结束，如果该用户是【第一次访问】，系统为其生成了临时key作为它的身份标识，之后的操作都是基于这个临时key完成的
-     * 所以这种情况下，返回时一定要告诉浏览器这个key，并让他保存进cookie，之后再次访问就会自动携带
+     * At the end of the service, if the user is "visiting for the first time", the system will generate a temporary key as its identity, and all subsequent operations will be based on this temporary key
+     * In this case, be sure to tell the browser this key when you return, and let it be stored in a cookie, which will be automatically carried by the browser when you revisit it
      * @param request
      * @param response
      * @param handler
@@ -75,17 +75,17 @@ public class CartInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         UserLoginStatusTO userLoginStatusTO = threadLocal.get();
-        // 的确是第一次访问的用户，系统为其分配了user-key，告知浏览器保存
+        // The system assigns a user-key to the user who is visiting for the first time and tells the browser to save it
         if (userLoginStatusTO.isFirstVisit()) {
-            // 系统为其分配的user-key
+            // User-key assigned by the system
             String key = userLoginStatusTO.getUserKey();
-            // 命令浏览器保存,下次访问会自动携带
+            // Command browser to save, the next visit will be automatically carried
             Cookie cookie = new Cookie(CartConstant.COOKIE_TEMP_USER_KEY, key);
-            // 设置有效期
+            // Set expiration date
             cookie.setMaxAge(CartConstant.COOKIE_TEMP_USER_KEY_TIMEOUT);
-            // 设置作用域范围，该键值仅用于购物车服务，所以默认就是当前域，不用设置
+            // Set the scope. This key is only used for the shopping cart service, so the default is the current scope
             // cookie.setDomain();
-            // 命令浏览器保存
+            // Tell the browser to save
             response.addCookie(cookie);
         }
     }

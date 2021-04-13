@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class CartExceptionHandler {
 
     /**
-     * 业务异常
+     * Business exceptions
      * @param e
      * @return
      */
     @ResponseBody
     @ExceptionHandler({BizException.class})
     public R bizException(BizException e) {
-        // 其他业务异常则直接返回json数据
+        // Other business exceptions return JSON data directly
         return R.error(e.getErrorCode(), e.getErrorMsg());
     }
 
     /**
-     * 运行期异常
+     * Runtime exceptions
      * @param e
      * @return
      */

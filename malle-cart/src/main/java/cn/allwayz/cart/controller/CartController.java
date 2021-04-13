@@ -20,7 +20,7 @@ public class CartController {
     CartService cartService;
 
     /**
-     * 用户访问其购物车
+     * The user accesses his shopping cart
      * @return
      */
     @GetMapping("/list.html")
@@ -32,12 +32,12 @@ public class CartController {
     }
 
     /**
-     * 用户将某个商品加入其购物车，成功后返回成功页面，
-     * 为了避免表单重复提交，应该使用重定向
+     * When a user adds an item to his or her shopping cart and returns to the success page,
+     * a redirect should be used to avoid double submission of the form
      *
-     * 如果使用  redirectAttributes.addFlashAttribute("item", itemVO); 重定向回成功页面，只能取一次数据，用户刷新后就无了
+     * If use redirectAttributes.addFlashAttribute("item", itemVO); Redirect back to the success page, can only fetch data once, user refresh will be lost
      *
-     * 所以应该重定向到另一个请求，单上当次的skuId，控制器重新获取这个购物项数据，放入model中，再返回到成功页
+     * So it should redirect to another request, the skuId, and the controller will retrieve the purchase item data, put it in the model, and return to the success page
      *
      * @return
      */
@@ -49,7 +49,7 @@ public class CartController {
     }
 
     /**
-     * 结合上面那个方法，共同完成添加商品到购物车功能，即可刷新页面，又不会重复提交表单数据
+     * Combined with the above method, add an item to your shopping cart to refresh the page without submitting the form data twice
      * @param skuId
      * @param model
      * @return
@@ -69,7 +69,7 @@ public class CartController {
         return R.ok();
     }
     /**
-     * 改变购物车中某个购物项选中状态
+     * Changes the selection status of a shopping item in the shopping cart
      */
     @ResponseBody
     @GetMapping("/change/status")
@@ -80,7 +80,7 @@ public class CartController {
     }
 
     /**
-     * 改变购物车中某个购物项的数量
+     * Change the amount of an item in your shopping cart
      */
     @ResponseBody
     @GetMapping("/change/count")
@@ -91,7 +91,7 @@ public class CartController {
     }
 
     /**
-     * 获取当前用户购物车中选中的购物项列表
+     * Gets a list of selected items in the current user's shopping cart
      */
     @ResponseBody
     @GetMapping("/checked")

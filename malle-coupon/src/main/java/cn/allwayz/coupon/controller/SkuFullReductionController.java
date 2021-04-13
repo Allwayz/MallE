@@ -1,21 +1,20 @@
 package cn.allwayz.coupon.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import cn.allwayz.common.to.SkuReductionTo;
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.R;
+import cn.allwayz.coupon.entity.SkuFullReductionEntity;
+import cn.allwayz.coupon.service.SkuFullReductionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import cn.allwayz.coupon.entity.SkuFullReductionEntity;
-import cn.allwayz.coupon.service.SkuFullReductionService;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.R;
+import java.util.Arrays;
+import java.util.Map;
 
 
 
 /**
- * 商品满减信息
+ * Commodities full reduced information
  *
  * @author allwayz
  * @email allwayz_org@icloud.com

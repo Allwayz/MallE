@@ -34,7 +34,7 @@ public class SkuSaleAttrValueServiceImpl extends ServiceImpl<SkuSaleAttrValueDao
     }
 
     /**
-     * 指定spu的所有销售属性及其值(值为多个值，逗号分隔，总体为一个string)
+     * Specify all sales properties of the SPU and their values (multiple values, separated by commas, and collectively a String)
      *
      * @param spuId
      * @return

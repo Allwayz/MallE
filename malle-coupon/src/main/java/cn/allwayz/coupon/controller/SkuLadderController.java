@@ -1,24 +1,19 @@
 package cn.allwayz.coupon.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import cn.allwayz.coupon.entity.SkuLadderEntity;
-import cn.allwayz.coupon.service.SkuLadderService;
 import cn.allwayz.common.utils.PageUtils;
 import cn.allwayz.common.utils.R;
+import cn.allwayz.coupon.entity.SkuLadderEntity;
+import cn.allwayz.coupon.service.SkuLadderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
 /**
- * 商品阶梯价格
+ * Commodity tiered price
  *
  * @author allwayz
  * @email allwayz_org@icloud.com

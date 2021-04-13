@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 优惠券信息
+ * CouponDao
  * 
  * @author allwayz
  * @email allwayz_org@icloud.com

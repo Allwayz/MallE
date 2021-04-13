@@ -10,21 +10,22 @@ import org.springframework.context.annotation.Configuration;
  * @author allwayz
  */
 @Configuration
-@MapperScan("cn.malle.order.dao")
+@MapperScan("cn.allwayz.order.dao")
 public class MybatisPlusConfig {
 
     /**
-     * 配置分页插件
+     * Configure the paging plug-in
+     *
      * @return
      */
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
-        // 设置请求的页面大于最大页后操作， true调回到首页，false 继续请求  默认false
+        // Set the requested page to be larger than the maximum page size, true to return to the front page, false to continue to request default false
         // paginationInterceptor.setOverflow(false);
-        // 设置最大单页限制数量，默认 500 条，-1 不受限制
+        // Set the maximum number of pages per page, default is 500, -1 is unrestricted
         // paginationInterceptor.setLimit(500);
-        // 开启 count 的 join 优化,只针对部分 left join
+        // Enable count join optimization on partial left joins
         paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
         return paginationInterceptor;
     }

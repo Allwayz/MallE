@@ -7,7 +7,7 @@ import cn.allwayz.auth.vo.RegisterVO;
  */
 public interface RegisterService {
     /**
-     * 用户注册
+     * Register
      * @param registerVO
      * @return
      */

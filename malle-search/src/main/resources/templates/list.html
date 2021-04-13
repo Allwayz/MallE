@@ -81,7 +81,7 @@
 
 <hr style="border: 1px solid #1346e3;margin-top: -7px;">
 <br>
-<!--手机-->
+
 <div class="JD_ipone">
     <div class="JD_ipone_bar">
         <div class="JD_ipone_one a crumbs-first">
@@ -235,6 +235,7 @@
                     </div>
                     <!--排序内容-->
                     <div class="rig_tab">
+                        <p th:if="${#lists.isEmpty(result.getSkuList())}" style="color: blue">No Result! Try typing something else.</p>
                         <div th:each="product : ${result.getSkuList()}">
                             <div class="ico">
                                 <i class="iconfont icon-weiguanzhu"></i>
@@ -250,7 +251,7 @@
                                     <img th:src="${product.skuImg}"></a></li>
                             </ul>
                             <p class="tab_R">
-                                <span th:text="'£'+${product.skuPrice}">¥5199.00</span>
+                                <span th:text="'£'+${product.skuPrice}">£5199.00</span>
                             </p>
                             <p class="tab_JE">
                                 <a th:href="|http://item.malle.com/${product.skuId}.html|" th:utext="${product.skuTitle}">

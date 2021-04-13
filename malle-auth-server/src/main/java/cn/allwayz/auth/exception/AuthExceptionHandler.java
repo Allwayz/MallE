@@ -22,8 +22,10 @@ import java.util.stream.Collectors;
 public class AuthExceptionHandler {
 
     /**
-     * 注册，表单提交数据格式校验失败，重新跳转到注册页，携带提示信息
-     * 为了防止重复提交，我们使用重定向，因为要使用视图解析，所以不能加 @ResponseBody
+     * Registration, the form submission data format verification failed,
+     * jump to the registration page again, with a prompt message
+     * To prevent duplicate submissions, function use a redirect,
+     * because using view resolution, so unable add @responseBody
      * @param e
      * @return
      */
@@ -36,7 +38,7 @@ public class AuthExceptionHandler {
     }
 
     /**
-     * 封装错误信息，并返回注册页面
+     * Encapsulates the error message and returns to the registration page
      * @param e
      * @return
      */
@@ -48,7 +50,7 @@ public class AuthExceptionHandler {
     }
 
     /**
-     * 封装错误信息，并返回登录页面
+     * Encapsulates the error message and returns to the login page
      * @param e
      * @return
      */
@@ -60,7 +62,7 @@ public class AuthExceptionHandler {
     }
 
     /**
-     * 其他业务异常
+     * Business exceptions
      * @param e
      * @return
      */

@@ -5,64 +5,64 @@ import lombok.Getter;
 /**
  * @author allwayz
  *
- * <h3>错误码和错误信息定义类</h3>
- * <ul>1. 错误码定义规则为5为数字</ul>
- * <ul>2. 前两位表示业务场景，最后三位表示错误码。例如：100001。10:通用 001:系统未知异常</ul>
- * <ul>3. 维护错误码后需要维护错误描述，将他们定义为枚举形式</ul>
- * <h3>错误码列表：</h3>
+ * <h3> error code and error message define class </h3>
+ * <ul>1. The error code definition rule is 5 for the number </ul>
+ * <ul>2. The first two represent the business scenario and the last three represent the error code. For example: 100001. 10: Universal 001: System unknown exception </ul>
+ * <ul>3. The error descriptions need to be maintained after the error codes are maintained. Define them to the enumeration form </ul>
+ * <h3> error code list: </h3>
  *  <ul>
- *  <li>10: 通用</li>
+ * <li>10: generic </li>
  *      <ul>
  *          <li>
- *          001：参数格式校验
+ * 001: Parameter format check
  *          </li>
  *      </ul>
- *  <li>11: 商品</li>
- *  <li>12: 订单</li>
- *  <li>13: 购物车</li>
- *  <li>14: 物流</li>
+ * <li>11: goods </li>
+ * <li>12: order </li>
+ * <li>13: shopping cart </li>
+ * <li>14: logistics </li>
  *  </ul>
  */
 @Getter
 public enum BizCodeEnum implements CommonError{
-    /**
-     *
-     */
-    UNKNOW_EXCEPTION(10000,"Unknown system exception"),
-    VAILD_EXCEPTION(10001,"Parameter format verification failed"),
-    SMS_CODE_EXCEPTION(10002,"短信频率太快"),
 
-    TOO_MANY_REQUESTS(10003,"请求频率过高"),
+    //System Exception
+    THREAD_POOL_TASK_FAILED(00001, "The thread pool failed to execute the task"),
+    TOO_MANY_REQUEST(00002, "Request too frequent, please try again later"),
+    UNKNOW_EXCEPTION(00003,"Unknown system exception"),
+    VAILD_EXCEPTION(00004,"Parameter format verification failed"),
+    PRODUCT_PARAM_INVAILD(00005,"Item parameter format validation failed"),
+    SMS_CODE_EXCEPTION(00006,"Texting too fast"),
+    TOO_MANY_REQUESTS(00007,"Request frequency is too high"),
 
-    PRODUCT_UP_EXCEPTION(11000, "商品上架异常"),
+    //Product Execption
+    PRODUCT_UP_EXCEPTION(10001, "Product release error"),
+    WARE_SKU_STOCK_NOT_ENOUGH(10002, "Short stock of goods"),
 
-    USERNAME_EXIST_EXCEPTION(15001, "用户名已存在"),
+    //User Execption
+    USERNAME_EXIST_EXCEPTION(20001, "The user name already exists"),
+    PHONE_EXIST_EXCEPTION(20002, "The phone number already exists"),
+    MEMBER_ALREADY_EXIST(20003, "User already exists"),
+    MEMBER_NOT_EXIST(20004, "Account does not exist"),
+    MEMBER_ACCOUNT_PASSWORD_NOT_MATCH(20005, "Incorrect user name or password"),
+    INVALIDE_PASSWORD(20006,"Wrong Password"),
+    AUTH_WEIBO_LOGIN_FAILED(20007, "Third party login failed, please try again"),
+    AUTH_USER_NOT_LOGIN(20008, "User not logged in"),
 
-    PHONE_EXIST_EXCEPTION(15002, "手机号已存在"),
+    //Order Execption
 
-    LOGIN_EXCEPTION(15003, "用户名或密码错误"),
-    MEMBER_ALREADY_EXIST(80001, "用户已存在"),
-    MEMBER_NOT_EXIST(80002, "账户不存在"),
-    MEMBER_ACCOUNT_PASSWORD_NOT_MATCH(80003, "用户名或密码错误"),
-    INVALIDE_PASSWORD(8004,"Wrong Password"),
+    ORDER_HAS_EXPIRED(30001, "The order has been processed, please place a new order"),
+    ORDER_CREATE_FAILED(30002, "Order creation failed"),
+    ORDER_PAY_FEILED(30003, "Order payment failed"),
 
-    PRODUCT_PARAM_INVAILD(10001,"参数格式校验失败"),
-    THREAD_POOL_TASK_FAILED(00003, "线程池执行任务失败"),
-    TOO_MANY_REQUEST(00002, "请求太频繁，请稍后重试"),
-    AUTH_WEIBO_LOGIN_FAILED(99003, "微博登录失败，请重试"),
-    AUTH_USER_NOT_LOGIN(99004, "用户未登录"),
-    CALL_FEIGN_SERVICE_FAILED(00004, "调用远程服务失败"),
 
-    ORDER_HAS_EXPIRED(90001, "订单已处理，请重新下单"),
-    ORDER_CREATE_FAILED(90002, "订单创建失败"),
-    ORDER_PAY_FEILED(90003, "订单支付失败"),
+    //Warehouse Execption
+    WARE_PURCHASE_MERGE_FAILED(40001, "Unable to merge purchase items into a received purchase order"),
+    WARE_PURCHASE_ASSIGN_FAILED(40002, "Purchasers can only be assigned to newly created purchase orders"),
 
-    WARE_PURCHASE_MERGE_FAILED(11001, "无法将采购项合并到已被领取的采购单"),
+    //Remote Call Execption
+    CALL_FEIGN_SERVICE_FAILED(50001, "The call to the remote service failed");
 
-    WARE_PURCHASE_ASSIGN_FAILED(11002, "只能给新建的采购单分配采购员"),
-    WARE_SKU_STOCK_NOT_ENOUGH(11003, "商品库存不足"),
-
-    NO_STOCK_EXCEPTION(22000, "商品库存不足");
 
     private int code;
     private String msg;

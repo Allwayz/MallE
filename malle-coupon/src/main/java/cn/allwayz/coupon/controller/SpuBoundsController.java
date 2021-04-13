@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 /**
- * 商品spu积分设置
+ * Commodity SPU credit setting
  *
  * @author allwayz
  * @email allwayz_org@icloud.com

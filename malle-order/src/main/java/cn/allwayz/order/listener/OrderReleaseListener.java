@@ -31,8 +31,7 @@ public class OrderReleaseListener {
 
         try {
             orderService.closeOrder(orderEntity);
-            // TODO 这里应该手动调用一次支付宝的收单接收，以往由于网络延迟，我们已撤销订单，然而用户继续支付，导致后续支付宝通知到来，我们将其又改为已支付状态
-            // 消费成功，手动ack
+             // 消费成功，手动ack
             channel.basicAck(deliveryTag, false);
         } catch (Exception e) {
             // 消费失败，消息重新入队

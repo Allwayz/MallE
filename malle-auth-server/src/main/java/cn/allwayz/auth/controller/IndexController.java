@@ -15,7 +15,7 @@ public class IndexController {
     @GetMapping("/login.html")
     public String loginPage(HttpSession httpSession) {
         if (httpSession.getAttribute(AuthServerConstant.LOGIN_USER_KEY) != null) {
-            // 用户已登录
+            // If User Already Login
             return "redirect:http://malle.com";
         }
         return "index";

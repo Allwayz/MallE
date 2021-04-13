@@ -1,39 +1,30 @@
 package cn.allwayz.product.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import cn.allwayz.common.utils.PageUtils;
+import cn.allwayz.common.utils.Query;
+import cn.allwayz.product.dao.CategoryDao;
+import cn.allwayz.product.entity.CategoryEntity;
 import cn.allwayz.product.service.CategoryBrandRelationService;
+import cn.allwayz.product.service.CategoryService;
 import cn.allwayz.product.vo.Catelog2VO;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.UUID;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.allwayz.common.utils.PageUtils;
-import cn.allwayz.common.utils.Query;
-
-import cn.allwayz.product.dao.CategoryDao;
-import cn.allwayz.product.entity.CategoryEntity;
-import cn.allwayz.product.service.CategoryService;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 /**
@@ -60,11 +51,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     @Override
     public List<CategoryEntity> listWithTree() {
-        //1、查出所有分类
+        //1、Find all categories
         List<CategoryEntity> categoryEntities = baseMapper.selectList(null);
 
-        //2、组装成父子结构
-        //2.1 找到所有的一级分类
+        //2. Assemble the parent-child structure
+        //2.1 Find all first-level classifications
         List<CategoryEntity> level1Menus = categoryEntities.stream().filter(categoryEntity->
                 categoryEntity.getParentCid() == 0
         ).map(menu->{
@@ -78,7 +69,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     @Override
     public void removeMenuByIds(List<Long> asList) {
-        //TODO: check the list if there have been reference by any other.
         baseMapper.deleteBatchIds(asList);
     }
 
@@ -140,36 +130,36 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
      */
 
     /**
-     * 利用Redis进行缓存商品分类数据
+     * Use Redis to cache product classification data
      *
      * @return
      */
     public Map<String, List<Catelog2VO>> getCatalogJson2() throws InterruptedException {
-        // TODO 产生堆外内存溢出 OutOfDirectMemoryError
+        // TODO： OutOfDirectMemoryError
         /*
-         * 1. SpringBoot2.0之后默认使用 lettuce 作为操作 redis 的客户端，lettuce 使用 Netty 进行网络通信
-         * 2. lettuce 的 bug 导致 Netty 堆外内存溢出 -Xmx300m   Netty 如果没有指定对外内存 默认使用 JVM 设置的参数
-         *      可以通过 -Dio.netty.maxDirectMemory 设置堆外内存
-         * 解决方案：不能仅仅使用 -Dio.netty.maxDirectMemory 去调大堆外内存
-         *      1. 升级 lettuce 客户端   2. 切换使用 jedis
+         * 1. After SpringBoot2.0, lettuce is used as the default client to operate Redis, and lettuce uses Netty for network communication
+         * 2. Lettuce bug causes out-of-heap memory overflow in Netty -Xmx300m Netty will use the parameters set by JVM if no external memory is specified
+         * can use - Dio.net ty. MaxDirectMemory set outside the heap memory
+         * solutions: can't just use - Dio.net. Ty maxDirectMemory to pile of external memory
+         * 1. Upgrade the lettuce client 2. Switch to using Jedis
          *
-         *      RedisTemplate 对 lettuce 与 jedis 均进行了封装 所以直接使用 详情见：RedisAutoConfiguration 类
-         */
-        /*
-         * - 空结果缓存：解决缓存穿透
+         * Redistemplate encapsulates both lettuce and jedis, so see the RedisAutoConfiguration class for details
          *
-         * - 设置过期时间（加随机值）：解决缓存雪崩
          *
-         * - 加锁：解决缓存击穿
+         * - Null result cache: Resolves Cache Penetration
+         *
+         * - Set expiration time (plus random value) : Solve Cache Avalanche
+         *
+         * - Locking: Resolves Hotspot Invalid
          */
 
-        // 给缓存中放入JSON字符串，取出JSON字符串还需要逆转为能用的对象类型
+        // To put a JSON string in the cache, the fetched JSON string also needs to be reversed to a usable object type
 
-        // 1. 加入缓存逻辑， 缓存中存的数据是 JSON 字符串
+        // 1. Add cache logic. The data stored in the cache is a JSON string
         String catalogJSON = stringRedisTemplate.opsForValue().get("catalogJSON");
         if (StringUtils.isEmpty(catalogJSON)) {
-            // 2 如果缓存未命中 则查询数据库
-            // 4 返回从数据库中查询的数据
+            // 2 Query the database if the cache is not hit
+            // 4 Returns the data queried from the database
             return getCatalogJsonFromDBWithRedisLock();
         }
 
@@ -191,16 +181,14 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     }
 
     /**
-     * Redis 实现分布式锁
+     * Redis Implementing Distributed Locking
      *
      * @return
      */
     public Map<String, List<Catelog2VO>> getCatalogJsonFromDBWithRedisLock() throws InterruptedException {
-        // 1 Redis 占位
         String uuid = UUID.randomUUID().toString();
         Boolean lockResult = stringRedisTemplate.opsForValue().setIfAbsent("lock", uuid, 300, TimeUnit.SECONDS);
         if (lockResult) {
-            // 2 加锁成功 执行业务
             Map<String, List<Catelog2VO>> dataFromDB;
             try {
                 dataFromDB = getDataFromDB();
@@ -208,14 +196,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                 String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
                 stringRedisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Collections.singletonList("lock"), uuid);
             }
-            /*
-           String lockFromRedis = stringRedisTemplate.opsForValue().get("lock");
-           if (uuid.equals(lockFromRedis))
-               stringRedisTemplate.delete("lock");
-               */
             return dataFromDB;
         } else {
-            // 3 加锁失败 睡眠 100ms 后重试
             Thread.sleep(100);
             return getCatalogJsonFromDBWithRedisLock();
         }
@@ -249,30 +231,29 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
             }
             return catelog2VOS;
         }));
-        // 3 查到的数据再放入缓存 将对象转为JSON放入缓存
         String cache = JSON.toJSONString(parentCid);
         stringRedisTemplate.opsForValue().set("catalogJSON", cache, 1, TimeUnit.DAYS);
         return parentCid;
     }
 
     /**
-     * 从数据库查询并封装商品分类数据
+     * Query and encapsulate product classification data from the database
      *
      * @return
      */
     public Map<String, List<Catelog2VO>> getCatalogJsonFromDBWithLocalLock() {
         /**
-         * 优化
-         * 1. 将数据库的多次查询变为一次查询
-         *
-         * SpringBoot 所有的组件在容器中默认都是单例的，使用 synchronized (this) 可以实现加锁
-         */
+        * optimize
+        * 1. Change multiple database queries into one query
+        *
+        * SpringBoot all components are singletons by default in the container and can be locked using synchronized (this)
+        */
         synchronized (this) {
             /**
-             * 得到锁之后 应该再去缓存中确定一次，如果没有的话才需要继续查询
+             * After you get the lock, you should check it again in the cache. If not, you need to continue the query
              *
-             * 假如有100W个并发请求，首先得到锁的请求开始查询，此时其他的请求将会排队等待锁
-             * 等到获得锁的时候再去执行查询，但是此时有可能前一个加锁的请求已经查询成功并且将结果添加到了缓存中
+             * If there are 100W concurrent requests, the first request to obtain the lock will start the query, and the other requests will queue for the lock
+             * Wait until the lock is obtained before executing the query, but it is possible that the previous lock request has been successfully queried and the result has been added to the cache
              */
             return getDataFromDB();
         }
@@ -280,7 +261,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
 
     /**
-     * 递归查找所有菜单的子菜单
+     *
      * @param root
      * @param all
      * @return
@@ -289,11 +270,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         List<CategoryEntity> childrenList = all.stream().filter(categoryEntity -> {
             return categoryEntity.getParentCid().equals(root.getCatId());
         }).map(categoryEntity -> {
-            //找到子菜单
+            //Find the submenu
             categoryEntity.setChildren(getChildren(categoryEntity,all));
             return categoryEntity;
         }).sorted((menu1,menu2)->{
-            //菜单排序
+            //Sort menu
             return (menu1.getSort()==null?0:menu1.getSort()) - (menu2.getSort()==null?0:menu2.getSort());
         }).collect(Collectors.toList());
         return childrenList;
@@ -317,7 +298,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
      * @return
      */
     private List<Long> findParentPath(Long catelogId,List<Long> paths){
-        //1、收集当前节点id
+        //1、Collect the current node ID
         paths.add(catelogId);
         CategoryEntity byId = this.getById(catelogId);
         if(byId.getParentCid()!=0){

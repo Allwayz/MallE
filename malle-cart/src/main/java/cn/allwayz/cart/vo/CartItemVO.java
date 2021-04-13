@@ -10,9 +10,9 @@ import java.util.List;
  * @author allwayz
  * 2021/1/16 12:08
  *
- * 购物车中每一项------用于查看购物车列表
+ * Each item in the shopping cart ------ is used to view the shopping cart list
  *
- * 需要计算的属性，重写其get方法，保证每次或者这个属性值都是重新计算的最新值
+ * For the property that needs to be evaluated, override its get method to ensure that each time or this property value is recalculated to the latest value
  */
 public class CartItemVO {
 

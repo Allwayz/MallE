@@ -39,7 +39,7 @@ public class SpuBoundsServiceImpl extends ServiceImpl<SpuBoundsDao, SpuBoundsEnt
     }
 
     /**
-     * 远程调用，seata分布式事务
+     * Remote calls, SEATA distributed transactions
      * @param spuBounds
      * @return
      */

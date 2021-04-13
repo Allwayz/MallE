@@ -14,39 +14,39 @@ public class MemberAddressTO {
      */
     private Long memberId;
     /**
-     * 收货人姓名
+     * Name of consignee
      */
     private String name;
     /**
-     * 电话
+     * phone
      */
     private String phone;
     /**
-     * 邮政编码
+     * postCode
      */
     private String postCode;
     /**
-     * 省份/直辖市
+     * province
      */
     private String province;
     /**
-     * 城市
+     * city
      */
     private String city;
     /**
-     * 区
+     * region
      */
     private String region;
     /**
-     * 详细地址(街道)
+     * detailAddress
      */
     private String detailAddress;
     /**
-     * 省市区代码
+     * areacode
      */
     private String areacode;
     /**
-     * 是否默认
+     * defaultStatus
      */
     private Integer defaultStatus;
 }

@@ -27,7 +27,7 @@ public class OrderWebController {
     OrderService orderService;
 
     /**
-     * 用户订单列表
+     * User order list
      * @return
      */
     @GetMapping("/center/list.html")
@@ -43,7 +43,7 @@ public class OrderWebController {
     }
 
     /**
-     * 用户从购物车页面点击去结算
+     * The user clicks from the shopping cart page to check out
      */
     @GetMapping("/toTrade")
     public String toTrade(Model model, HttpServletRequest request) {
@@ -54,8 +54,7 @@ public class OrderWebController {
     }
 
     /**
-     * 提交订单，创建订单
-     *
+     * Submit the order, create the order
      */
     @PostMapping("/submit")
     public String submit(OrderSubmitVO submitVO) {
@@ -73,7 +72,7 @@ public class OrderWebController {
     }
 
     /**
-     * 以/api开始的为远程调用，需要被拦截器直接放行
+     * Remote calls that start with/API need to be cleared by interceptors
      * @param orderSn
      * @return
      */

@@ -14,30 +14,30 @@ package cn.allwayz.common.utils;
  * @author Mark sunlightcs@gmail.com
  */
 public class Constant {
-	/** 超级管理员ID */
+	/** Super Administrator ID */
 	public static final int SUPER_ADMIN = 1;
     /**
-     * 当前页码
+     * The current page number
      */
     public static final String PAGE = "page";
     /**
-     * 每页显示记录数
+     * Displays the number of records per page
      */
     public static final String LIMIT = "limit";
     /**
-     * 排序字段
+     * ORDER_FIELD
      */
     public static final String ORDER_FIELD = "sidx";
     /**
-     * 排序方式
+     * ORDER
      */
     public static final String ORDER = "order";
     /**
-     *  升序
+     *  ASC
      */
     public static final String ASC = "asc";
 	/**
-	 * 菜单类型
+	 * MenuType
 	 * 
 	 * @author chenshun
 	 * @email sunlightcs@gmail.com
@@ -45,15 +45,15 @@ public class Constant {
 	 */
     public enum MenuType {
         /**
-         * 目录
+         * CATALOG
          */
     	CATALOG(0),
         /**
-         * 菜单
+         * MENU
          */
         MENU(1),
         /**
-         * 按钮
+         * BUTTON
          */
         BUTTON(2);
 

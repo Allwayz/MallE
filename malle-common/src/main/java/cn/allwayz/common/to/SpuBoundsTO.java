@@ -14,11 +14,11 @@ public class SpuBoundsTO {
      */
     private Long spuId;
     /**
-     * 成长积分
+     * growBounds
      */
     private BigDecimal growBounds;
     /**
-     * 购物积分
+     * buyBounds
      */
     private BigDecimal buyBounds;
 

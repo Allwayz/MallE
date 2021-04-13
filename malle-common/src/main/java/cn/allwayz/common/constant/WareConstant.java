@@ -10,12 +10,12 @@ public class WareConstant {
     public static final String STOCK_LOCKED_ROUTING_KEY = "stock.locked.#";
     public static final String DEAD_LETTER_EXCHANGE = "stock-event-exchange";
     public static final String DEAD_LETTER_ROUTING_KEY = "stock.release";
-    public static final Integer DEAD_LETTER_TTL = 3 * 60 * 1000; // 单位是ms
+    public static final Integer DEAD_LETTER_TTL = 3 * 60 * 1000; //The unit is ms
 
     public enum  PurchaseStatusEnum{
-        CREATED(0,"New"),ASSIGNED(1,"已分配"),
-        RECEIVE(2,"已领取"),FINISH(3,"已完成"),
-        HASERROR(4,"有异常");
+        CREATED(0,"New"),ASSIGNED(1,"New"),
+        RECEIVE(2,"Receive"),FINISH(3,"Completed"),
+        HASERROR(4,"Error");
         private int code;
         private String msg;
 
@@ -35,9 +35,11 @@ public class WareConstant {
 
 
     public enum  PurchaseDetailStatusEnum{
-        CREATED(0,"新建"),ASSIGNED(1,"已分配"),
-        BUYING(2,"正在采购"),FINISH(3,"已完成"),
-        HASERROR(4,"采购失败");
+        CREATED(0,"New"),
+        ASSIGNED(1,"allocated"),
+        BUYING(2,"Buying"),
+        FINISH(3,"Completed"),
+        HASERROR(4,"Failure");
         private int code;
         private String msg;
 
@@ -59,9 +61,9 @@ public class WareConstant {
      * 商品库存锁定状态
      */
     public enum StockLockStatus {
-        LOCKED(1, "已锁定"),
-        RELEASED(2, "已释放"),
-        DEDUCTED(3,  "已扣减");
+        LOCKED(1, "Locked"),
+        RELEASED(2, "Released"),
+        DEDUCTED(3,  "Deducted");
 
         private int value;
         private String desc;

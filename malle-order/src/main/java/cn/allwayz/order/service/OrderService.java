@@ -25,7 +25,7 @@ public interface OrderService extends IService<OrderEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     /**
-     * 返回订单确认页需要的数据
+     * Returns the data required for the order confirmation page
      * @return
      */
     OrderConfirmVO confirmOrder();
@@ -38,7 +38,7 @@ public interface OrderService extends IService<OrderEntity> {
     OrderCreateVO submit(OrderSubmitVO submitVO);
 
     /**
-     * 获取订单及订单项
+     * Get the order and the order item
      * @param orderSn
      * @return
      */
@@ -49,14 +49,14 @@ public interface OrderService extends IService<OrderEntity> {
     OrderEntity getOrderByOrderSn(String orderSn);
 
     /**
-     * 订单超时未支付，取消订单
+     * Order not paid over time, cancel order
      * @param orderEntity
      */
     void closeOrder(OrderEntity orderEntity);
 
 
     /**
-     * 支付订单
+     * Payment order
      * @param orderSn
      * @return
      */
@@ -64,14 +64,14 @@ public interface OrderService extends IService<OrderEntity> {
 
 
     /**
-     * 分页查询当前登录用户的订单列表
+     * Paging the order list of the current logged-in user
      * @param params
      * @return
      */
     PageUtils getCurrentUserOrderList(Map<String, Object> params);
 
     /**
-     * 处理阿里支付异步通知消息
+     * Handle Ali payment asynchronous notification messages
      * @param notifyVO
      */
     String handleAlipayNotify(AlipayNotifyVO notifyVO, HttpServletRequest request);

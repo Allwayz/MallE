@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 秒杀活动场次
+ * SeckillSessionDao
  * 
  * @author allwayz
  * @email allwayz_org@icloud.com

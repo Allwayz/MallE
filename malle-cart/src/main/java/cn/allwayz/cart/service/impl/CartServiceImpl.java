@@ -45,10 +45,10 @@ public class CartServiceImpl implements CartService {
     StringRedisTemplate redisTemplate;
 
     /**
-     * 获取当前用户的购物车
-     * - 如果是未登录用户，他只有user-key(临时购物车)，拿到全部购物项
-     * - 如果是登录用户，他既有id(正式购物车)，又有user-key(临时购物车)，
-     *      如果它的临时购物车不空，则要将其临时购物车中的购物项合并到正式购物车中，并清空临时购物车
+     * Gets the current user's shopping cart
+     * - If the user is not logged in, he only has the user-key(temporary shopping cart) to get all the items
+     * - If the user is logged in, he has both an ID (official shopping cart) and a User-key (temporary shopping cart),
+     *      If its temporary shopping cart is not empty, it merges the items in its temporary shopping cart into its formal shopping cart and empties the temporary cart
      * @return
      */
     @Override
@@ -72,7 +72,7 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * 将商品添加到当前用户购物车
+     * Adds an item to the current user's shopping cart
      * @param skuId
      * @param count
      * @return
@@ -84,7 +84,7 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * 得到当前用户购物车中某个购物项的详细数据
+     * Gets the detailed data for an item in the current user's shopping cart
      * @param skuId
      * @return
      */
@@ -130,7 +130,7 @@ public class CartServiceImpl implements CartService {
 
 
     /**
-     * 获取当前用户的购物车在redis中的key
+     * Gets the key of the current user's shopping cart in Redis
      * @return
      */
     private String getCurrentUserCartKey() {
@@ -143,14 +143,14 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * 获取当前用户的购物车在redis中的操作器
+     * Gets the operator for the current user's shopping cart in Redis
      */
     private BoundHashOperations<String, String, String> getCurrentUserCartOps() {
         return redisTemplate.boundHashOps(getCurrentUserCartKey());
     }
 
     /**
-     * 获取指定购物车的数据
+     * Gets the data for the specified shopping cart
      * @param cartKey
      * @return
      */
@@ -162,16 +162,16 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * 根据sku'id查出该商品的基本信息、销售属性，构造购物车项，
+     * According to the SKU 'ID to find out the basic information of the commodity, sales attributes, construct the shopping cart item
      * @param skuId
      * @return
      */
     private CartItemVO buildCartItemVO(Long skuId) {
         CartItemVO itemVO = new CartItemVO();
         itemVO.setSkuId(skuId);
-        // 使用线程池异步编排提高效率
+        // Use thread pool asynchronous choreography for efficiency
         CompletableFuture<Void> skuInfoTask = CompletableFuture.runAsync(() -> {
-            // 调用远程服务查询sku详情
+            // Invoke the remote service to query the SKU details
             R res = productFeignService.getSkuInfo(skuId);
             if (res.getCode() != 0) {
                 log.error("远程调用malle-product查询skuinfo失败");
@@ -184,43 +184,43 @@ public class CartServiceImpl implements CartService {
         }, executor);
 
         CompletableFuture<Void> saleAttrTask = CompletableFuture.runAsync(() -> {
-            // 调用远程服务查询sku saleattrs
+            // Invoke the remote service to query SKU SaleatTRS
             R r = productFeignService.getSaleAttrStringList(skuId);
             if (r.getCode() != 0) {
-                log.error("远程调用malle-product查询sku saleattr失败");
+                log.error("The remote call to malle-product query SKU saleattr failed");
                 throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED);
             } else {
                 itemVO.setAttrs(r.getData(new TypeReference<List<String>>() {
                 }));
             }
         }, executor);
-        // 等待异步任务执行完成
+        // Wait for the asynchronous task to complete
         try {
             CompletableFuture.allOf(skuInfoTask, saleAttrTask).get();
         } catch (Exception e) {
-            log.error("线程池异步编排构造购物项详细信息失败");
+            log.error("Failed to construct shopping item details by thread pool asynchronous orchestration");
             throw new BizException(BizCodeEnum.THREAD_POOL_TASK_FAILED);
         }
         return itemVO;
     }
 
     /**
-     * 将商品加入指定的购物车中
+     * Add items to the specified shopping cart
      * @return
      */
     private CartItemVO addToCertainCart(Long skuId, Integer count, String cartKey) {
-        // 判断购物车中该商品是否存在
-        // 如果购物车中没有这个商品，那就是新加；如果有，那就是修改数量
+        // Determine if the item exists in the shopping cart
+        // If the item is not in the shopping cart, it is a new addition; If so, that is the number of modifications
         BoundHashOperations<String, String, String> op = redisTemplate.boundHashOps(cartKey);
         String dataStr = op.get(skuId.toString());
-        // 有
+        // yes
         if (!StringUtils.isEmpty(dataStr)) {
             CartItemVO itemVO = JSON.parseObject(dataStr, CartItemVO.class);
             itemVO.setCount(itemVO.getCount() + count);
             op.put(skuId.toString(), JSON.toJSONString(itemVO));
             return itemVO;
         }
-        // 没有
+        // no
         CartItemVO itemVO = buildCartItemVO(skuId);
         itemVO.setCount(count);
         itemVO.setChecked(true);
@@ -229,29 +229,29 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * 将商品合并到指定的购物车中
+     * Merges the items into the specified shopping cart
      *
-     * 主要用于 合并临时购物车到正式购物车
+     * Mainly used to merge the temporary shopping cart into the formal shopping cart
      * @return
      */
     private void moveToCertainCart(CartItemVO itemVO, String cartKey) {
-        // 判断购物车中该商品是否存在
-        // 如果购物车中没有这个商品，那就是新加；如果有，那就是修改数量
+        // Determine if the item exists in the shopping cart
+        // If the item is not in the shopping cart, it is a new addition; If so, that is the number of modifications
         BoundHashOperations<String, String, String> op = redisTemplate.boundHashOps(cartKey);
         String dataStr = op.get(itemVO.getSkuId().toString());
-        // 有
+        // yes
         if (!StringUtils.isEmpty(dataStr)) {
             CartItemVO cartItem = JSON.parseObject(dataStr, CartItemVO.class);
             cartItem.setCount(cartItem.getCount() + itemVO.getCount());
             op.put(cartItem.getSkuId().toString(), JSON.toJSONString(cartItem));
         } else {
-            // 没有，直接挪进去
+            // no
             op.put(itemVO.getSkuId().toString(), JSON.toJSONString(itemVO));
         }
     }
 
     /**
-     * 清空指定购物车
+     * Clear cart
      * @param cartKey
      */
     private void clearCart(String cartKey) {
@@ -259,7 +259,7 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * 远程调用，一定是登录用户
+     * Remote call, must be the logged-in user
      * @return
      */
     @Override
@@ -271,18 +271,18 @@ public class CartServiceImpl implements CartService {
         BoundHashOperations<String, String, String> ops = getCurrentUserCartOps();
         List<CartItemTO> collect = ops.values().stream()
                 .map(val -> JSON.parseObject(val, CartItemVO.class))
-                // 过滤选中的购物项
+                // Filter the selected shopping items
                 .filter(item -> item.getChecked())
                 .map(itemVO -> {
-                    // 重新查询，得到最新价格
+                    // Re-query to get the latest price
                     R res = productFeignService.getSkuInfo(itemVO.getSkuId());
                     if (res.getCode() != 0) {
-                        log.error("远程调用malle-product查询skuinfo失败");
-                        throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "查询购物车失败");
+                        log.error("The remote call to malle-product query skuinfo failed");
+                        throw new BizException(BizCodeEnum.CALL_FEIGN_SERVICE_FAILED, "Query for shopping cart failed");
                     }
                     SkuInfoTO skuInfo = res.getData("skuInfo",new TypeReference<SkuInfoTO>(){});
                     itemVO.setPrice(skuInfo.getPrice());
-                    // 转换成传输对象
+                    // Convert to a transfer object
                     return convertCartItem2CartItemTO(itemVO);
                 }).collect(Collectors.toList());
         return collect;

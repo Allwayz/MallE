@@ -19,11 +19,11 @@ public class FeignBeforeExecInterceptor implements RequestInterceptor {
     public void apply(RequestTemplate template) {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (requestAttributes != null) {
-            // 拿到原始请求头数据
+            // Get the original request header data
             HttpServletRequest request = requestAttributes.getRequest();
             String cookie = request.getHeader("Cookie");
             if (!StringUtils.isEmpty(cookie)) {
-                // 同步
+                // synchronous
                 template.header("Cookie", cookie);
             }
         }

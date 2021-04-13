@@ -12,19 +12,19 @@ import lombok.NoArgsConstructor;
 @Data
 public class StockLockTO {
 
-    // 库存工作单详情id
+    // Inventory work order detail ID
     private Long taskDetailId;
 
-    // 订单id
+    // The order id
     private String orderSn;
 
-    // 商品id
+    // product id
     private Long skuId;
 
-    // 仓库id
+    // warehouse id
     private Long wareId;
 
-    // 数量
+    // number
     private Integer count;
 }
 

@@ -14,11 +14,11 @@ public class OrderTO {
      */
     private Long memberId;
     /**
-     * 订单号
+     * orderSn
      */
     private String orderSn;
     /**
-     * 使用的优惠券
+     * couponId
      */
     private Long couponId;
     /**
@@ -26,151 +26,151 @@ public class OrderTO {
      */
     private Date createTime;
     /**
-     * 用户名
+     * memberUsername
      */
     private String memberUsername;
     /**
-     * 订单总额
+     * totalAmount
      */
     private BigDecimal totalAmount;
     /**
-     * 应付总额
+     * payAmount
      */
     private BigDecimal payAmount;
     /**
-     * 运费金额
+     * freightAmount
      */
     private BigDecimal freightAmount;
     /**
-     * 促销优化金额（促销价、满减、阶梯价）
+     * promotionAmount
      */
     private BigDecimal promotionAmount;
     /**
-     * 积分抵扣金额
+     * integrationAmount
      */
     private BigDecimal integrationAmount;
     /**
-     * 优惠券抵扣金额
+     * couponAmount
      */
     private BigDecimal couponAmount;
     /**
-     * 后台调整订单使用的折扣金额
+     * discountAmount
      */
     private BigDecimal discountAmount;
     /**
-     * 支付方式【1->支付宝；2->微信；3->银联； 4->货到付款；】
+     * payType
      */
     private Integer payType;
     /**
-     * 订单来源[0->PC订单；1->app订单]
+     * sourceType
      */
     private Integer sourceType;
     /**
-     * 订单状态【0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭；5->无效订单】
+     * status
      */
     private Integer status;
     /**
-     * 物流公司(配送方式)
+     * deliveryCompany
      */
     private String deliveryCompany;
     /**
-     * 物流单号
+     * deliverySn
      */
     private String deliverySn;
     /**
-     * 自动确认时间（天）
+     * autoConfirmDay
      */
     private Integer autoConfirmDay;
     /**
-     * 可以获得的积分
+     * integration
      */
     private Integer integration;
     /**
-     * 可以获得的成长值
+     * growth
      */
     private Integer growth;
     /**
-     * 发票类型[0->不开发票；1->电子发票；2->纸质发票]
+     * billType
      */
     private Integer billType;
     /**
-     * 发票抬头
+     * billHeader
      */
     private String billHeader;
     /**
-     * 发票内容
+     * billContent
      */
     private String billContent;
     /**
-     * 收票人电话
+     * billReceiverPhone
      */
     private String billReceiverPhone;
     /**
-     * 收票人邮箱
+     * billReceiverEmail
      */
     private String billReceiverEmail;
     /**
-     * 收货人姓名
+     * receiverName
      */
     private String receiverName;
     /**
-     * 收货人电话
+     * receiverPhone
      */
     private String receiverPhone;
     /**
-     * 收货人邮编
+     * receiverPostCode
      */
     private String receiverPostCode;
     /**
-     * 省份/直辖市
+     * receiverProvince
      */
     private String receiverProvince;
     /**
-     * 城市
+     * receiverCity
      */
     private String receiverCity;
     /**
-     * 区
+     * receiverRegion
      */
     private String receiverRegion;
     /**
-     * 详细地址
+     * receiverDetailAddress
      */
     private String receiverDetailAddress;
     /**
-     * 订单备注
+     * note
      */
     private String note;
     /**
-     * 确认收货状态[0->未确认；1->已确认]
+     * confirmStatus
      */
     private Integer confirmStatus;
     /**
-     * 删除状态【0->未删除；1->已删除】
+     * deleteStatus
      */
     private Integer deleteStatus;
     /**
-     * 下单时使用的积分
+     * useIntegration
      */
     private Integer useIntegration;
     /**
-     * 支付时间
+     * paymentTime
      */
     private Date paymentTime;
     /**
-     * 发货时间
+     * deliveryTime
      */
     private Date deliveryTime;
     /**
-     * 确认收货时间
+     * receiveTime
      */
     private Date receiveTime;
     /**
-     * 评价时间
+     * commentTime
      */
     private Date commentTime;
     /**
-     * 修改时间
+     * modifyTime
      */
     private Date modifyTime;
 }

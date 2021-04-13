@@ -22,15 +22,15 @@ import java.util.Map;
 /**
  * @author allwayz
  *
- * 开启rabbitmq自动配置，并添加自定义配
+ * Enable automatic RabbitMQ configuration and add custom configuration
  *
- * 如果只需要创建Exchange，queue，binding，发送消息等，只需使用AmqpAdmin就足够，
- * 但如果要使用 @RabbitListener监听消息(消费)，必须有 @EnableRabbit开启功能
- * 这个注解其实是往容器中注册了RabbitListenerAnnotationBeanPostProcessor
+ * If you only need to create exchanges, queues, bindings, send messages, etc., just use AmqpAdmin.
+ * If you want to use @RabbitListener to listen for messages (consumption), you must have @Enablerabbit enabled
+ * registered its RabbitListenerAnnotationBeanPostProcessor this annotation is the water in the container
  *
- * 保证消息不丢失：
- * 1、开始publisher确认机制(confirmCallback,returnCallback)和consumer确认(手动ack/nack)
- * 2、每条发送的消息在数据库做好记录，定期扫描数据库将发送失败的消息重新发送。
+ * Guarantee that messages are not lost:
+ * 1, began to publisher confirmed mechanism (confirmCallback, returnCallback) and consumer to confirm (manual ack/nack)
+ * 2. Record each message sent in the database, scan the database regularly and resend the failed message.
  */
 @EnableRabbit
 @Configuration
@@ -41,14 +41,14 @@ public class RabbitConfig {
     RabbitTemplate rabbitTemplate;
 
     /**
-     * 如果发送的消息是一个对象，会使用序列化机制，由MessageConverter转换器处理，
-     * 默认是WhiteListDeserializingMessageConverter，使用jdk序列化，所以这些bean必须实现Serializable接口
+     * If the message sent is an object, the serialization mechanism is used and processed by the MessageConverter converter,
+     * default is WhiteListDeserializingMessageConverter, using JDK serialization, so these beans must implement the Serializable interface
      *
-     * 为了使用json序列化，我们需要往容器中添加一个使用json格式的MessageConverter，发送的消息会标记这个对象的全类名
+     * To use JSON serialization, we need to add a JSON formatted MessageConverter to the container and send a message marked with the full class name of the object
      *
-     * 监听队列的方法参数，可以使用Object obj来接收消息内容，通过obj.getClass()能看到真正类型是 org.springframework.amqp.core.Message
-     * 所以也可以直接使用 Message me来接收，通过me.getBody()能够得到消息体
-     * 如果知道消息体的本质类型，也可以直接使用 XXXEntity 来接收，
+     * listening to the queue method parameter, you can use the Object obj to receive the Message content, through the obj. GetClass () can see true type is org. Springframework. It.. The core Message
+     * So you can also use Message Me directly to receive the Message. You can get the body of the Message through me.getBody()
+     * If you know the intrinsic type of the message body, you can also use XXXEntity to receive it directly.
      * @return
      */
     @Bean
@@ -59,20 +59,20 @@ public class RabbitConfig {
     @PostConstruct
     public void setCallback() {
         /**
-         * 消息由生产者投递到Broker/Exchange回调
+         * Messages are delivered by producers to Broker/Exchange callbacks
          */
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             if (ack) {
-                log.info("消息投递到交换机成功：[correlationData={}]",correlationData);
+                log.info("Message delivered to switch successfully：[correlationData={}]",correlationData);
             } else {
-                log.error("消息投递到交换机失败：[correlationData={}，原因：{}]", correlationData, cause);
+                log.error("Message delivered to switch failure：[correlationData={}，because：{}]", correlationData, cause);
             }
         });
         /**
-         * 消息由Exchange路由到Queue失败回调
+         * The message is routed from Exchange to Queue failure callback
          */
         rabbitTemplate.setReturnCallback((message, replyCode, replyText, exchange, routingKey) -> {
-            log.error("路由到队列失败，消息内容：{}，交换机：{}，路由件：{}，回复码：{}，回复文本：{}", message, exchange, routingKey, replyCode, replyText);
+            log.error("Routing to queue failed,message content:{},switch:{},route piece:{},reply code:{},reply text:{}", message, exchange, routingKey, replyCode, replyText);
         });
     }
 
@@ -94,7 +94,7 @@ public class RabbitConfig {
                 false);
     }
 
-    // 暂时未使用，订单取消时，要回滚扣减的优惠
+    // Temarily unused, when the order is cancelled, to roll back the discount
     @Bean
     public Queue orderReleaseCouponQueue() {
         //String name, boolean durable, boolean exclusive, boolean autoDelete,
@@ -106,7 +106,7 @@ public class RabbitConfig {
     }
 
     /**
-     * 死信队列/延时队列
+     * Dead letter queue/delay queue
      * @return
      *
      * x-dead-letter-exchange="stock-event-exchange"
@@ -129,7 +129,7 @@ public class RabbitConfig {
     }
 
     /**
-     * 绑定关系
+     * The binding relationship
      */
     @Bean
     public Binding orderCreateBinding() {
@@ -154,7 +154,7 @@ public class RabbitConfig {
     }
 
     /**
-     * 绑定到库存的解锁队列，
+     * Bind to the unlock queue of the inventory
      * @return
      */
     @Bean
@@ -169,7 +169,7 @@ public class RabbitConfig {
     }
 
     /**
-     * 秒杀消息队列和交换机的绑定关系
+     * The binding relationship between seckill message queue and switch
      * @return
      */
     @Bean
