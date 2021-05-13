@@ -1,7 +1,0 @@
-#spring:
-#  cloud:
-#    alicloud:
-#      access-key: LTAI4GH9JNwJZfpRy8nKbHnb
-#      secret-key: tJhfwgS7FBtSVHYcRm3uCeSpWqJDJt
-#      oss:
-#        endpoint: oss-eu-west-1.aliyuncs.com

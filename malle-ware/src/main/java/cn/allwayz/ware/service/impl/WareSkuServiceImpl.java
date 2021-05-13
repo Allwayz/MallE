@@ -157,7 +157,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             Long skuId = skuLockStock.getSkuId();
             // 先查询此商品在哪些仓库有货
             List<Long> wareIds = this.baseMapper.listWaresBySkuId(skuId);
-            System.out.println("该商品在{}仓库有货"+wareIds);
+            //System.out.println("该商品在{}仓库有货"+wareIds);
             if (CollectionUtils.isEmpty(wareIds)) {
                 // 当前商品库存不足，锁定失败
                 throw new BizException(BizCodeEnum.WARE_SKU_STOCK_NOT_ENOUGH, "Out Of Stoke：" + skuLockStock);
@@ -166,11 +166,12 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             boolean currSkuLockRes = false;
             for (Long wareId : wareIds) {
                 long rows = this.baseMapper.lockSkuStock(wareId, skuId, skuLockStock.getCount());
-                System.out.println("锁定结果："+rows);
+                //System.out.println("锁定结果："+rows);
                 if (rows == 1) {
                     // 当前商品库存锁定成功
                     // 创键任务详情
                     taskEntity.setWareId(wareId);
+                    //taskEntity.setCreateTime();
                     if(taskService.getTaskByOrderSn(taskEntity.getOrderSn())==null){
                         taskService.save(taskEntity);
                     }
